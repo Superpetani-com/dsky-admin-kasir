@@ -177,12 +177,12 @@
                                     <input type="text" id="totalrp" class="form-control" readonly>
                                 </div>
                             </div>
-                            <div class="form-group row">
+                            <!-- <div class="form-group row">
                                 <label for="diskon" class="col-lg-3 control-label">Diskon</label>
                                 <div class="col-lg-8">
                                     <input type="number" name="diskon" id="diskon" class="form-control" value="{{ $order->diskon }}">
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="form-group row">
                                 <label for="bayarrp" class="col-lg-3 control-label">Bayar</label>
                                 <div class="col-lg-8">
