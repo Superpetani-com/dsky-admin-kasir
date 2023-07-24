@@ -133,7 +133,7 @@ class PesananDetailController extends Controller
 
     public function destroy($id)
     {
-        $detail = PembelianDetail::find($id);
+        $detail = pesanandetail::find($id);
         $detail->delete();
         return response(null, 204);
     }

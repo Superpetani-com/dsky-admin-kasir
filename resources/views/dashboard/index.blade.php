@@ -102,8 +102,16 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
               <td>{{$item->jamselesai}}</td>
               <td id="tddurasi{{$item->id_meja_biliard}}">{{$item->durasi}} Menit</td>
               <td id="tdsisadurasi{{$item->id_meja_biliard}}">{{$item->sisadurasi}} Menit</td>
-              <td>{{$item->order['customer']}}</td>
-              <td>Rp. {{number_format(($item->order['totalbayar']), 0,",",".")}}</td>
+              <td>
+                @if($item->order)
+                {{$item->order['customer']}}
+                @endif
+              </td>
+              <td>Rp. 
+                @if($item->order)
+                {{number_format(($item->order['totalbayar']), 0,",",".")}}
+                @endif
+                </td>
               <td>{{$item->id_order_biliard}}</td>
               <td width="12%">
                 <a href="{{route('orderbiliarddetail.index2', $item->id_order_biliard)}}" class="btn btn-xs btn-flat {{$item->status}}" id="tdstatus{{$item->id_meja_biliard}}">
