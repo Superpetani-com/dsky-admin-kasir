@@ -7,7 +7,7 @@
           <img src="{{asset('AdminLTE-2/dist/img/avatar.png')}}" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
-          <p>Zulfikar</p>
+          <p>{{auth()->user()->name}}</p>
           <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
         </div>
       </div>
@@ -88,7 +88,16 @@
             <i class="fa fa-file-text-o"></i> <span>Report Biliard</span>
             </span>
           </a>
+        </li>
+        @if(auth()->user()->level == 3)
+        <li>
+          <a href="{{route('laporan.sensor')}}">
+            <i class="fa fa-file-text-o"></i> <span>Log Sensor</span>
+            </span>
+          </a>
         </li>  
+        @endif
+       
         <li class="header">USER</li>
         <li>
           <a href="pages/widgets.html">

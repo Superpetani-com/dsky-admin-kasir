@@ -103,4 +103,7 @@ Route::group(['middleware'=>'auth'], function(){
     Route::get('/laporan/cetaktest/{awal}/{akhir}', [LaporanTestController::class, 'cetaktest'])->name('laporan.cetaktest');
     Route::get('/laporan/datatest/{awal}/{akhir}', [LaporanTestController::class, 'datatest'])->name('laporan.datatest');
     Route::get('/laporan/pdftest/{awal}/{akhir}', [LaporanTestController::class, 'exportPDFtest'])->name('laporan.export_pdftest');
+
+    Route::get('/sensor', [DataLampuController::class, 'getAll'])->name('laporan.sensor');
+    Route::get('/sensor/data', [DataLampuController::class, 'getAllData'])->name('laporan.sensorData');
 });

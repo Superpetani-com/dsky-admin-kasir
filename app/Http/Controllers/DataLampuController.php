@@ -36,4 +36,19 @@ class DataLampuController extends Controller
         }
         return ($state);
     }
+
+    public function getAll() {
+        $state = LogSensor::with('meja')->orderBy('id')->get();
+        return view('laporan.sensor', compact('state'));
+        
+    }
+
+    public function getAllData() {
+        $state = LogSensor::with('meja')->orderBy('id')->get();
+
+        return datatables()
+            ->of($state)
+            ->make(true);
+        
+    }
 }

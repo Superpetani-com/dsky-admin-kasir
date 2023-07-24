@@ -13,4 +13,9 @@ class LogSensor extends Model
     protected $primaryKey = 'id';
     protected $guarded = [];
     public $timestamps = false;
+
+    public function meja()
+    {
+        return $this->hasOne(MejaBiliard::class, 'id_meja_biliard', 'id_meja');
+    }
 }
