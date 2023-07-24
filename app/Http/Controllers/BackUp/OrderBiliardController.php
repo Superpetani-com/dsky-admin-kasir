@@ -115,7 +115,7 @@ class OrderBiliardController extends Controller
         $item->update();}
         $order->totaljam= $request->total_jam;
         //$order->totalflag= $request->total_flag;
-        $order->diskon = $request->diskon;
+        $order->diskon = 0;
         $order->totalharga = $request->total;
         $order->totalbayar = $request->bayar;
         $order->diterima=$request->diterima;

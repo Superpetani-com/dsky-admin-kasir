@@ -89,7 +89,7 @@ class PesananController extends Controller
         $item->update();}
         $pesanan->TotalItem= $request->total_item;
         $pesanan->TotalHarga = $request->total;
-        $pesanan->Diskon = $request->diskon;
+        $pesanan->Diskon = 0;
         $pesanan->TotalBayar = $request->bayar;
         $pesanan->Diterima=$request->diterima;
         $pesanan->Kembali=$request->kembali;

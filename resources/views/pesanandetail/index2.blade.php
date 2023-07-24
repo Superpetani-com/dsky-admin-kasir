@@ -132,12 +132,12 @@
                                     <input type="text" id="totalrp" class="form-control" readonly>
                                 </div>
                             </div>
-                            <div class="form-group row">
+                            <!-- <div class="form-group row">
                                 <label for="diskon" class="col-lg-2 control-label">Diskon</label>
                                 <div class="col-lg-8">
                                     <input type="number" name="diskon" id="diskon" class="form-control" value="{{ $pesanan->Diskon }}">
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="form-group row">
                                 <label for="ppnrp" class="col-lg-2 control-label">PPN 10%</label>
                                 <div class="col-lg-8">
@@ -341,17 +341,35 @@
     let status=($('#status_pesanan').val());
     if (status=="Aktif"){
         if (confirm('Yakin ingin menghapus data terpilih?')) {
-            $.post(url, {
+          $.ajax({
+              url: url,
+              type: 'DELETE',
+              data: {
                     '_token': $('[name=csrf-token]').attr('content'),
                     '_method': 'delete'
-                })
-                .done((response) => {
-                    table.ajax.reload();
-                })
-                .fail((errors) => {
+                },
+              success: function(result) {
+                table.ajax.reload();
+              },
+              error: function(erros) {
+                console.log(errors, url);
                     alert('Tidak dapat menghapus data');
                     return;
-                });
+              }
+
+          });
+            // $.post(url, {
+            //         '_token': $('[name=csrf-token]').attr('content'),
+            //         '_method': 'delete'
+            //     })
+            //     .done((response) => {
+            //         table.ajax.reload();
+            //     })
+            //     .fail((errors) => {
+            //       console.log(errors, url);
+            //         alert('Tidak dapat menghapus data');
+            //         return;
+            //     });
         }
       }
     }
