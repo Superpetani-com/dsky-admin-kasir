@@ -144,8 +144,18 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
               @foreach ($meja as $key1=>$item1)
               <tr>
               <td>{{$item1->nama_meja}}</td>
-              <td>{{$item1->pesanan['customer']}}</td>
-              <td>Rp. {{ number_format(($item1->pesanan['TotalBayar']), 0,",",".")}}</td>
+              <td>
+              @if ($item1->pesanan)
+                {{$item1->pesanan['customer']}}
+              @endif
+              </td>
+
+              <td>Rp. 
+              @if ($item1->pesanan)
+                {{ number_format(($item1->pesanan['TotalBayar']), 0,",",".")}}
+              @endif
+              </td>
+
               <td>{{$item1->Id_pesanan}}</td>
               <td width="12%">
                 <a href="{{route('pesanandetail.index2', $item1->Id_pesanan)}}" class="btn btn-xs btn-flat {{$item1->Status}}">

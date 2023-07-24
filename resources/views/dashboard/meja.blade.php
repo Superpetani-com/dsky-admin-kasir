@@ -18,7 +18,11 @@
             @foreach ($meja as $key=>$item)
             <tr >
               <td width=5%>{{$key+1}}</td>
-              <td>{{$item->nama_meja}} {{$item->pesanan['customer']}}</td>
+              <td>{{$item->nama_meja}}
+              @if ($item->pesanan)
+                {{$item->pesanan['customer']}}
+              @endif
+              </td>
               <td width=20%><div  class="{{$item->Status}}">{{$item->Status}}</div></td>
               <td width=15%>
                 <a href="{{route ('pesanan.create', $item->id_meja)}}" class="btn btn-primary btn-sm btn-flat btn-{{$item->Status}}">
