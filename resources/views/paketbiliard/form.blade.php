@@ -37,6 +37,19 @@
                     <span class="help-block with-errors"></span>
                 </div>
                 </div>
+
+                <div class="form-group row">
+                <label for="keterangan" class="col-md-3 control-label">Tipe</label>
+                  <div class="col-md-7">
+                    <select name="type" id="option" class="form-control row">
+                      <option value="custom">Custom</option>
+                      <option value="malam">Malam</option>
+                      <option value="siang">Siang</option>
+                    </select>
+                  </div>
+                </div>
+
+
                 
         </div>
       <div class="modal-footer">

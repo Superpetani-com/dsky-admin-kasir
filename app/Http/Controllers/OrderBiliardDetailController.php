@@ -27,7 +27,16 @@ class OrderBiliardDetailController extends Controller
             return "Belum Ada Order";
         }
         $id_order_biliard=$id;
-        $paket=paketbiliard::orderBy('nama_paket')->get();
+
+        $currentHour = date('H'); // Get the current hour in 24-hour format (00 to 23)
+
+        // Check if the current hour is within the range of 13:00 (1:00 PM) to 17:00 (5:00 PM)
+        $paket = paketbiliard::whereIn('type', ['malam', 'custom'])->orderBy('id_paket_biliard', 'desc')->get();
+        if ($currentHour >= 13 && $currentHour <= 17) {
+            // The current time is within the range
+            $paket = paketbiliard::whereIn('type', ['siang', 'custom'])->orderBy('id_paket_biliard', 'desc')->get();
+        }
+
         $order=orderbiliard::where('id_order_biliard', $id)->first();
         $mejabiliard=mejabiliard::where('id_meja_biliard', $order->id_meja_biliard)->first();
         $mejadetail = mejabiliard::orderBy('id_meja_biliard')->get();

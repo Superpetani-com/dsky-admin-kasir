@@ -41,6 +41,7 @@
                 <th width="13%">Harga</th>
                 <th width="15%">Durasi(Menit)</th>
                 <th width="35%">Keterangan</th>
+                <th width="35%">Tipe</th>
                 <th width="12%"><i class="fa fa-cog"></i></th>
               </thead>
               <tbody></tbody>
@@ -74,6 +75,7 @@
         {data:'harga'},
         {data:'durasi'},
         {data:'keterangan'},
+        {data:'type'},
         {data:'aksi', searchable:false, sortable:false},
      ]
    }); 
@@ -124,6 +126,8 @@
           $('#modal-form [name=nama_paket]').val(response.nama_paket);
           $('#modal-form [name=harga]').val(response.harga);
           $('#modal-form [name=keterangan]').val(response.keterangan);
+          $('#modal-form [name=durasi]').val(response.durasi);
+          $('#modal-form #option').val(response.type).change();
         })
         .fail((errors)=>{
           alert('Tidak dapat menampilkan data');

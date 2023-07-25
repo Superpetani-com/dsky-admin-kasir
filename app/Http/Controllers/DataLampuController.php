@@ -47,6 +47,14 @@ class DataLampuController extends Controller
     
                 return response()->json(['code' => 200, 'message'=> 'Data berhasil disimpan', 'data' => $data], 200);
             }
+
+            if($state->status == "Dipakai") {
+                return response()->json(['code' => 500, 'message'=> 'Meja Sedang Dipakai', 'data' => []], 500);
+            }
+
+            if($request->duration < 120) {
+                return response()->json(['code' => 500, 'message'=> 'Durasi Kurang Dari 120 detik', 'data' => []], 500);
+            }
         }
 
         if(!$state) {
