@@ -23,7 +23,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
 
 @section('breadcrumb')
     @parent
-    <li class="active">Laporan</li>
+    <li class="active">Sensor</li>
 @endsection
 
 @section('content')
@@ -35,9 +35,10 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
             <div class="box-body table-responsive">
                 <table class="table table-stiped table-bordered" style="width:100%"> 
                     <thead>
-                        <th width="5%">ID</th>
+                        <th >ID</th>
                         <th>ID Meja</th>
                         <th>Nama Meja</th>
+                        <th data-toggle="tooltip" data-placement="top" title="1 = Mati, 0 = Nyala">Kondisi Lampu</th>
                         <th>Durasi</th>
                         <th>Tanggal</th>
                     </thead>
@@ -54,6 +55,9 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
 <script src="{{ asset('/AdminLTE-2/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
 <script>
     let table;
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
 
     $(function () {
         table = $('.table').DataTable({
@@ -65,11 +69,12 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
                 url: '{{ route('laporan.sensorData') }}',
             },
             columns: [
-                {data: 'id', searchable: false, sortable: false},
-                {data: 'id_meja'},
-                {data: 'meja.namameja'},
-                {data: 'duration'},
-                {data: 'created_date'},
+                {data: 'id_log_sensor', searchable: false, sortable: false},
+                {data: 'meja_id'},
+                {data: 'meja_values'},
+                {data: 'log_values'},
+                {data: 'time_range'},
+                {data: 'created_dates'},
             ],
             dom: 'Brt',
             bSort: false,
