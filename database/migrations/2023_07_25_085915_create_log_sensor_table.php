@@ -15,10 +15,8 @@ class CreateLogSensorTable extends Migration
     {
         Schema::create('log_sensor', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('id_log_sensor', 255);
             $table->integer('id_meja');
             $table->integer('duration');
-            $table->string('value', 255);
             $table->string('created_date', 255);
         });
     }

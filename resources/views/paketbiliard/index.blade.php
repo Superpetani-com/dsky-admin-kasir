@@ -99,7 +99,7 @@
   
 
   function addForm(url){
-    if ({{auth()->user()->level}}==2){
+    if ({{auth()->user()->level}}==2 || {{auth()->user()->level}}==3){
     $('#modal-form').modal('show');
     $('#modal-form .modal-title').text('Tambah Paket Biliard');
 
