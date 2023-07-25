@@ -145,6 +145,7 @@
                   <th>Harga</th>
                   <th width="10%">Jumlah</th>
                   <th>Menit</th>
+                  <th>Sisa Durasi</th>
                   <th> SubTotal</th>
                   <th> Seting</th>
                   <th width="4%"> </th>
@@ -239,6 +240,7 @@
         {data:'harga'},
         {data:'jumlah'},
         {data:'menit'},
+        {data:'sisadurasi'},
         {data:'subtotal'},
         {data:'seting'},
         {data:'aksi', searchable:false, sortable:false},
@@ -319,11 +321,30 @@
         
         if (callNow) func.apply(context, args);
         };
-    }; 
+    };
+    function checkInputValidity(inputField, val) {
+      const currentValue = parseFloat(inputField.value);
+
+      if(val > currentValue) {
+        // alert('Jumlah tidak boleh kurang dari angka awal');
+        return false
+      }
+
+      return true
+      console.log(currentValue, val)
+      // if(val)
+    }
 $(document).on('input','.quantity', debounce(function(){
      let id=$(this).data('id');
      let jumlah=($(this).val());
+     let dataexist = $(this).attr('max');
+     console.log()
      
+     if(jumlah < dataexist) {
+        alert('Jumlah tidak boleh kurang dari angka awal');
+        $(this).val(dataexist);
+        return;
+     }
      if(jumlah<0.00){
         alert('Jumlah tidak boleh kurang dari 0.00');
         $(this).val(0.05);
@@ -393,7 +414,8 @@ $(document).on('input','.quantity', debounce(function(){
   }
 
   function deleteData(url) {
-        if (confirm('Yakin ingin MENGAHPUS DATA terpilih?')) {
+    // harusnya tidak bisa dihapus, bisa dihapus ketika data menitnya lebih besar dari data awal
+        if (confirm('Yakin ingin menghapus data terpilih?')) {
             $.post(url, {
                     '_token': $('[name=csrf-token]').attr('content'),
                     '_method': 'delete'

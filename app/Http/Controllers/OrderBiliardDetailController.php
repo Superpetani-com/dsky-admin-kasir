@@ -7,6 +7,7 @@ use App\Models\OrderBiliard;
 use App\Models\OrderBiliardDetail;
 use App\Models\MejaBiliard;
 use App\Models\PaketBiliard;
+use App\Models\Meja;
 
 class OrderBiliardDetailController extends Controller
 {
@@ -79,10 +80,10 @@ class OrderBiliardDetailController extends Controller
     
     public function data($id, $status1, $status2)
     {
-        $detail=OrderBiliardDetail::with('paket')
+        $detail=OrderBiliardDetail::with('paket', 'order')
         ->where('id_order_biliard', $id)
         ->get();
-        //dd ($detail);
+        // dd ($detail);
         $data = array();
         $total = 0;
         $total_jam = 0;
@@ -91,6 +92,10 @@ class OrderBiliardDetailController extends Controller
         
         
         foreach ($detail as $item) {
+            // dd($item['order']['id_meja_biliard']);
+            $mejabiliard=mejabiliard::where('id_meja_biliard', $item['order']['id_meja_biliard'])->first();
+
+
             $row = array();
             $row['nama_paket'] = $item->paket['nama_paket'];
             $row['harga']       = 'Rp. '. format_uang($item->harga);
@@ -98,7 +103,7 @@ class OrderBiliardDetailController extends Controller
             $row['jumlah']      = 
             '<form>
             <div class="form-group">
-            <input type="number" class="quantity form-control" data-id=" '. $item->id_order_biliard_detail .'" value="'. $item->jumlah .'" step=".05" size="4" readonly>
+            <input type="number" class="quantity form-control" onchange="checkInputValidity(this, '. $item->jumlah .')" max="'. $item->jumlah .'" data-id="'.$item->id_order_biliard_detail .'" value="'. $item->jumlah .'" step=".05" size="4" readonly>
             </div>
             </form>';   
             }
@@ -106,7 +111,7 @@ class OrderBiliardDetailController extends Controller
             $row['jumlah']      = 
             '<form>
             <div class="form-group">
-            <input type="number" class="quantity form-control" data-id=" '. $item->id_order_biliard_detail .'" value="'. $item->jumlah .'" step=".05" size="4">
+            <input type="number" class="quantity form-control" onchange="checkInputValidity(this, '. $item->jumlah .')" max="'. $item->jumlah .'" data-id="'.$item->id_order_biliard_detail .'" value="'. $item->jumlah .'" step=".05" size="4">
             </div>
             </form>';
             }
@@ -130,6 +135,8 @@ class OrderBiliardDetailController extends Controller
             }                       
             $row['menit']       = $item->menit;
             $row['seting']      = $item->seting;
+            $row['durasi']      = $item->created_at;
+            $row['sisadurasi']  = $mejabiliard['sisadurasi'] . ' Menit';
             $data[] = $row;
 
             $total += $item->harga * $item->jumlah;
@@ -150,6 +157,7 @@ class OrderBiliardDetailController extends Controller
             'subtotal'=>'',
             'aksi'=>'',
             'aksi2'=>'',
+            'sisadurasi'=>''
                           ];
         return datatables()
             ->of($data)
@@ -205,8 +213,31 @@ class OrderBiliardDetailController extends Controller
     public function destroy($id)
     {
         $detail = OrderBiliardDetail::find($id);
-        $detail->delete();
-        return response(null, 204);
+        $isDeleted = false;
+        // $orderAll = OrderBiliardDetail::where('id_order_biliard', $detail->id_order_biliard)->get();
+
+        $valueToCheck = $detail->menit; // The value you want to check
+        $columnToCheck = 'menit'; // The column in which you want to check the maximum value
+        $maxValueInColumn = OrderBiliardDetail::where('id_order_biliard', $detail->id_order_biliard)->max($columnToCheck);
+
+        if ($valueToCheck === $maxValueInColumn) {
+            // The value is the maximum in the column
+            // Your logic here
+            $isDeleted = false;
+        } else {
+            // The value is not the maximum in the column
+            // Your logic here
+            $isDeleted = true;
+        }
+
+        // dd($isDeleted, $maxValueInColumn);
+        if($isDeleted) {
+            $detail->delete();
+            return response(null, 204);
+        } else {
+            return response('failed delete', 500);
+        }
+ 
     }
 
     public function stop($id, $meja, $flag)

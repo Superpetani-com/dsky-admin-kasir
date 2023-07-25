@@ -17,4 +17,9 @@ class OrderBiliardDetail extends Model
     {
         return $this->hasOne(PaketBiliard::class, 'id_paket_biliard', 'id_paket_biliard');
     }
+
+    public function order()
+    {
+        return $this->hasOne(OrderBiliard::class, 'id_order_biliard', 'id_order_biliard');
+    }
 }
