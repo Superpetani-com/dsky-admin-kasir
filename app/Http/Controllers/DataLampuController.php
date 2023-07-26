@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\MejaBiliard;
 use App\Models\LogSensor;
 use App\Models\LogHapus;
+use App\Models\PaketBiliard;
+use App\Models\OrderBiliardDetail;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
@@ -116,6 +118,36 @@ class DataLampuController extends Controller
 
     public function logHapusData() {
         $state = LogHapus::with('pesanan', 'menu')->orderBy('id', 'desc')->get();
+
+        return datatables()
+            ->of($state)
+            ->make(true);
+    }
+
+    public function orderCustom() {
+        return view('laporan.custom');
+    }
+
+    public function orderCustomData() {
+        // cari paket biliard yang tipenya custom
+        $paket = PaketBiliard::where('type', '=', 'custom')->get();
+        $id_paket = [];
+        $id_order = [];
+
+        foreach ($paket as $value) {
+            array_push($id_paket, $value['id_paket_biliard']);
+        }
+
+        $state = OrderBiliardDetail::whereIn('id_paket_biliard', $id_paket)->with('order', 'paket')->orderBy('id_order_biliard', 'desc')->get();
+        foreach ($state as $item) {
+            $id_meja_biliard = $item->order->id_meja_biliard;
+            // dd($id_meja_biliard);
+            // Retrieve "meja" data using the ID
+            $meja = MejaBiliard::where('id_meja_biliard', '=', $id_meja_biliard)->get()[0];
+        
+            // Add $meja as a new property to the $item
+            $item->meja = $meja;
+        }
 
         return datatables()
             ->of($state)

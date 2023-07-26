@@ -102,6 +102,12 @@
             </span>
           </a>
         </li>  
+        <li>
+          <a href="{{route('laporan.orderCustom')}}">
+            <i class="fa fa-file-text-o"></i> <span>Log Order Custom</span>
+            </span>
+          </a>
+        </li>  
         @endif
        
         <li class="header">USER</li>

@@ -22,4 +22,9 @@ class OrderBiliardDetail extends Model
     {
         return $this->hasOne(OrderBiliard::class, 'id_order_biliard', 'id_order_biliard');
     }
+
+    public function meja()
+    {
+        return $this->hasOne(meja::class, 'id_meja', 'Id_meja');
+    }
 }

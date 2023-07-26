@@ -110,4 +110,7 @@ Route::group(['middleware'=>'auth'], function(){
     Route::get('/log/hapus-barang', [DataLampuController::class, 'logHapus'])->name('laporan.hapus');
     Route::get('/log/hapus-barang/data', [DataLampuController::class, 'logHapusData'])->name('laporan.hapusData');
 
+    Route::get('/log/order/custom', [DataLampuController::class, 'orderCustom'])->name('laporan.orderCustom');
+    Route::get('/log/order/custom/data', [DataLampuController::class, 'orderCustomData'])->name('laporan.orderCustomData');
+
 });
