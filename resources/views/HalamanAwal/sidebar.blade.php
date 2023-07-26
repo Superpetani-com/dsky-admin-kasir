@@ -96,6 +96,12 @@
             </span>
           </a>
         </li>  
+        <li>
+          <a href="{{route('laporan.hapus')}}">
+            <i class="fa fa-file-text-o"></i> <span>Log Hapus Barang</span>
+            </span>
+          </a>
+        </li>  
         @endif
        
         <li class="header">USER</li>

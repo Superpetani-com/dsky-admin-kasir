@@ -7,6 +7,7 @@ use App\Models\Menu;
 use App\Models\Meja;
 use App\Models\Pesanan;
 use App\Models\PesananDetail;
+use App\Models\LogHapus;
 
 class PesananDetailController extends Controller
 {
@@ -134,6 +135,18 @@ class PesananDetailController extends Controller
     public function destroy($id)
     {
         $detail = pesanandetail::find($id);
+
+        // save deleted data to table log_hapus
+        $log_hapus= new LogHapus();
+        $log_hapus->id_pesanan = $detail->id_pesanan;
+        $log_hapus->id_menu = $detail->id_menu;
+        $log_hapus->harga = $detail->harga;
+        $log_hapus->jumlah = $detail->jumlah;
+        $log_hapus->subtotal = $detail->subtotal;
+        $log_hapus->created_at = date('Y-m-d H:i:s');
+        $log_hapus->updated_at = date('Y-m-d H:i:s');
+        $log_hapus->save();
+
         $detail->delete();
         return response(null, 204);
     }

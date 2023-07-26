@@ -106,4 +106,8 @@ Route::group(['middleware'=>'auth'], function(){
 
     Route::get('/sensor', [DataLampuController::class, 'getAll'])->name('laporan.sensor');
     Route::get('/sensor/data', [DataLampuController::class, 'getAllData'])->name('laporan.sensorData');
+
+    Route::get('/log/hapus-barang', [DataLampuController::class, 'logHapus'])->name('laporan.hapus');
+    Route::get('/log/hapus-barang/data', [DataLampuController::class, 'logHapusData'])->name('laporan.hapusData');
+
 });

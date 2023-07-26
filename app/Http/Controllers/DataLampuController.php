@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\MejaBiliard;
 use App\Models\LogSensor;
+use App\Models\LogHapus;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
@@ -107,5 +108,17 @@ class DataLampuController extends Controller
             ->of($state)
             ->make(true);
         
+    }
+
+    public function logHapus() {
+        return view('laporan.hapus');
+    }
+
+    public function logHapusData() {
+        $state = LogHapus::with('pesanan', 'menu')->orderBy('id', 'desc')->get();
+
+        return datatables()
+            ->of($state)
+            ->make(true);
     }
 }
