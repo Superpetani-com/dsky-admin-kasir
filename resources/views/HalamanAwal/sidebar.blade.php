@@ -69,7 +69,7 @@
         </li> -->
         @endif
 
-        @if(auth()->user()->level == 5)
+        @if(auth()->user()->level == 5 || auth()->user()->level == 6)
         <li class="header">CAFE</li>
         <!-- <li>
           <a href="{{route('menu.index')}}">

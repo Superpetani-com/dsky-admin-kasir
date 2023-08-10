@@ -78,6 +78,9 @@ class MejaController extends Controller
                 }
             })
             ->addColumn('aksi', function($meja){
+                if(auth()->user()->level == 6) {
+                    return '';
+                }
                 if(auth()->user()->level == 5) {
                     if($meja->Status == "Diproses") {
                         return '

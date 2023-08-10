@@ -17,7 +17,7 @@ class DashboardController extends Controller
         $meja = meja::with('pesanan')
         ->orderBy('id_meja')->get();
 
-        if(auth()->user()->level == 5 || auth()->user()->level == 1) {
+        if(auth()->user()->level == 5 || auth()->user()->level == 1 || auth()->user()->level == 6) {
             return redirect()->to('meja');
         }
 
