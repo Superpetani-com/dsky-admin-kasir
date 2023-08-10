@@ -28,6 +28,7 @@ class PesananController extends Controller
         $pesanan->Kembali=0;
         $pesanan->ppn=10;
         $pesanan->status='Aktif';
+        $pesanan->cabang_id='cilacap_1';
         $pesanan->save();
         //session(['Id_pesanan'=> $pesanan->Id_pesanan]);
         //session(['Id_meja'=> $pesanan->Id_meja]);

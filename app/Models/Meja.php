@@ -14,7 +14,13 @@ class Meja extends Model
     protected $guarded=[];
 
     public function pesanan()
-{
-    return $this->hasOne(pesanan::class, 'Id_pesanan', 'Id_pesanan');
-}
+    {
+        return $this->hasOne(pesanan::class, 'Id_pesanan', 'Id_pesanan');
+    }
+
+    public function pesanan_detail() {
+        {
+            return $this->hasMany(PesananDetail::class, 'id_pesanan', 'Id_pesanan');
+        }
+    }
 }

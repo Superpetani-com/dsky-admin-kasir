@@ -18,30 +18,124 @@ class MejaController extends Controller
     public function index()
     {
         $meja = meja::orderBy('id_meja')->get();
+        // dd('test');
         return view('meja.index', compact('meja'));
     }
     public function data()
     {
-        $meja=meja::orderBy('id_meja')->get();
+        $meja = meja::orderBy('id_meja')->get();
+
+        if(auth()->user()->level == 5) {
+            $meja = meja::where('Id_pesanan', '!=', '0')->with('pesanan_detail')->orderBy('id_meja')->get();
+            // dd($meja['pesanan_detail'][0]);
+            foreach ($meja as $value) {
+                foreach ($value['pesanan_detail'] as $item) {
+                    $menu = menu::where('Id_Menu', '=', $item['id_menu'])->get()[0];
+                    $item['Nama_menu'] = $menu['Nama_menu'];
+                }
+
+                // dd($value['status']);
+                if($value['Status'] == 'Dipakai') {
+                    $value['Status'] = 'Menunggu Kitchen';
+                }
+                
+                # code...
+            }
+            // dd($meja);
+        } else {
+            // $meja = meja::where('Id_pesanan', '!=', '0')->with('pesanan_detail')->orderBy('id_meja')->get();
+            // dd($meja['pesanan_detail'][0]);
+            foreach ($meja as $value) {
+                
+
+                // dd($value['status']);
+                if($value['Status'] == 'Dipakai') {
+                    $value['Status'] = 'Menunggu Kitchen';
+                }
+                
+                # code...
+            }
+        }
 
         return datatables()
             ->of($meja)
             ->addIndexColumn()
             ->addColumn('status', function ($meja) {
+                // dd($meja);
                 if ($meja->Status=='Kosong'){
-                    return '<div class="div-green">Kosong</div>';  
+                    return '<div class="div-red">Kosong</div>';  
+                } else if ($meja->Status=='Dipakai'){
+                    return '<div class="div-green">Sedang Diproses</div>';  
+                } else if ($meja->Status=='Menunggu Kitchen'){
+                    return '<div class="div-green">Menunggu Kitchen</div>';  
                 }
-                elseif ($meja->Status=='Dipakai'){
-                    return '<div class="div-red">Dipakai</div>';  
+
+                if($meja->Status == "Selesai Kitchen") {
+                    return '<div class="div-green">Selesai Kitchen</div>';  
+                }
+                if($meja->Status == "Diproses") {
+                    return '<div class="div-green">Diproses Kitchen</div>';  
                 }
             })
             ->addColumn('aksi', function($meja){
-                return '
-                <div class="btn-group">
-                <button onclick="editForm(`'.route('pesanandetail.index2', $meja->Id_pesanan).'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil"> </i> Edit</button>
-                <button onclick="resetform(`'.route('meja.reset', $meja->id_meja).'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-book"> </i> Selesai</button>
-                </div>
+                if(auth()->user()->level == 5) {
+                    if($meja->Status == "Diproses") {
+                        return '
+                        <div class="btn-group">
+                            <button disabled onclick="prosesform(`'.route('meja.proses', $meja->id_meja).'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-book"> </i> Diproses</button>
+                            <button onclick="resetform(`'.route('meja.reset', $meja->id_meja).'`)" class="btn btn-xs btn-success btn-flat">Selesai</button>
+                            <button disabled onclick="cancelform(`'.route('meja.cancel', $meja->id_meja).'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-close"> </i> Cancel</button>
+                        </div>
+                    ';
+                    }
+
+                    if($meja->Status == "Selesai Kitchen") {
+                        return '
+                        <div class="btn-group">
+                            <button disabled onclick="prosesform(`'.route('meja.proses', $meja->id_meja).'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-book"> </i> Diproses</button>
+                            <button disabled onclick="resetform(`'.route('meja.reset', $meja->id_meja).'`)" class="btn btn-xs btn-success btn-flat">Selesai</button>
+                            <button disabled onclick="cancelform(`'.route('meja.cancel', $meja->id_meja).'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-close"> </i> Cancel</button>
+                        </div>
+                    ';
+                    }
+
+                    if($meja->Status == "Menunggu Kitchen") {
+                        return '
+                        <div class="btn-group">
+                            <button onclick="prosesform(`'.route('meja.proses', $meja->id_meja).'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-book"> </i> Diproses</button>
+                            <button disabled onclick="resetform(`'.route('meja.reset', $meja->id_meja).'`)" class="btn btn-xs btn-success btn-flat">Selesai</button>
+                            <button onclick="cancelform(`'.route('meja.cancel', $meja->id_meja).'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-close"> </i> Cancel</button>
+                        </div>
+                    ';
+                    }
+
+                    return '
+                    <div class="btn-group">
+                        <button onclick="prosesform(`'.route('meja.proses', $meja->id_meja).'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-book"> </i> Diproses</button>
+                        <button onclick="resetform(`'.route('meja.reset', $meja->id_meja).'`)" class="btn btn-xs btn-success btn-flat">Selesai</button>
+                        <button onclick="cancelform(`'.route('meja.cancel', $meja->id_meja).'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-close"> </i> Cancel</button>
+                    </div>
                    ';
+                        
+                } else {
+                    if($meja->Status == "Menunggu Kitchen") {
+                        return '
+                        <div class="btn-group">
+                        <button onclick="editForm(`'.route('pesanandetail.index2', $meja->Id_pesanan).'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil"> </i> Edit</button>
+                        <button disabled onclick="resetform(`'.route('meja.reset', $meja->id_meja).'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-book"> </i> Selesai</button>
+                        <button onclick="cancelform(`'.route('meja.cancel', $meja->id_meja).'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-close"> </i> Cancel</button>
+                        </div>
+                    ';
+                    }
+                    return '
+                    <div class="btn-group">
+                        <button onclick="editForm(`'.route('pesanandetail.index2', $meja->Id_pesanan).'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil"> </i> Edit</button>
+                        <button onclick="resetform(`'.route('meja.reset', $meja->id_meja).'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-book"> </i> Selesai</button>
+                        <button onclick="cancelform(`'.route('meja.cancel', $meja->id_meja).'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-close"> </i> Cancel</button>
+                    </div>
+                   ';
+                }
+
             })
             ->rawColumns(['aksi', 'status'])
             ->make(true);
@@ -128,20 +222,64 @@ class MejaController extends Controller
     public function reset($id)
     {
         $meja = meja::find($id);
-        $pesanan=pesanan::find($meja->Id_pesanan);
-        $detail =Pesanandetail::where('id_pesanan',$meja->Id_pesanan)->get();
+        $pesanan = pesanan::find($meja->Id_pesanan);
+        $detail = Pesanandetail::where('id_pesanan',$meja->Id_pesanan)->get();
+
         $pesanan->status="Selesai";
+
+        if(auth()->user()->level == 5) {
+            $pesanan->status="Selesai Kitchen";
+            $meja->Status = "Selesai Kitchen";
+        } else {
+            $meja->Id_pesanan = 0;
+            $meja->Status = "Kosong";
+        }
+
         $pesanan->update();
-        $meja->Status = "Kosong";
-        $meja->Id_pesanan = 0;
         $meja->update();
-        foreach ($detail as $item2){
-            $menu=menu::find($item2->id_menu);
-            if($menu->jenis=="Update Stok" && $menu->stok>0 && $pesanan->status!="Selesai"){
-                $menu->stok=$menu->stok-$item2->jumlah;
-                $menu->update();
+
+        if(auth()->user()->level != 5) {
+            foreach ($detail as $item2){
+                $menu=menu::find($item2->id_menu);
+                if($menu->jenis=="Update Stok" && $menu->stok>0 && $pesanan->status!="Selesai"){
+                    $menu->stok=$menu->stok-$item2->jumlah;
+                    $menu->update();
+                }
             }
-            }
-        
+        }
+    }
+
+    public function cancel($id)
+    {
+        $meja = meja::find($id);
+        $pesanan = pesanan::find($meja->Id_pesanan);
+        $detail = Pesanandetail::where('id_pesanan',$meja->Id_pesanan)->get();
+
+        if(auth()->user()->level == 5) {
+            $pesanan->status="Selesai";
+            $meja->Id_pesanan = 0;
+            $meja->Status = "Kosong";
+        } else {
+            $meja->Id_pesanan = 0;
+            $meja->Status = "Kosong";
+        }
+
+        $pesanan->update();
+        $meja->update();
+    }
+
+    public function proses($id)
+    {
+        $meja = meja::find($id);
+        $pesanan = pesanan::find($meja->Id_pesanan);
+        $detail = Pesanandetail::where('id_pesanan',$meja->Id_pesanan)->get();
+
+        if(auth()->user()->level == 5) {
+            $pesanan->status="Diproses";
+            $meja->Status = "Diproses";
+        }
+
+        $pesanan->update();
+        $meja->update();
     }
 }

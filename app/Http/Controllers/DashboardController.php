@@ -16,6 +16,12 @@ class DashboardController extends Controller
         ->orderBy('id_meja_biliard')->get();
         $meja = meja::with('pesanan')
         ->orderBy('id_meja')->get();
+
+        if(auth()->user()->level == 5 || auth()->user()->level == 1) {
+            return redirect()->to('meja');
+        }
+
+        // dd($meja);
         return view('dashboard.index', compact('mejabiliard','meja'));
 
     }

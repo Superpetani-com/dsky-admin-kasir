@@ -53,7 +53,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
 </style>
 @endpush
 @section('title')
-    Daftar Meja
+    Daftar Meja Cafe
 @endsection
 
 @section('breadcrumb')
@@ -67,17 +67,24 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
       <div class="row">
         <div class="col-md-12">
           <div class="box">
+            @if(auth()->user()->level != 5)
             <div class="box-header with-border">
               <button onclick="addForm()" class="btn btn-success  btn-flat"><i class="fa fa-plus-circle">
               </i> Tambah</button>          
             </div>
-            <div class="box-body table-responsive"  style="width:65%">
+            @endif
+            <p id="level" style="display: none;">{{auth()->user()->level}}</p>
+            <div class="box-body table-responsive"  style="width:100%">
             <table class="table table-stiped table-bordered table-mejacafe">
               <thead>
                 <th width="5%">No</th>
                 <th>Nama Meja</th>
                 <th>No.Order</th>
+                @if(auth()->user()->level == 5)
+                <th>Pesanan </th>
+                @endif
                 <th>Status</th>
+                <th>Tanggal</th>
                 <th width="20%"><i class="fa fa-cog"></i></th>
               </thead>
               <tbody></tbody>
@@ -95,9 +102,12 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
 @push('scripts')
 <script>
   let table,table2;
+  let level = document.getElementById('level').innerHTML;
 
+  console.log(level.innerHTML, 'level')
   $(function(){
-   table= $('.table-mejacafe').DataTable({
+   if(level == '5') {
+    table= $('.table-mejacafe').DataTable({
      responsive:true,
      processing: true,
      serverSide: true,
@@ -108,12 +118,65 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
      columns:[
         {data:'DT_RowIndex', searchable:false, sortable:false},
         {data:'nama_meja'},
-        {data:'Id_pesanan'},
+        {
+          "mData": "Id_pesanan",
+          "mRender": function (data, type, row) {
+            return `<a href='#'>${data}</a>`;
+          }
+        },
+        {
+          "mData": "pesanan_detail",
+          "mRender": function (data, type, row) {
+            let pesanan = '';
+            data.map((item) => {
+              pesanan += `${item.Nama_menu} (${item.jumlah}) , `
+            });
+            
+            // Remove the trailing comma and space
+            pesanan = pesanan.slice(0, -2);
+            
+            return `<ol>${pesanan.split(',').map(item => `<li>${item}</li>`).join('')}</ol>`;
+          }
+        },
         {data:'status'},
+        {data:'updated_at', "render": function (data) {
+          var date = new Date(data);
+          var month = date.getMonth() + 1;
+          return (month.toString().length > 1 ? month : "0" + month) + "/" + date.getDate() + "/" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes();
+        }},
+        {data:'aksi', searchable:false, sortable:false},
+     ],
+     bPaginate:false,
+    }); 
+   } else {
+    table= $('.table-mejacafe').DataTable({
+     responsive:true,
+     processing: true,
+     serverSide: true,
+     autoWidth:false,
+     ajax: {
+        url: '{{route('meja.data')}}',
+     },
+     columns:[
+        {data:'DT_RowIndex', searchable:false, sortable:false},
+        {data:'nama_meja'},
+        {
+          "mData": "Id_pesanan",
+          "mRender": function (data, type, row) {
+            return `<a href='{{ url('/pesanandetail/${data}') }}'>${data}</a>`;
+          }
+        },
+        {data:'status'},
+        {data:'updated_at', "render": function (data) {
+          var date = new Date(data);
+          var month = date.getMonth() + 1;
+          return (month.toString().length > 1 ? month : "0" + month) + "/" + date.getDate() + "/" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes();
+        }},
         {data:'aksi', searchable:false, sortable:false},
      ],
      bPaginate:false,
    }); 
+   }
    table2= $('.table-order').DataTable();
 
     $('#modal-form').validator().on('submit', function (e){
@@ -161,6 +224,36 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
   }
 
   function resetform(url){
+    if (confirm('Yakin ingin me-reset meja terpilih?')) {
+    $.get(url)
+    .done((response)=>{
+      //table.ajax.reload();
+      //table2.ajax.reload();
+      location.reload();   
+        })
+    .fail((errors)=>{
+    alert('Tidak dapat me-reset data');
+    return;
+        })
+    }
+  }
+
+  function cancelform(url){
+    if (confirm('Yakin ingin me-reset meja terpilih?')) {
+    $.get(url)
+    .done((response)=>{
+      //table.ajax.reload();
+      //table2.ajax.reload();
+      location.reload();   
+        })
+    .fail((errors)=>{
+    alert('Tidak dapat me-reset data');
+    return;
+        })
+    }
+  }
+
+  function prosesform(url){
     if (confirm('Yakin ingin me-reset meja terpilih?')) {
     $.get(url)
     .done((response)=>{

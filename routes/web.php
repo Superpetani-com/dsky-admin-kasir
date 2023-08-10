@@ -63,6 +63,8 @@ Route::group(['middleware'=>'auth'], function(){
       ->except('create', 'show', 'edit');
 
     Route::get('/meja/{id}/reset', [MejaController::class, 'reset'])->name('meja.reset');
+    Route::get('/meja/{id}/cancel', [MejaController::class, 'cancel'])->name('meja.cancel');
+    Route::get('/meja/{id}/proses', [MejaController::class, 'proses'])->name('meja.proses');
     Route::get('/meja/data', [MejaController::class, 'data'])->name('meja.data');
     Route::resource('/meja',MejaController::class);
 
