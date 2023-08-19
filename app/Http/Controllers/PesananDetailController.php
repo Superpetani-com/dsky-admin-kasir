@@ -20,9 +20,9 @@ class PesananDetailController extends Controller
         if(!$meja){
             abort(404);
         }
-        
+
         return view('pesanandetail.index', compact('Id_pesanan','menu','meja'));
-        
+
     }*/
 
     public function index2($id)
@@ -34,9 +34,9 @@ class PesananDetailController extends Controller
         $menu=menu::orderBy('Nama_menu')->get();
         $pesanan=pesanan::where('Id_pesanan', $id)->first();
         $meja=meja::where('Id_meja', $pesanan->Id_meja)->first();
-                
+
         return view('pesanandetail.index2', compact('Id_pesanan','menu','meja','pesanan'));
-        
+
     }
 
     public function store(Request $request)
@@ -51,6 +51,7 @@ class PesananDetailController extends Controller
         $detail->harga=$menu->Harga;
         $detail->jumlah=1;
         $detail->subtotal=$menu->Harga;
+        $detail->cabang_id='Jogja Billiard';
         $detail->save();
         return response()->json('Data berhasil disimpan', 200);
     }
@@ -68,7 +69,7 @@ class PesananDetailController extends Controller
             $row['nama_menu'] = $item->menu['Nama_menu'];
             $row['harga']       = 'Rp. '. format_uang($item->harga);
             if ( $status=="Selesai"){
-                $row['jumlah']      = '<input type="number" class="form-control input-sm quantity" data-id="'. $item->id_pesanan_detail .'" value="'. $item->jumlah .'" readonly>';   
+                $row['jumlah']      = '<input type="number" class="form-control input-sm quantity" data-id="'. $item->id_pesanan_detail .'" value="'. $item->jumlah .'" readonly>';
             }
             else{
                 $row['jumlah']      = '<input type="number" class="form-control input-sm quantity" data-id="'. $item->id_pesanan_detail .'" value="'. $item->jumlah .'">';
@@ -81,7 +82,7 @@ class PesananDetailController extends Controller
 
             $total += $item->harga * $item->jumlah;
             $total_item += $item->jumlah;
-        } 
+        }
         $data[] = [
             'nama_menu'=> '',
             'harga'=>'',
@@ -107,14 +108,14 @@ class PesananDetailController extends Controller
                 return 'Rp.'.$detail->harga;
             })
             ->addColumn('jumlah', function ($detail){
-                return '<input type="number" class="form-control input-sm quantity" data-id="'.$detail->id_pesanan_detail.'" 
+                return '<input type="number" class="form-control input-sm quantity" data-id="'.$detail->id_pesanan_detail.'"
                 value="'.$detail->jumlah.'">';
             })
             ->addColumn('subtotal', function ($detail){
                 return 'Rp.'.$detail->subtotal;
             })
             ->addColumn('aksi', function($detail){
-                return ' 
+                return '
                 <div class="btn-group">
                    <button onclick="deleteData(`'.route('pesanandetail.destroy', $detail->id_pesanan_detail).'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i> Hapus</button>
                 </div>
@@ -143,6 +144,8 @@ class PesananDetailController extends Controller
         $log_hapus->harga = $detail->harga;
         $log_hapus->jumlah = $detail->jumlah;
         $log_hapus->subtotal = $detail->subtotal;
+        $log_hapus->cabang_id = 'Jogja Billiard';
+        $log_hapus->user_id = auth()->user()->name;
         $log_hapus->created_at = date('Y-m-d H:i:s');
         $log_hapus->updated_at = date('Y-m-d H:i:s');
         $log_hapus->save();

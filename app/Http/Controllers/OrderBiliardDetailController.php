@@ -41,7 +41,7 @@ class OrderBiliardDetailController extends Controller
         $mejabiliard=mejabiliard::where('id_meja_biliard', $order->id_meja_biliard)->first();
         $mejadetail = mejabiliard::orderBy('id_meja_biliard')->get();
         return view('orderbiliarddetail.index', compact('id_order_biliard','paket','order','mejabiliard', 'mejadetail'));
-        
+
     }
 
     /**
@@ -76,17 +76,18 @@ class OrderBiliardDetailController extends Controller
         if ($request->seting_paket=="MANUAL"){
             $detail->jumlah =0.00;
             $detail->menit  =0.00;
-            $detail->flag   =1;   
+            $detail->flag   =1;
         }
         $detail->id_order_biliard=$request->id_order_biliard;
         $detail->id_paket_biliard=$paket->id_paket_biliard;
         $detail->harga=$paket->harga;
         $detail->seting =$request->seting_paket;
         $detail->subtotal=$paket->harga*$detail->jumlah;
+        $detail->cabang_id='Jogja Billiard';
         $detail->save();
         return response()->json('Data berhasil disimpan', 200);
     }
-    
+
     public function data($id, $status1, $status2)
     {
         $detail=OrderBiliardDetail::with('paket', 'order')
@@ -98,8 +99,8 @@ class OrderBiliardDetailController extends Controller
         $total_jam = 0;
         $total_flag = 0;
         $total_menit= 0;
-        
-        
+
+
         foreach ($detail as $item) {
             // dd($item['order']['id_meja_biliard']);
             $mejabiliard=mejabiliard::where('id_meja_biliard', $item['order']['id_meja_biliard'])->first();
@@ -109,15 +110,15 @@ class OrderBiliardDetailController extends Controller
             $row['nama_paket'] = $item->paket['nama_paket'];
             $row['harga']       = 'Rp. '. format_uang($item->harga);
             if ($status2=="Selesai" or $item->seting<>"AUTO"){
-            $row['jumlah']      = 
+            $row['jumlah']      =
             '<form>
             <div class="form-group">
             <input type="number" class="quantity form-control" onchange="checkInputValidity(this, '. $item->jumlah .')" max="'. $item->jumlah .'" data-id="'.$item->id_order_biliard_detail .'" value="'. $item->jumlah .'" step=".05" size="4" readonly>
             </div>
-            </form>';   
+            </form>';
             }
             else{
-            $row['jumlah']      = 
+            $row['jumlah']      =
             '<form>
             <div class="form-group">
             <input type="number" class="quantity form-control" onchange="checkInputValidity(this, '. $item->jumlah .')" max="'. $item->jumlah .'" data-id="'.$item->id_order_biliard_detail .'" value="'. $item->jumlah .'" step=".05" size="4">
@@ -128,7 +129,7 @@ class OrderBiliardDetailController extends Controller
             if ($status2<>"Selesai"){
                 $row['aksi']        =  ' <div class="btn-group">
                                         <button onclick="deleteData(`'.route('orderbiliarddetail.destroy', $item->id_order_biliard_detail).'`)" class="btn btn-xs btn-danger btn-flat btn-hapus"><i class="fa fa-trash"></i> H</button>
-                                        </div>'; 
+                                        </div>';
             }
             if ($status2=="Selesai"){
                 $row['aksi']        =  ' ';
@@ -136,12 +137,12 @@ class OrderBiliardDetailController extends Controller
             if ($item->seting=="MANUAL"){
                 $row['aksi2']        =  ' <div class="btn-group">
                                         <button onclick="stopseting('.$item->id_order_biliard_detail.')" class="btn btn-xs btn-warning btn-flat btn-stop"><i class="fa fa-ban"></i> S</button>
-                                        </div>'; 
+                                        </div>';
             }
             if ($item->seting<>"MANUAL"){
                 $row['aksi2']        ='';
 
-            }                       
+            }
             $row['menit']       = $item->menit;
             $row['seting']      = $item->seting;
             $row['durasi']      = $item->created_at;
@@ -152,7 +153,7 @@ class OrderBiliardDetailController extends Controller
             $total_jam  += $item->jumlah;
             $total_flag += $item->flag;
             $total_menit += $item->menit;
-        } 
+        }
         $data[] = [
             'nama_paket'=> '',
             'harga'=>'',
@@ -246,7 +247,7 @@ class OrderBiliardDetailController extends Controller
         } else {
             return response('failed delete', 500);
         }
- 
+
     }
 
     public function stop($id, $meja, $flag)
@@ -260,7 +261,7 @@ class OrderBiliardDetailController extends Controller
         ->get();
         foreach ($detail1 as $item) {
         $total_flag += $item->flag;
-        } 
+        }
         $meja = Mejabiliard::find($meja);
         $meja->flag=$total_flag;
         $meja->update();

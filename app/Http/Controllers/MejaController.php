@@ -26,7 +26,7 @@ class MejaController extends Controller
         $meja = meja::orderBy('id_meja')->get();
 
         if(auth()->user()->level == 5) {
-            $meja = meja::where('Id_pesanan', '!=', '0')->with('pesanan_detail')->orderBy('id_meja')->get();
+            $meja = meja::where('Id_pesanan', '!=', '0')->where('status', '!=', 'Selesai Kitchen')->with('pesanan_detail')->orderBy('id_meja')->get();
             // dd($meja['pesanan_detail'][0]);
             foreach ($meja as $value) {
                 foreach ($value['pesanan_detail'] as $item) {
@@ -38,7 +38,7 @@ class MejaController extends Controller
                 if($value['Status'] == 'Dipakai') {
                     $value['Status'] = 'Menunggu Kitchen';
                 }
-                
+
                 # code...
             }
             // dd($meja);
@@ -46,13 +46,13 @@ class MejaController extends Controller
             // $meja = meja::where('Id_pesanan', '!=', '0')->with('pesanan_detail')->orderBy('id_meja')->get();
             // dd($meja['pesanan_detail'][0]);
             foreach ($meja as $value) {
-                
+
 
                 // dd($value['status']);
                 if($value['Status'] == 'Dipakai') {
                     $value['Status'] = 'Menunggu Kitchen';
                 }
-                
+
                 # code...
             }
         }
@@ -63,18 +63,18 @@ class MejaController extends Controller
             ->addColumn('status', function ($meja) {
                 // dd($meja);
                 if ($meja->Status=='Kosong'){
-                    return '<div class="div-red">Kosong</div>';  
+                    return '<div class="div-red">Kosong</div>';
                 } else if ($meja->Status=='Dipakai'){
-                    return '<div class="div-green">Sedang Diproses</div>';  
+                    return '<div class="div-green">Sedang Diproses</div>';
                 } else if ($meja->Status=='Menunggu Kitchen'){
-                    return '<div class="div-green">Menunggu Kitchen</div>';  
+                    return '<div class="div-green">Menunggu Kitchen</div>';
                 }
 
                 if($meja->Status == "Selesai Kitchen") {
-                    return '<div class="div-green">Selesai Kitchen</div>';  
+                    return '<div class="div-green">Selesai Kitchen</div>';
                 }
                 if($meja->Status == "Diproses") {
-                    return '<div class="div-green">Diproses Kitchen</div>';  
+                    return '<div class="div-green">Diproses Kitchen</div>';
                 }
             })
             ->addColumn('aksi', function($meja){
@@ -119,7 +119,7 @@ class MejaController extends Controller
                         <button onclick="cancelform(`'.route('meja.cancel', $meja->id_meja).'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-close"> </i> Cancel</button>
                     </div>
                    ';
-                        
+
                 } else {
                     if($meja->Status == "Menunggu Kitchen") {
                         return '

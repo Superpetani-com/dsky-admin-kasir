@@ -37,6 +37,8 @@ class OrderBiliardController extends Controller
         $order->diskon=0;
         $order->totalflag=0;
         $order->status='Aktif';
+        $order->cabang_id='Jogja Billiard';
+        $order->created_by = auth()->user()->name;
         $order->save();
         return redirect()->route('orderbiliarddetail.index2', $order->id_order_biliard);
     }
@@ -72,10 +74,10 @@ class OrderBiliardController extends Controller
             })
             ->addColumn('status', function ($order) {
                 if ($order->status=='Aktif'){
-                    return '<div class="div-red">Aktif</div>';  
+                    return '<div class="div-red">Aktif</div>';
                 }
                 elseif ($order->status=='Selesai'){
-                    return '<div class="div-green">Selesai</div>';  
+                    return '<div class="div-green">Selesai</div>';
                 }
             })
             ->addColumn('aksi', function($order){
@@ -102,7 +104,7 @@ class OrderBiliardController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
+    {
         $mejabiliard = MejaBiliard::find($request->id_meja_biliard);
         $order = orderbiliard::findOrFail($request->id_order_biliard);
         $updatestatus = orderbiliard::where('id_meja_biliard',$request->id_meja_biliard)
@@ -135,7 +137,7 @@ class OrderBiliardController extends Controller
         $jamselesai= date("Y/m/d H:i:s",intval(($durasi*60)+(strtotime($mejabiliard->jammulai))));
         $mejabiliard->jamselesai = $jamselesai;
         //}
-        
+
         //bila paket baru
         /*if ($mejabiliard->jammulai==0 && $mejabiliard->id_order_biliard==0){
         $mejabiliard->jammulai = $timenow;
@@ -143,7 +145,7 @@ class OrderBiliardController extends Controller
         $mejabiliard->jamselesai = $jamselesai;
         }*/
 
-        $mejabiliard->durasi = number_format($durasi,2,",",".");        
+        $mejabiliard->durasi = number_format($durasi,2,",",".");
         $mejabiliard->id_order_biliard = $request->id_order_biliard;
         $mejabiliard->flag=$request->total_flag;
 
@@ -222,5 +224,5 @@ class OrderBiliardController extends Controller
         //return ($detail);
         return view('orderbiliard.cetak', compact('detail','order', 'nama_meja'));
     }
-    
+
 }

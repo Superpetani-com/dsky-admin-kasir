@@ -28,17 +28,18 @@ class PesananController extends Controller
         $pesanan->Kembali=0;
         $pesanan->ppn=10;
         $pesanan->status='Aktif';
-        $pesanan->cabang_id='cilacap_1';
+        $pesanan->cabang_id='Jogja Billiard';
+        $pesanan->created_by = auth()->user()->name;
         $pesanan->save();
         //session(['Id_pesanan'=> $pesanan->Id_pesanan]);
         //session(['Id_meja'=> $pesanan->Id_meja]);
-        //dd($pesanan->Id_pesanan);  
+        //dd($pesanan->Id_pesanan);
         return redirect()->route('pesanandetail.index2', $pesanan->Id_pesanan);
     }
 
     public function data()
     {
-        $pesanan=pesanan::with('meja')
+        $pesanan = pesanan::with('meja')
         ->orderBy('Id_pesanan', 'desc')
         ->get();
         return datatables()
@@ -55,10 +56,10 @@ class PesananController extends Controller
             })
             ->addColumn('status', function ($order) {
                 if ($order->status=='Aktif'){
-                    return '<div class="div-red">Aktif</div>';  
+                    return '<div class="div-red">Aktif</div>';
                 }
                 elseif ($order->status=='Selesai'){
-                    return '<div class="div-green">Selesai</div>';  
+                    return '<div class="div-green">Selesai</div>';
                 }
             })
             ->addColumn('aksi', function($pesanan){
@@ -104,7 +105,7 @@ class PesananController extends Controller
             $meja->Id_pesanan=$pesanan->Id_pesanan;
         }
         $meja->update();
-        
+
         return
         redirect()->route('dashboard.index');
     }

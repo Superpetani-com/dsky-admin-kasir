@@ -8,6 +8,7 @@ use App\Models\LogSensor;
 use App\Models\LogHapus;
 use App\Models\PaketBiliard;
 use App\Models\OrderBiliardDetail;
+use App\Models\OrderBiliard;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
@@ -38,16 +39,21 @@ class DataLampuController extends Controller
         if($state) {
             if($state->status != "Dipakai" && $request->duration > 120) {
                 // jika meja tidak sedang dipakai tapi lampu nyala, insert log
-                $meja = new LogSensor();            
-    
+                $meja = new LogSensor();
+
+                // get last order created_by
+                $findLastOrderToGetUsers = OrderBiliard::orderBy('id_order_biliard', 'desc')->first()['created_by'];
+
                 $data = [
                     'id_meja' => $request->id_meja,
                     'duration' => $request->duration,
-                    'created_date' => date('Y-m-d H:i:s')
+                    'created_date' => date('Y-m-d H:i:s'),
+                    'cabang_id' => 'Jogja Billiard',
+                    'created_by' => $findLastOrderToGetUsers
                 ];
-    
+
                 $meja = LogSensor::create($data);
-    
+
                 return response()->json(['code' => 200, 'message'=> 'Data berhasil disimpan', 'data' => $data], 200);
             }
 
@@ -78,7 +84,7 @@ class DataLampuController extends Controller
         //     DB::raw("CONCAT(CAST(FLOOR(TIMESTAMPDIFF(SECOND, MIN(created_date), MAX(created_date)) / 60) AS UNSIGNED), ' menit') AS time_range")
         // )
         // ->groupBy('id_log_sensor');
-    
+
         // $state = LogSensor::joinSub($subquery, 'sub', function ($join) {
         //     $join->on('log_sensor.id_log_sensor', '=', 'sub.id_log_sensor');
         // })
@@ -94,7 +100,7 @@ class DataLampuController extends Controller
         // ->groupBy('log_sensor.id_log_sensor', 'meja_id', 'time_range') // Group by both id_log_sensor and meja_id
         // ->orderBy('log_sensor.id_log_sensor')
         // ->get();
-    
+
         $state = LogSensor::with('meja')->orderBy('id', 'desc')->get();
 
         foreach ($state as $key => $value) {
@@ -109,7 +115,7 @@ class DataLampuController extends Controller
         return datatables()
             ->of($state)
             ->make(true);
-        
+
     }
 
     public function logHapus() {
@@ -144,7 +150,7 @@ class DataLampuController extends Controller
             // dd($id_meja_biliard);
             // Retrieve "meja" data using the ID
             $meja = MejaBiliard::where('id_meja_biliard', '=', $id_meja_biliard)->get()[0];
-        
+
             // Add $meja as a new property to the $item
             $item->meja = $meja;
         }

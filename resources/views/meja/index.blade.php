@@ -16,7 +16,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
   background-color: #35b50e;
   color: white;
   text-align: center;
-}   
+}
 .div-red {
   background-color: #db1107;
   color: white;
@@ -49,7 +49,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
   padding:0;
 }
 .btn-Dipakai, .btn-Bayar{display: none;}
-   
+
 </style>
 @endpush
 @section('title')
@@ -70,7 +70,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
             @if(auth()->user()->level != 5)
             <div class="box-header with-border">
               <button onclick="addForm()" class="btn btn-success  btn-flat"><i class="fa fa-plus-circle">
-              </i> Tambah</button>          
+              </i> Tambah</button>
             </div>
             @endif
             <p id="level" style="display: none;">{{auth()->user()->level}}</p>
@@ -131,10 +131,10 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
             data.map((item) => {
               pesanan += `${item.Nama_menu} (${item.jumlah}) , `
             });
-            
+
             // Remove the trailing comma and space
             pesanan = pesanan.slice(0, -2);
-            
+
             return `<ol>${pesanan.split(',').map(item => `<li>${item}</li>`).join('')}</ol>`;
           }
         },
@@ -147,7 +147,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
         {data:'aksi', searchable:false, sortable:false},
      ],
      bPaginate:false,
-    }); 
+    });
    } else {
     table= $('.table-mejacafe').DataTable({
      responsive:true,
@@ -175,7 +175,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
         {data:'aksi', searchable:false, sortable:false},
      ],
      bPaginate:false,
-   }); 
+   });
    }
    table2= $('.table-order').DataTable();
 
@@ -197,7 +197,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
       }
     })
   });
-  
+
   function addForm(){
     $('#modal-form').modal('show');
   }
@@ -229,7 +229,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
     .done((response)=>{
       //table.ajax.reload();
       //table2.ajax.reload();
-      location.reload();   
+      location.reload();
         })
     .fail((errors)=>{
     alert('Tidak dapat me-reset data');
@@ -244,7 +244,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
     .done((response)=>{
       //table.ajax.reload();
       //table2.ajax.reload();
-      location.reload();   
+      location.reload();
         })
     .fail((errors)=>{
     alert('Tidak dapat me-reset data');
@@ -259,7 +259,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
     .done((response)=>{
       //table.ajax.reload();
       //table2.ajax.reload();
-      location.reload();   
+      location.reload();
         })
     .fail((errors)=>{
     alert('Tidak dapat me-reset data');
