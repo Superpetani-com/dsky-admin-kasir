@@ -74,6 +74,9 @@ class DataLampuController extends Controller
     }
 
     public function getAll() {
+        if(auth()->user()->level != 3) {
+            return redirect()->back();
+        }
         $state = LogSensor::with('meja')->orderBy('id', 'desc')->get();
         return view('laporan.sensor', compact('state'));
     }
@@ -119,6 +122,9 @@ class DataLampuController extends Controller
     }
 
     public function logHapus() {
+        if(auth()->user()->level != 3) {
+            return redirect()->back();
+        }
         return view('laporan.hapus');
     }
 
@@ -131,6 +137,9 @@ class DataLampuController extends Controller
     }
 
     public function orderCustom() {
+        if(auth()->user()->level != 3) {
+            return redirect()->back();
+        }
         return view('laporan.custom');
     }
 
