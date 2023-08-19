@@ -100,7 +100,7 @@ Route::group(['middleware'=>'auth'], function(){
     Route::get('/laporan/cetakcafe/{awal}/{akhir}', [LaporanCafeController::class, 'cetakcafe'])->name('laporan.cetakcafe');
     Route::get('/laporan/datacafe/{awal}/{akhir}', [LaporanCafeController::class, 'datacafe'])->name('laporan.datacafe');
     Route::get('/laporan/pdfcafe/{awal}/{akhir}', [LaporanCafeController::class, 'exportPDFcafe'])->name('laporan.export_pdfcafe');
-    
+
     Route::get('/laporantest', [LaporanTestController::class, 'indextest'])->name('laporan.indextest');
     Route::get('/laporan/cetaktest/{awal}/{akhir}', [LaporanTestController::class, 'cetaktest'])->name('laporan.cetaktest');
     Route::get('/laporan/datatest/{awal}/{akhir}', [LaporanTestController::class, 'datatest'])->name('laporan.datatest');
@@ -115,4 +115,9 @@ Route::group(['middleware'=>'auth'], function(){
     Route::get('/log/order/custom', [DataLampuController::class, 'orderCustom'])->name('laporan.orderCustom');
     Route::get('/log/order/custom/data', [DataLampuController::class, 'orderCustomData'])->name('laporan.orderCustomData');
 
+    Route::get('/users', [DataLampuController::class, 'users'])->name('laporan.users');
+    Route::get('/users/data', [DataLampuController::class, 'usersData'])->name('laporan.usersData');
+
+    Route::get('/user/register', [DataLampuController::class, 'register'])->name('user.register');
+    Route::delete('/user/delete/{id}', [DataLampuController::class, 'destroyUser'])->name('user.delete');
 });

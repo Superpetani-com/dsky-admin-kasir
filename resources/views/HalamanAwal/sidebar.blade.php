@@ -162,6 +162,12 @@
         <!-- SuperAdmin -->
         @if(auth()->user()->level == 3)
         <li>
+            <a href="{{route('laporan.users')}}">
+              <i class="fa fa-file-text-o"></i> <span>User Manajemen</span>
+              </span>
+            </a>
+          </li>
+        <li>
           <a href="{{route('laporan.sensor')}}">
             <i class="fa fa-file-text-o"></i> <span>Log Sensor</span>
             </span>

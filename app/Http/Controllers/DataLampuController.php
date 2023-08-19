@@ -9,6 +9,7 @@ use App\Models\LogHapus;
 use App\Models\PaketBiliard;
 use App\Models\OrderBiliardDetail;
 use App\Models\OrderBiliard;
+use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
@@ -167,5 +168,52 @@ class DataLampuController extends Controller
         return datatables()
             ->of($state)
             ->make(true);
+    }
+
+    public function users() {
+        if(auth()->user()->level != 3) {
+            return redirect()->back();
+        }
+        return view('laporan.users');
+    }
+
+    public function usersData() {
+        // cari paket biliard yang tipenya custom
+        $state = User::orderBy('updated_at', 'desc')->get();
+
+        return datatables()
+            ->of($state)
+            ->addIndexColumn()
+            ->addColumn('aksi', function($pesanan){
+                return '
+                    <div class="btn-group">
+                        <button onclick="editForm(`'.route('pesanandetail.index2', $pesanan->id).'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil"> </i> Edit</button>
+                        <button onclick="deleteData(`'.route('pesanan.destroy', $pesanan->id).'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"> </i> Hapus</button>
+                    </div>
+                ';
+            })
+            ->rawColumns(['aksi', 'status'])
+            ->make(true);
+    }
+
+    public function register(Request $request)
+    {
+        $user = User::create($request->all());
+
+        return response()->json('Data berhasil disimpan', 200);
+    }
+
+     /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroyUser($id)
+    {
+        $user = User::find($id);
+        $user->delete();
+
+        return response(null, 204);
     }
 }

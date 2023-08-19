@@ -7,6 +7,7 @@ use App\Models\MejaBiliard;
 use App\Models\Meja;
 use App\Models\OrderBiliard;
 use App\Models\Pesanan;
+use App\Models\User;
 
 class DashboardController extends Controller
 {
@@ -16,6 +17,12 @@ class DashboardController extends Controller
         ->orderBy('id_meja_biliard')->get();
         $meja = meja::with('pesanan')
         ->orderBy('id_meja')->get();
+
+        // Get the user by their ID
+        $user = User::find(auth()->user()->id);
+
+        // Update the updated_at timestamp to the current date and time
+        $user->update(['updated_at' => now()]);
 
         if(auth()->user()->level == 5 || auth()->user()->level == 1 || auth()->user()->level == 6) {
             return redirect()->to('meja');
@@ -29,9 +36,7 @@ class DashboardController extends Controller
             return redirect()->to('sensor');
         }
 
-        // dd($meja);
         return view('dashboard.index', compact('mejabiliard','meja'));
-
     }
     public function store()
     {

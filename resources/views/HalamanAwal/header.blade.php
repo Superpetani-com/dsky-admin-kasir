@@ -2,9 +2,9 @@
     <!-- Logo -->
     <a class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>d</b>S</span>
+      <span class="logo-mini"><b>J</b>B</span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg">{{config ('app.name')}}</span>
+      <span class="logo-lg">Jogja Billiard</span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
@@ -31,7 +31,7 @@
 
                 <p>
                 {{auth()->user()->name}} - {{auth()->user()->email}}
-                  
+
                 </p>
               </li>
               <li class="user-footer">
