@@ -28,11 +28,11 @@
         @media print {
             @page {
                 margin: 0;
-                size: 75mm 
+                size: 75mm
     ';
     ?>
-    <?php 
-    $style .= 
+    <?php
+    $style .=
         ! empty($_COOKIE['innerHeight'])
             ? $_COOKIE['innerHeight'] .'mm; }'
             : '}';
@@ -57,7 +57,7 @@
 <button class="btn-print" style="position: absolute; right: 1rem; top: rem;" onclick="window.print()">Print</button>
     <div class="text-center">
         <h3 style="margin-bottom: 5px;">{{ strtoupper("NOTA BILIARD") }}</h3>
-        <h3 style="margin-bottom: 5px;">{{ strtoupper("D'SKY CAFE") }}</h3>
+        <h3 style="margin-bottom: 5px;">{{ strtoupper("Jogja Billiard") }}</h3>
         <p>{{ ucwords("jl dr. sutomo cilacap") }}</p>
         <p>{{ ucwords("BCA : 4340171379") }}</p>
         <p>{{ ucwords("WA : 081227741940") }}</p>

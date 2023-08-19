@@ -31,11 +31,11 @@
         @media print {
             @page {
                 margin: 0;
-                size: 75mm 
+                size: 75mm
     ';
     ?>
-    <?php 
-    $style .= 
+    <?php
+    $style .=
         ! empty($_COOKIE['innerHeight'])
             ? $_COOKIE['innerHeight'] .'mm; }'
             : '}';
@@ -59,7 +59,7 @@
 <body onload="window.print()">
 <button class="btn-print" style="position: absolute; right: 1rem; top: rem;" onclick="window.print()">Print</button>
     <div class="text-center">
-        <h3 style="margin-bottom: 5px;">{{ strtoupper("D'SKY CAFE") }}</h3>
+        <h3 style="margin-bottom: 5px;">{{ strtoupper("Jogja Billiard") }}</h3>
         <p>{{ ucwords("jl dr. sutomo cilacap") }}</p>
     </div>
     <br>
@@ -89,7 +89,7 @@
                         <td>{{ $row['Customer'] }}</td>
                         <td>{{ $row['TotalBayar'] }}</td>
                 </tr>
-                
+
             @endforeach
             </tbody>
     </table>
