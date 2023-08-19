@@ -33,7 +33,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
             <div class="box-header with-border">
             </div>
             <div class="box-body table-responsive">
-                <table class="table table-stiped table-bordered" style="width:100%"> 
+                <table class="table table-stiped table-bordered" style="width:100%">
                     <thead>
                         <th width="5%">ID Pesanan</th>
                         <th>ID Meja</th>
@@ -43,6 +43,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
                         <th>Total</th>
                         <th>Status Terakhir</th>
                         <th>Tanggal Dihapus</th>
+                        <th>Yang Menghapus</th>
                     </thead>
                 </table>
             </div>
@@ -82,6 +83,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
                 {data: 'subtotal'},
                 {data: 'pesanan.status'},
                 {data: 'created_at'},
+                {data: 'user_id'},
             ],
             dom: 'Brt',
             bSort: false,

@@ -25,6 +25,10 @@ class DashboardController extends Controller
             return redirect()->to('menu');
         }
 
+        if(auth()->user()->level == 3) {
+            return redirect()->to('sensor');
+        }
+
         // dd($meja);
         return view('dashboard.index', compact('mejabiliard','meja'));
 

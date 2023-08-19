@@ -33,13 +33,14 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
             <div class="box-header with-border">
             </div>
             <div class="box-body table-responsive">
-                <table class="table table-stiped table-bordered" style="width:100%"> 
+                <table class="table table-stiped table-bordered" style="width:100%">
                     <thead>
                         <th width="5%">ID</th>
                         <th>ID Meja</th>
                         <th>Nama Meja</th>
                         <th>Durasi</th>
                         <th>Tanggal</th>
+                        <th>Nama Kasir</th>
                     </thead>
                 </table>
             </div>
@@ -70,6 +71,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
                 {data: 'meja.namameja'},
                 {data: 'duration'},
                 {data: 'created_date'},
+                {data: 'created_by'},
             ],
             dom: 'Brt',
             bSort: false,

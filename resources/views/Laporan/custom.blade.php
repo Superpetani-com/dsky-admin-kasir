@@ -33,7 +33,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
             <div class="box-header with-border">
             </div>
             <div class="box-body table-responsive">
-                <table class="table table-stiped table-bordered" style="width:100%"> 
+                <table class="table table-stiped table-bordered" style="width:100%">
                     <thead>
                         <th width="5%">ID Order</th>
                         <th>ID Meja</th>
@@ -43,6 +43,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
                         <th>Total</th>
                         <th>Status</th>
                         <th>Tanggal Order</th>
+                        <th>Nama Kasir</th>
                     </thead>
                 </table>
             </div>
@@ -82,6 +83,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
                 {data: 'order.totalharga'},
                 {data: 'order.status'},
                 {data: 'created_at'},
+                {data: 'order.created_by'},
             ],
             bSort: false,
             bPaginate: true,
