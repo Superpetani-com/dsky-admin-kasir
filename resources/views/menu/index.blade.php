@@ -15,7 +15,7 @@
   }
   .table_menu tbody tr:nth-child(even) {
   background-color: #cef0b1;
-    } 
+    }
   .table_menu  thead{background-color: #96bf73;}
   table{font-size: 12pt;}
   input[type="text"]{font-size:12pt;}
@@ -30,7 +30,7 @@
           <div class="box">
             <div class="box-header with-border">
               <button onclick="addForm('{{route('menu.store')}}')" class="btn btn-success  btn-flat"><i class="fa fa-plus-circle">
-              </i> Tambah</button>          
+              </i> Tambah</button>
             </div>
             <div class="box-body table-responsive">
             <table class="table table-stiped table-bordered table_menu">
@@ -75,7 +75,7 @@
         {data:'jenis'},
         {data:'aksi', searchable:false, sortable:false},
      ]
-   }); 
+   });
 
     $('#modal-form').validator().on('submit', function (e){
       if(!e.preventDefault()){
@@ -96,9 +96,9 @@
     })
 
   });
-  
+
   function addForm(url){
-    if ({{auth()->user()->level}}==2 || {{auth()->user()->level}}==3){
+    if ({{auth()->user()->level}}==2 || {{auth()->user()->level}}==3 || {{auth()->user()->level}}==4){
     $('#modal-form').modal('show');
     $('#modal-form .modal-title').text('Tambah Menu');
 
@@ -146,6 +146,6 @@
                 });
         }
     }
-    
+
 </script>
 @endpush

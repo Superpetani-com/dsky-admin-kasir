@@ -21,12 +21,16 @@ class DashboardController extends Controller
             return redirect()->to('meja');
         }
 
+        if(auth()->user()->level == 4) {
+            return redirect()->to('menu');
+        }
+
         // dd($meja);
         return view('dashboard.index', compact('mejabiliard','meja'));
 
     }
     public function store()
     {
-        
+
     }
 }

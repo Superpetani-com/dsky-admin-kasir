@@ -24,7 +24,7 @@
       <!-- /.search form -->
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
-      
+
         <!-- Kasir -->
         @if(auth()->user()->level == 1)
 
@@ -92,13 +92,13 @@
         @endif
 
         @if(auth()->user()->level == 4)
-        <li>
+        {{-- <li>
         <li>
           <a href="{{route('dashboard.index')}}">
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
             </span>
           </a>
-        </li>
+        </li> --}}
         <li class="header">REPORT</li>
         <li>
           <a href="{{route('laporan.index')}}">
@@ -166,21 +166,21 @@
             <i class="fa fa-file-text-o"></i> <span>Log Sensor</span>
             </span>
           </a>
-        </li>  
+        </li>
         <li>
           <a href="{{route('laporan.hapus')}}">
             <i class="fa fa-file-text-o"></i> <span>Log Hapus Barang</span>
             </span>
           </a>
-        </li>  
+        </li>
         <li>
           <a href="{{route('laporan.orderCustom')}}">
             <i class="fa fa-file-text-o"></i> <span>Log Order Custom</span>
             </span>
           </a>
-        </li>  
+        </li>
         @endif
-       
+
       </ul>
     </section>
     <!-- /.sidebar -->
