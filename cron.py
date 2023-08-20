@@ -1,4 +1,8 @@
+import tkinter as tk
+from tkinter import messagebox, scrolledtext
+from threading import Thread
 import schedule
+import time
 import mysql.connector
 
 # Local database configuration
@@ -11,8 +15,8 @@ local_db_config = {
 
 # Remote database configuration
 remote_db_config = {
-    "user": "o2uclzz9a2namt2yemqf",
-    "password": "pscale_pw_HFWNscT2YRF22m3tGzbFcxwp5xXgVo2yzgxqOQXLo51",
+    "user": "4v47wxw8tw4li5733mig",
+    "password": "pscale_pw_Wfa1t6eYCFpCoDap6VImF1Z39eLD1rsF0JhxbAsr1LP",
     "host": "aws.connect.psdb.cloud",
     "database": "billiard",
     "connection_timeout": 1200
@@ -77,40 +81,12 @@ def retrieve_data_log_sensor(last_date_sync):
     finally:
         local_connection.close()
 
-def retrieve_data_pesanan_detail(last_date_sync):
-    local_connection = mysql.connector.connect(**local_db_config)
-
-    try:
-        cursor = local_connection.cursor(dictionary=True)
-        cursor.execute('SELECT * FROM pesanan_detail WHERE updated_at > %s', (last_date_sync,))
-        rows = cursor.fetchall()
-        return rows
-    except mysql.connector.Error as error:
-        print('Error retrieving data from local database:', error)
-        return []
-    finally:
-        local_connection.close()
-
 def retrieve_data_order_biliard(last_date_sync):
     local_connection = mysql.connector.connect(**local_db_config)
 
     try:
         cursor = local_connection.cursor(dictionary=True)
         cursor.execute('SELECT * FROM order_biliard WHERE updated_at > %s', (last_date_sync,))
-        rows = cursor.fetchall()
-        return rows
-    except mysql.connector.Error as error:
-        print('Error retrieving data from local database:', error)
-        return []
-    finally:
-        local_connection.close()
-
-def retrieve_data_order_biliard_detail(last_date_sync):
-    local_connection = mysql.connector.connect(**local_db_config)
-
-    try:
-        cursor = local_connection.cursor(dictionary=True)
-        cursor.execute('SELECT * FROM orderbiliarddetail WHERE updated_at > %s', (last_date_sync,))
         rows = cursor.fetchall()
         return rows
     except mysql.connector.Error as error:
@@ -194,25 +170,24 @@ def upsert_to_remote_table_log_sensor(data):
 
         for item in data:
             upsert_query = """
-                INSERT INTO log_sensor (id_pesanan, duration, cabang_id, created_at)
+                INSERT INTO log_sensor (id_meja, duration, cabang_id, created_date)
                 VALUES (%s, %s, %s, %s)
                 ON DUPLICATE KEY UPDATE
+                id_meja = VALUES(id_meja),
                 duration = VALUES(duration),
                 cabang_id = VALUES(cabang_id),
-                created_at = VALUES(created_at)
+                created_date = VALUES(created_date)
             """
 
             values = (
-                item["id_pesanan"],
+                item["id_meja"],
                 item["duration"],
                 item["cabang_id"],
-                item["created_at"],
-                item["subtotal"],
-                item["created_at"]
+                item["created_date"]
             )
 
             cursor.execute(upsert_query, values)
-            print(f'Upserting data table log_sensor with id {item["id_pesanan"]}')
+            print(f'Upserting data table log_sensor with id {item["id_meja"]}')
 
             total_data += 1
 
@@ -242,20 +217,22 @@ def upsert_to_remote_table_log_hapus_barang(data):
 
         for item in data:
             upsert_query = """
-                INSERT INTO log_hapus_barang (id_meja, id_menu, harga, jumlah, subtotal, created_at, cabang_id, user_id)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                INSERT INTO log_hapus_barang (id_pesanan, id_menu, harga, jumlah, subtotal, created_at, updated_at,  cabang_id, user_id)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
                 ON DUPLICATE KEY UPDATE
+                id_pesanan = VALUES(id_pesanan),
                 id_menu = VALUES(id_menu),
                 harga = VALUES(harga),
                 jumlah = VALUES(jumlah),
                 subtotal = VALUES(subtotal),
                 created_at = VALUES(created_at),
+                updated_at = VALUES(updated_at),
                 cabang_id = VALUES(cabang_id),
                 user_id = VALUES(user_id)
             """
 
             values = (
-                item["id_meja"],
+                item["id_pesanan"],
                 item["id_menu"],
                 item["harga"],
                 item["jumlah"],
@@ -267,7 +244,7 @@ def upsert_to_remote_table_log_hapus_barang(data):
             )
 
             cursor.execute(upsert_query, values)
-            print(f'Upserting data table log_hapus_barang with id {item["id_meja"]}')
+            print(f'Upserting data table log_hapus_barang with id {item["id_pesanan"]}')
 
             total_data += 1
 
@@ -291,7 +268,9 @@ last_date_sync = get_last_date_sync()
 print(f'Last Date Syncronize: {last_date_sync}')
 
 def perform_data_sync():
+    print(last_date_sync, 'last sync date')
     if last_date_sync:
+        print('Do sync...')
         # sync tabel pesanan
         data = retrieve_data(last_date_sync)
         if data:
@@ -302,22 +281,119 @@ def perform_data_sync():
         # sync tabel log hapus barang
         data_log_hapus_barang = retrieve_data_log_hapus_barang(last_date_sync)
         if data_log_hapus_barang:
-            upsert_to_remote_table_log_hapus_barang(data)
+            upsert_to_remote_table_log_hapus_barang(data_log_hapus_barang)
         else:
             print('No new data to sync in table log hapus barang')
 
         # sync tabel log hapus barang
         data_log_sensor = retrieve_data_log_sensor(last_date_sync)
         if data_log_sensor:
-            upsert_to_remote_table_log_sensor(data)
+            upsert_to_remote_table_log_sensor(data_log_sensor)
         else:
             print('No new data to sync in table log hapus barang')
 
     else:
         print('Unable to fetch last sync date from remote database.')
 
-perform_data_sync()
-print('Data synchronization job started.')
+# perform_data_sync()
+# GUI initialization
+class DataSyncApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Data Synchronization")
 
-# Schedule the data synchronization operation every minute
-# schedule.every().minute.do(perform_data_sync)
+        self.log_console = scrolledtext.ScrolledText(root, wrap=tk.WORD, height=10)
+        self.log_console.pack()
+
+
+        # Create labels to display last sync date
+        self.last_sync_label = tk.Label(root, text="Last Sync Date:")
+        self.last_sync_label.pack()
+
+        self.last_sync_date_label = tk.Label(root, text="")
+        self.last_sync_date_label.pack()
+
+        # Create buttons to trigger data synchronization
+        self.sync_pesanan_button = tk.Button(root, text="Sync Pesanan", command=self.sync_pesanan)
+        self.sync_pesanan_button.pack()
+
+        self.sync_log_hapus_barang_button = tk.Button(root, text="Sync Log Hapus Barang", command=self.sync_log_hapus_barang)
+        self.sync_log_hapus_barang_button.pack()
+
+        self.sync_log_sensor_button = tk.Button(root, text="Sync Log Sensor", command=self.sync_log_sensor)
+        self.sync_log_sensor_button.pack()
+
+        self.sync_all_button = tk.Button(root, text="Sync All", command=self.sync_all)
+        self.sync_all_button.pack()
+
+        # Schedule the data synchronization operation
+        schedule.every(15).minutes.do(self.perform_data_sync)
+
+        # Update last sync date and GUI
+        self.update_last_sync_date()
+
+        # Start the scheduling loop
+        self.schedule_thread = Thread(target=self.run_schedule)
+        self.schedule_thread.start()
+
+        # Redirect stdout to the log console
+        import sys
+        sys.stdout = self.LogRedirector(self.log_console)
+
+    class LogRedirector:
+        def __init__(self, text_widget):
+            self.text_widget = text_widget
+
+        def write(self, message):
+            self.text_widget.insert(tk.END, message)
+            self.text_widget.see(tk.END)
+
+    def run_schedule(self):
+        while True:
+            schedule.run_pending()
+            time.sleep(1)
+
+    def perform_data_sync(self):
+        self.update_last_sync_date()
+        perform_data_sync()
+
+    def update_last_sync_date(self):
+        last_date_sync = get_last_date_sync()
+        if last_date_sync:
+            self.last_sync_date_label.config(text=last_date_sync)
+        else:
+            self.last_sync_date_label.config(text="Not available")
+
+    def sync_pesanan(self):
+        data = retrieve_data(last_date_sync)
+        if data:
+            upsert_to_remote_table_pesanan(data)
+            messagebox.showinfo("Sync Pesanan", "Sync completed.")
+        else:
+            messagebox.showinfo("Sync Pesanan", "No new data to sync.")
+
+    def sync_log_hapus_barang(self):
+        data = retrieve_data_log_hapus_barang(last_date_sync)
+        if data:
+            upsert_to_remote_table_log_hapus_barang(data)
+            messagebox.showinfo("Sync Log Hapus Barang", "Sync completed.")
+        else:
+            messagebox.showinfo("Sync Log Hapus Barang", "No new data to sync.")
+
+    def sync_log_sensor(self):
+        data = retrieve_data_log_sensor(last_date_sync)
+        if data:
+            upsert_to_remote_table_log_sensor(data)
+            messagebox.showinfo("Sync Log Sensor", "Sync completed.")
+        else:
+            messagebox.showinfo("Sync Log Sensor", "No new data to sync.")
+
+    def sync_all(self):
+        self.sync_pesanan()
+        self.sync_log_hapus_barang()
+        self.sync_log_sensor()
+
+# Create the main application window
+root = tk.Tk()
+app = DataSyncApp(root)
+root.mainloop()
