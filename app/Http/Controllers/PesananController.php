@@ -7,6 +7,7 @@ use App\Models\Pesanan;
 use App\Models\Meja;
 use App\Models\PesananDetail;
 use App\Models\Menu;
+use Ramsey\Uuid\Uuid;
 
 class PesananController extends Controller
 {
@@ -18,6 +19,7 @@ class PesananController extends Controller
 
     public function create($id)
     {
+        $uuid = Uuid::uuid4();
         $pesanan=new pesanan();
         $pesanan->Id_meja=$id;
         $pesanan->TotalItem=0;
@@ -30,6 +32,7 @@ class PesananController extends Controller
         $pesanan->status='Aktif';
         $pesanan->cabang_id='Jogja Billiard';
         $pesanan->created_by = auth()->user()->name;
+        $pesanan->uuid = $uuid->toString();
         $pesanan->save();
         //session(['Id_pesanan'=> $pesanan->Id_pesanan]);
         //session(['Id_meja'=> $pesanan->Id_meja]);

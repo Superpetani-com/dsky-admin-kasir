@@ -8,6 +8,7 @@ use App\Models\Meja;
 use App\Models\Pesanan;
 use App\Models\PesananDetail;
 use App\Models\LogHapus;
+use Ramsey\Uuid\Uuid;
 
 class PesananDetailController extends Controller
 {
@@ -138,6 +139,8 @@ class PesananDetailController extends Controller
         $detail = pesanandetail::find($id);
 
         // save deleted data to table log_hapus
+        $uuid = Uuid::uuid4();
+
         $log_hapus= new LogHapus();
         $log_hapus->id_pesanan = $detail->id_pesanan;
         $log_hapus->id_menu = $detail->id_menu;
@@ -148,6 +151,8 @@ class PesananDetailController extends Controller
         $log_hapus->user_id = auth()->user()->name;
         $log_hapus->created_at = date('Y-m-d H:i:s');
         $log_hapus->updated_at = date('Y-m-d H:i:s');
+        $log_hapus->uuid = $uuid->toString();
+
         $log_hapus->save();
 
         $detail->delete();

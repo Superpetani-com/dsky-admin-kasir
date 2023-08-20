@@ -106,8 +106,8 @@ def upsert_to_remote_table_pesanan(data):
 
         for item in data:
             upsert_query = """
-                INSERT INTO pesanan (Id_pesanan, Id_meja, TotalItem, TotalHarga, Diskon, ppn, TotalBayar, Diterima, Kembali, status, customer, cabang_id, created_at, updated_at, created_by)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                INSERT INTO pesanan (Id_pesanan, Id_meja, TotalItem, TotalHarga, Diskon, ppn, TotalBayar, Diterima, Kembali, status, customer, cabang_id, created_at, updated_at, created_by, uuid)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 ON DUPLICATE KEY UPDATE
                 Id_meja = VALUES(Id_meja),
                 TotalItem = VALUES(TotalItem),
@@ -122,7 +122,8 @@ def upsert_to_remote_table_pesanan(data):
                 cabang_id = VALUES(cabang_id),
                 created_at = VALUES(created_at),
                 updated_at = VALUES(updated_at),
-                created_by = VALUES(created_by)
+                created_by = VALUES(created_by),
+                uuid = VALUES(uuid)
             """
 
             values = (
@@ -140,7 +141,8 @@ def upsert_to_remote_table_pesanan(data):
                 item["cabang_id"],
                 item["created_at"],
                 item["updated_at"],
-                item["created_by"]
+                item["created_by"],
+                item["uuid"]
             )
 
             cursor.execute(upsert_query, values)
@@ -203,7 +205,7 @@ def upsert_to_remote_table_log_sensor(data):
             )
 
             cursor.execute(upsert_query, values)
-            print(f'Upserting data table log_sensor with id {item["id_meja"]}')
+            print(f'Upserting data table log_sensor with id {item["uuid"]}')
 
             total_data += 1
 
@@ -233,7 +235,7 @@ def upsert_to_remote_table_log_hapus_barang(data):
 
         for item in data:
             upsert_query = """
-                INSERT INTO log_hapus_barang (id_pesanan, id_menu, harga, jumlah, subtotal, created_at, updated_at,  cabang_id, user_id, created_by)
+                INSERT INTO log_hapus_barang (id_pesanan, id_menu, harga, jumlah, subtotal, created_at, updated_at,  cabang_id, user_id, uuid)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 ON DUPLICATE KEY UPDATE
                 id_pesanan = VALUES(id_pesanan),
@@ -245,7 +247,7 @@ def upsert_to_remote_table_log_hapus_barang(data):
                 updated_at = VALUES(updated_at),
                 cabang_id = VALUES(cabang_id),
                 user_id = VALUES(user_id),
-                created_by = VALUES(created_by)
+                uuid = VALUES(uuid)
             """
 
             values = (
@@ -258,7 +260,7 @@ def upsert_to_remote_table_log_hapus_barang(data):
                 item["updated_at"],
                 item["cabang_id"],
                 item["user_id"],
-                item["created_by"]
+                item["uuid"]
             )
 
             cursor.execute(upsert_query, values)
