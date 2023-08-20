@@ -74,8 +74,9 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
             </div>
             @endif
             <p id="level" style="display: none;">{{auth()->user()->level}}</p>
+            <h1 id="new-order"></h1>
             <div class="box-body table-responsive"  style="width:100%">
-            <table class="table table-stiped table-bordered table-mejacafe">
+            <table class="table table-stiped table-bordered table-mejacafe" id="table-mejacafe">
               <thead>
                 <th width="5%">No</th>
                 <th>Nama Meja</th>
@@ -95,6 +96,25 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
       </div>
 </div>
 
+<audio id="alertSound">
+    <source src="./sound.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+
+<div class="modal fade" id="customAlert" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h1>Ada Order Masuk</h1>
+            </div>
+            <div class="modal-footer">
+                <button id="okButton" type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @includeIf('meja.meja')
 
 @endsection
@@ -104,8 +124,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
   let table,table2;
   let level = document.getElementById('level').innerHTML;
 
-  console.log(level.innerHTML, 'level')
-  $(function(){
+  function load(){
    if(level == '5') {
     table= $('.table-mejacafe').DataTable({
      responsive:true,
@@ -196,7 +215,84 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
         })
       }
     })
-  });
+  };
+
+  load(); // Call the load function initially
+
+    var audioIsPlaying = false;
+
+    function playAlertSound() {
+        if (!audioIsPlaying) {
+            var audio = document.getElementById("alertSound");
+            audio.play();
+            audioIsPlaying = true;
+
+            // Once the audio finishes playing, reset the audioIsPlaying flag
+            audio.addEventListener("ended", function() {
+                audioIsPlaying = false;
+            });
+        }
+    }
+    function showAlert() {
+        playAlertSound();
+        $('#customAlert').modal('show');
+    }
+
+    // Create an interval that calls the load function every 3 seconds
+    //   setInterval(load, 3000);
+    var currentPath = window.location.pathname;
+        var parts = currentPath.split('/');
+        var lastPart = parts[parts.length - 1];
+
+
+        if (lastPart == 'meja' && level == 5) {
+        function getData(yt_url, callback) {
+            $.ajax({
+                type: "GET",
+                url: yt_url,
+                dataType: "json",
+                success: callback,
+                error: function(request, status, error) {
+                    alert(status);
+                }
+            });
+        }
+
+
+        let isOk = true;
+
+        setInterval(() => {
+            let lastLength = 0;
+            getData('{{route('meja.data')}}', function(response) {
+                console.log(response.data.length, lastLength)
+                if(response.data.length > lastLength  && isOk) {
+                    console.log('order baru', response.data.length, lastLength)
+                    showAlert()
+                }
+                // alert('The response was: ' + response.data.length, rowCount);
+                // alert('Ada pesanan baru')
+            });
+
+
+            var tables = document.getElementById("table-mejacafe");
+            lastLength = tables.rows.length;
+
+            document.getElementById("okButton").addEventListener("click", function() {
+                $('#customAlert').modal('hide');
+                isOk = false;
+            });
+
+            console.log(isOk, 'ok')
+        }, 3000);
+        // setInterval(() => {
+        //     if ($.fn.DataTable.isDataTable('.table-mejacafe')) {
+        //         $('.table-mejacafe').DataTable().destroy();
+        //     }
+        //     load()
+        // }, 3000);
+    }
+
+
 
   function addForm(){
     $('#modal-form').modal('show');
@@ -224,7 +320,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
   }
 
   function resetform(url){
-    if (confirm('Yakin ingin me-reset meja terpilih?')) {
+    if (confirm('Selesaikan Pesanan?')) {
     $.get(url)
     .done((response)=>{
       //table.ajax.reload();
@@ -239,7 +335,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
   }
 
   function cancelform(url){
-    if (confirm('Yakin ingin me-reset meja terpilih?')) {
+    if (confirm('Cancel Pesanan?')) {
     $.get(url)
     .done((response)=>{
       //table.ajax.reload();
@@ -254,7 +350,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
   }
 
   function prosesform(url){
-    if (confirm('Yakin ingin me-reset meja terpilih?')) {
+    if (confirm('Proses Pesanan?')) {
     $.get(url)
     .done((response)=>{
       //table.ajax.reload();

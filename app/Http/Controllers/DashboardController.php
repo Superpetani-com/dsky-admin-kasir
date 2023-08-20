@@ -24,7 +24,7 @@ class DashboardController extends Controller
         // Update the updated_at timestamp to the current date and time
         $user->update(['updated_at' => now()]);
 
-        if(auth()->user()->level == 5 || auth()->user()->level == 1 || auth()->user()->level == 6) {
+        if(auth()->user()->level == 5 || auth()->user()->level == 6) {
             return redirect()->to('meja');
         }
 

@@ -85,9 +85,9 @@ class MejaController extends Controller
                     if($meja->Status == "Diproses") {
                         return '
                         <div class="btn-group">
-                            <button disabled onclick="prosesform(`'.route('meja.proses', $meja->id_meja).'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-book"> </i> Diproses</button>
+                            <button disabled class="btn btn-xs btn-danger btn-flat"><i class="fa fa-book"> </i> Diproses</button>
                             <button onclick="resetform(`'.route('meja.reset', $meja->id_meja).'`)" class="btn btn-xs btn-success btn-flat">Selesai</button>
-                            <button disabled onclick="cancelform(`'.route('meja.cancel', $meja->id_meja).'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-close"> </i> Cancel</button>
+                            <button disabled class="btn btn-xs btn-info btn-flat"><i class="fa fa-close"> </i> Cancel</button>
                         </div>
                     ';
                     }
@@ -95,9 +95,9 @@ class MejaController extends Controller
                     if($meja->Status == "Selesai Kitchen") {
                         return '
                         <div class="btn-group">
-                            <button disabled onclick="prosesform(`'.route('meja.proses', $meja->id_meja).'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-book"> </i> Diproses</button>
-                            <button disabled onclick="resetform(`'.route('meja.reset', $meja->id_meja).'`)" class="btn btn-xs btn-success btn-flat">Selesai</button>
-                            <button disabled onclick="cancelform(`'.route('meja.cancel', $meja->id_meja).'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-close"> </i> Cancel</button>
+                            <button disabled class="btn btn-xs btn-danger btn-flat"><i class="fa fa-book"> </i> Diproses</button>
+                            <button disabled class="btn btn-xs btn-success btn-flat">Selesai</button>
+                            <button disabled class="btn btn-xs btn-info btn-flat"><i class="fa fa-close"> </i> Cancel</button>
                         </div>
                     ';
                     }
@@ -106,7 +106,7 @@ class MejaController extends Controller
                         return '
                         <div class="btn-group">
                             <button onclick="prosesform(`'.route('meja.proses', $meja->id_meja).'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-book"> </i> Diproses</button>
-                            <button disabled onclick="resetform(`'.route('meja.reset', $meja->id_meja).'`)" class="btn btn-xs btn-success btn-flat">Selesai</button>
+                            <button disabled class="btn btn-xs btn-success btn-flat">Selesai</button>
                             <button onclick="cancelform(`'.route('meja.cancel', $meja->id_meja).'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-close"> </i> Cancel</button>
                         </div>
                     ';
@@ -125,8 +125,18 @@ class MejaController extends Controller
                         return '
                         <div class="btn-group">
                         <button onclick="editForm(`'.route('pesanandetail.index2', $meja->Id_pesanan).'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil"> </i> Edit</button>
-                        <button disabled onclick="resetform(`'.route('meja.reset', $meja->id_meja).'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-book"> </i> Selesai</button>
+                        <button disabled class="btn btn-xs btn-danger btn-flat"><i class="fa fa-book"> </i> Selesai</button>
                         <button onclick="cancelform(`'.route('meja.cancel', $meja->id_meja).'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-close"> </i> Cancel</button>
+                        </div>
+                    ';
+                    }
+
+                    if($meja->Status == "Kosong") {
+                        return '
+                        <div class="btn-group">
+                        <button disabled onclick="editForm(`'.route('pesanandetail.index2', $meja->Id_pesanan).'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil"> </i> Edit</button>
+                        <button disabled class="btn btn-xs btn-danger btn-flat"><i class="fa fa-book"> </i> Selesai</button>
+                        <button disabled onclick="cancelform(`'.route('meja.cancel', $meja->id_meja).'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-close"> </i> Cancel</button>
                         </div>
                     ';
                     }

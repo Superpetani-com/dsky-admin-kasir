@@ -27,8 +27,15 @@
 
         <!-- Kasir -->
         @if(auth()->user()->level == 1)
-
+        <li>
+            <a href="{{route('dashboard.index')}}">
+              <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+              </span>
+            </a>
+          </li>
         <li class="header">CAFE</li>
+
+
         <!-- <li>
           <a href="{{route('menu.index')}}">
             <i class="fa fa-cutlery"></i> <span>Menu</span>
@@ -161,12 +168,37 @@
 
         <!-- SuperAdmin -->
         @if(auth()->user()->level == 3)
+        <li class="header">REPORT</li>
+        <li>
+          <a href="{{route('laporan.index')}}">
+            <i class="fa fa-file-pdf-o"></i> <span>Report Singkat</span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="{{route('laporan.indexcafe')}}">
+            <i class="fa fa-file-text-o"></i> <span>Report Cafe</span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="{{route('laporan.indexbiliard')}}">
+            <i class="fa fa-file-text-o"></i> <span>Report Biliard</span>
+            </span>
+          </a>
+        </li>
+        <li class="header">USERS</li>
+
         <li>
             <a href="{{route('laporan.users')}}">
               <i class="fa fa-file-text-o"></i> <span>User Manajemen</span>
               </span>
             </a>
           </li>
+        <li>
+        </li>
+
+        <li class="header">LOGS</li>
         <li>
           <a href="{{route('laporan.sensor')}}">
             <i class="fa fa-file-text-o"></i> <span>Log Sensor</span>
@@ -185,6 +217,8 @@
             </span>
           </a>
         </li>
+        </li>
+
         @endif
 
       </ul>

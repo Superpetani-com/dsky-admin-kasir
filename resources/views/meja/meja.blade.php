@@ -1,3 +1,11 @@
+<style>
+    .btn-Diproses {
+        display: none !important;
+    }
+    .btn-Selesai {
+        display: none !important;
+    }
+</style>
 <div class="modal fade" id="modal-form" tabindex="-1" role="dialog" aria-labelledby="modal-form">
   <div class="modal-dialog" role="document">
 

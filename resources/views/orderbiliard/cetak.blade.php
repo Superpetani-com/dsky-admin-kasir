@@ -56,23 +56,23 @@
 <body onload="window.print()">
 <button class="btn-print" style="position: absolute; right: 1rem; top: rem;" onclick="window.print()">Print</button>
     <div class="text-center">
-        <h3 style="margin-bottom: 5px;">{{ strtoupper("NOTA BILIARD") }}</h3>
-        <h3 style="margin-bottom: 5px;">{{ strtoupper("Jogja Billiard") }}</h3>
-        <p>{{ ucwords("jl dr. sutomo cilacap") }}</p>
-        <p>{{ ucwords("BCA : 4340171379") }}</p>
-        <p>{{ ucwords("WA : 081227741940") }}</p>
-        <p>{{ ucwords("IG : dskyresto") }}</p>
+        {{-- <h3 style="margin-bottom: 5px;">{{ strtoupper("NOTA BILIARD") }}</h3> --}}
+        <h3 style="margin-bottom: 5px;">{{ strtoupper("Nota Jogja Billiard") }}</h3>
+        <p>{{ ucwords("Jl. Urip Sumoharjo No.3-5") }}</p>
+        <p>{{ ucwords("BCA : 0376-616-333(Billiard Indonesia)") }}</p>
+        <p>{{ ucwords("WA : 081225557100") }}</p>
+        <p>{{ ucwords("IG : @jogjabilliard") }}</p>
     </div>
     <br>
     <div>
     <div>
         <p style="float: left;">{{ date('d-m-Y') }}</p>
-        <p style="float: right">Kasir:{{ ucwords(auth()->user()->name) }}</p>
+        <p style="float: right">Kasir: {{ ucwords(auth()->user()->name) }}</p>
     </div>
     <div class="clear-both" style="clear: both;"></div>
-    <p>Cutomer:{{ ucwords($order->customer) }}</p>
-    <p>NoOrder: {{ ($order->id_order_biliard) }}</p>
-    <p>No.Meja: {{ ($nama_meja) }}</p>
+    <p>Cutomer: {{ ucwords($order->customer) }}</p>
+    <p>No Order: {{ ($order->id_order_biliard) }}</p>
+    <p>No Meja: {{ ($nama_meja) }}</p>
     <p class="text-center">===================================</p>
     <br>
     <table width="100%" style="border: 0;">
@@ -87,7 +87,8 @@
             </tr>
         @endforeach
     </table>
-    <p class="text-center">-----------------------------------</p>
+    {{-- <p class="text-center">-----------------------------------</p> --}}
+    <p class="text-center">===================================</p>
 
     <table width="100%" style="border: 0;">
         <tr>
