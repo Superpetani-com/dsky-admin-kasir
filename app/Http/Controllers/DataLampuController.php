@@ -12,6 +12,7 @@ use App\Models\OrderBiliard;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Ramsey\Uuid\Uuid;
 
 class DataLampuController extends Controller
 {
@@ -44,8 +45,9 @@ class DataLampuController extends Controller
 
                 // get last order created_by
                 $findLastOrderToGetUsers = OrderBiliard::orderBy('id_order_biliard', 'desc')->first()['created_by'];
-
+                $uuid = Uuid::uuid4();
                 $data = [
+                    'uuid' => $uuid->toString(),
                     'id_meja' => $request->id_meja,
                     'duration' => $request->duration,
                     'created_date' => date('Y-m-d H:i:s'),

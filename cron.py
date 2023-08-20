@@ -4,6 +4,7 @@ from threading import Thread
 import schedule
 import time
 import mysql.connector
+import datetime
 
 # Local database configuration
 local_db_config = {
@@ -105,8 +106,8 @@ def upsert_to_remote_table_pesanan(data):
 
         for item in data:
             upsert_query = """
-                INSERT INTO pesanan (Id_pesanan, Id_meja, TotalItem, TotalHarga, Diskon, ppn, TotalBayar, Diterima, Kembali, status, customer, cabang_id, created_at, updated_at)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                INSERT INTO pesanan (Id_pesanan, Id_meja, TotalItem, TotalHarga, Diskon, ppn, TotalBayar, Diterima, Kembali, status, customer, cabang_id, created_at, updated_at, created_by)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 ON DUPLICATE KEY UPDATE
                 Id_meja = VALUES(Id_meja),
                 TotalItem = VALUES(TotalItem),
@@ -120,7 +121,8 @@ def upsert_to_remote_table_pesanan(data):
                 customer = VALUES(customer),
                 cabang_id = VALUES(cabang_id),
                 created_at = VALUES(created_at),
-                updated_at = VALUES(updated_at)
+                updated_at = VALUES(updated_at),
+                created_by = VALUES(created_by)
             """
 
             values = (
@@ -137,7 +139,8 @@ def upsert_to_remote_table_pesanan(data):
                 item["customer"],
                 item["cabang_id"],
                 item["created_at"],
-                item["updated_at"]
+                item["updated_at"],
+                item["created_by"]
             )
 
             cursor.execute(upsert_query, values)
@@ -167,23 +170,36 @@ def upsert_to_remote_table_log_sensor(data):
         cursor = connection.cursor()
 
         total_data = 0  # Count the total number of upserted data
+        # Get the current UTC time
+        current_time_utc = datetime.datetime.utcnow()
 
+        # Calculate the GMT+7 offset in hours
+        gmt_plus_7_offset = datetime.timedelta(hours=7)
+
+        # Adjust the current time with the GMT+7 offset
+        current_time_gmt_plus_7 = current_time_utc + gmt_plus_7_offset
         for item in data:
             upsert_query = """
-                INSERT INTO log_sensor (id_meja, duration, cabang_id, created_date)
-                VALUES (%s, %s, %s, %s)
+                INSERT INTO log_sensor (id_log_sensor, id_meja, duration, cabang_id, created_date, created_by, last_sync)
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
                 ON DUPLICATE KEY UPDATE
+                id_log_sensor = VALUES(id_log_sensor),
                 id_meja = VALUES(id_meja),
                 duration = VALUES(duration),
                 cabang_id = VALUES(cabang_id),
-                created_date = VALUES(created_date)
+                created_date = VALUES(created_date),
+                created_by = VALUES(created_by),
+                last_sync = VALUES(last_sync)
             """
 
             values = (
+                item["uuid"],
                 item["id_meja"],
                 item["duration"],
                 item["cabang_id"],
-                item["created_date"]
+                item["created_date"],
+                item["created_by"],
+                current_time_gmt_plus_7
             )
 
             cursor.execute(upsert_query, values)
@@ -194,9 +210,9 @@ def upsert_to_remote_table_log_sensor(data):
         # Insert into cron_history table
         insert_cron_history_query = """
             INSERT INTO cron_history (last_date_sync, total_data)
-            VALUES (NOW(), %s)
+            VALUES (%s, %s)
         """
-        cursor.execute(insert_cron_history_query, (total_data,))
+        cursor.execute(insert_cron_history_query, (current_time_gmt_plus_7, total_data))
 
         connection.commit()
         print(f'Bulk upsert operation successful. Total data upserted: {total_data}')
@@ -217,8 +233,8 @@ def upsert_to_remote_table_log_hapus_barang(data):
 
         for item in data:
             upsert_query = """
-                INSERT INTO log_hapus_barang (id_pesanan, id_menu, harga, jumlah, subtotal, created_at, updated_at,  cabang_id, user_id)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                INSERT INTO log_hapus_barang (id_pesanan, id_menu, harga, jumlah, subtotal, created_at, updated_at,  cabang_id, user_id, created_by)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 ON DUPLICATE KEY UPDATE
                 id_pesanan = VALUES(id_pesanan),
                 id_menu = VALUES(id_menu),
@@ -228,7 +244,8 @@ def upsert_to_remote_table_log_hapus_barang(data):
                 created_at = VALUES(created_at),
                 updated_at = VALUES(updated_at),
                 cabang_id = VALUES(cabang_id),
-                user_id = VALUES(user_id)
+                user_id = VALUES(user_id),
+                created_by = VALUES(created_by)
             """
 
             values = (
@@ -240,7 +257,8 @@ def upsert_to_remote_table_log_hapus_barang(data):
                 item["created_at"],
                 item["updated_at"],
                 item["cabang_id"],
-                item["user_id"]
+                item["user_id"],
+                item["created_by"]
             )
 
             cursor.execute(upsert_query, values)
