@@ -78,7 +78,7 @@ class MejaController extends Controller
                 }
             })
             ->addColumn('aksi', function($meja){
-                if(auth()->user()->level == 6 || auth()->user()->level == 4) {
+                if(auth()->user()->level == 6 || auth()->user()->level == 4 || auth()->user()->level == 2) {
                     return '';
                 }
                 if(auth()->user()->level == 5) {

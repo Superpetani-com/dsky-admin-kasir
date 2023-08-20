@@ -98,7 +98,7 @@
         </li> -->
         @endif
 
-        @if(auth()->user()->level == 4)
+        @if(auth()->user()->level == 4 || auth()->user()->level == 2)
         {{-- <li>
         <li>
           <a href="{{route('dashboard.index')}}">

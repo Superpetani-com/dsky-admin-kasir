@@ -31,11 +31,16 @@ class MenuController extends Controller
                 return format_uang($menu->stok);
             })
             ->addColumn('aksi', function($menu){
-                if (auth()->user()->level==2 || auth()->user()->level==3 || auth()->user()->level==4){
+                if (auth()->user()->level==3 || auth()->user()->level==4){
                     return '
                 <div class="btn-group">
                    <button onclick="editForm(`'.route('menu.update', $menu->Id_Menu).'`)" class="btn btn-xs btn-info btn-flat btn-edit"><i class="fa fa-pencil"></i> Edit</button>
                    <button onclick="deleteData(`'.route('menu.destroy', $menu->Id_Menu).'`)" class="btn btn-xs btn-danger btn-flat btn-edit"><i class="fa fa-trash"></i> Hapus</button>
+                </div>';}
+                if (auth()->user()->level==2){
+                    return '
+                <div class="btn-group">
+                   <button onclick="editForm(`'.route('menu.update', $menu->Id_Menu).'`)" class="btn btn-xs btn-info btn-flat btn-edit"><i class="fa fa-pencil"></i> Edit</button>
                 </div>';}
 
             })

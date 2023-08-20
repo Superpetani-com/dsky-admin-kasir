@@ -81,7 +81,7 @@ class OrderBiliardController extends Controller
                 }
             })
             ->addColumn('aksi', function($order){
-                if (auth()->user()->level==2  || auth()->user()->level==3){return '
+                if (auth()->user()->level==3){return '
                 <div class="btn-group">
                    <button onclick="editForm(`'.route('orderbiliarddetail.index2', $order->id_order_biliard).'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil"> </i> Edit</button>
                    <button onclick="deleteData(`'.route('orderbiliard.destroy', $order->id_order_biliard).'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"> </i> Hapus</button>

@@ -63,7 +63,7 @@ class PesananController extends Controller
                 }
             })
             ->addColumn('aksi', function($pesanan){
-                if (auth()->user()->level==2  || auth()->user()->level==3){return '
+                if (auth()->user()->level==3){return '
                 <div class="btn-group">
                    <button onclick="editForm(`'.route('pesanandetail.index2', $pesanan->Id_pesanan).'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil"> </i> Edit</button>
                    <button onclick="deleteData(`'.route('pesanan.destroy', $pesanan->Id_pesanan).'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"> </i> Hapus</button>

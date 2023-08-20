@@ -36,6 +36,10 @@ class DashboardController extends Controller
             return redirect()->to('sensor');
         }
 
+        if(auth()->user()->level == 2) {
+            return redirect()->to('laporan');
+        }
+
         return view('dashboard.index', compact('mejabiliard','meja'));
     }
     public function store()

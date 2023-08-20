@@ -29,7 +29,7 @@ class PaketBiliardController extends Controller
             })
 
             ->addColumn('aksi', function($paket){
-                if (auth()->user()->level==2  || auth()->user()->level==3 || auth()->user()->level==4){return '
+                if (auth()->user()->level==3 || auth()->user()->level==4){return '
                 <div class="btn-group">
                    <button onclick="editForm(`'.route('paketbiliard.update', $paket->id_paket_biliard).'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil icon"></i> Edit</button>
                    <button onclick="deleteData(`'.route('paketbiliard.destroy', $paket->id_paket_biliard).'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash icon"></i> Hapus</button>

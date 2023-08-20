@@ -66,7 +66,10 @@ class MejaBiliardController extends Controller
                 }
             })
             ->addColumn('aksi', function($mejabiliard){
-                return '
+                if(auth()->user()->level == 2) {
+                    return '';
+                }else {
+                    return '
                 <div class="btn-group">
                    <button onclick="editForm(`'.route('orderbiliarddetail.index2', $mejabiliard->id_order_biliard).'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil"> </i> Detail</button>
                 </div>
@@ -74,6 +77,7 @@ class MejaBiliardController extends Controller
                 <button onclick="resetform(`'.route('mejabiliard.reset', $mejabiliard->id_meja_biliard).'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-book"> </i> Selesai</button>
                 </div>
                    ';
+                }
             })
             ->rawColumns(['aksi', 'status'])
             ->make(true);
