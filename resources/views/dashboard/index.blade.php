@@ -16,7 +16,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
   background-color: #35b50e;
   color: white;
   text-align: center;
-}   
+}
 .div-red {
   background-color: #db1107;
   color: white;
@@ -49,8 +49,22 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
   padding:2;
 }
 .btn-Dipakai, .btn-Bayar, .tr-dummy, .btnr-Kosong{display: none;}
-  
-  
+
+.Diproses {
+  background-color: #dac511;
+  color: white;
+  text-align: center;
+  height: 50%;
+  padding:2;
+}
+
+.Selesai {
+  background-color: #110eb5;
+  color: white;
+  text-align: center;
+  height: 50%;
+  padding:2;
+}
 </style>
 @endpush
 @section('title')
@@ -69,15 +83,15 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
       <div class="col-md-7">
             <div class="box-header with-border">
               <button onclick="addForm1()" class="btn btn-success  btn-flat"><i class="fa fa-plus-circle">
-              </i> Order Biliard</button>          
+              </i> Order Biliard</button>
             </div>
       </div>
       <div class="col-md-5">
             <div class="box-header with-border">
               <button onclick="addForm2()" class="btn btn-primary  btn-flat"><i class="fa fa-plus-circle">
-              </i> Order Cafe</button>          
+              </i> Order Cafe</button>
             </div>
-      </div>      
+      </div>
       </div>
       <div class="row">
             <div class="col-md-7">
@@ -107,7 +121,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
                 {{$item->order['customer']}}
                 @endif
               </td>
-              <td>Rp. 
+              <td>Rp.
                 @if($item->order)
                 {{number_format(($item->order['totalbayar']), 0,",",".")}}
                 @endif
@@ -158,7 +172,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
               @endif
               </td>
 
-              <td>Rp. 
+              <td>Rp.
               @if ($item1->pesanan)
                 {{ number_format(($item1->pesanan['TotalBayar']), 0,",",".")}}
               @endif
@@ -167,7 +181,21 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
               <td>{{$item1->Id_pesanan}}</td>
               <td width="12%">
                 <a href="{{route('pesanandetail.index2', $item1->Id_pesanan)}}" class="btn btn-xs btn-flat {{$item1->Status}}">
-                  {{$item1->Status}}
+                    @if ($item1->Status=='Kosong')
+                        Kosong
+                    @elseif ($item1->Status=='Dipakai')
+                        @if(auth()->user()->level == 1)
+                            Menunggu Kitchen
+                        @else
+                            Sedang Diproses
+                        @endif
+                    @elseif ($item1->Status=='Menunggu Kitchen')
+                        Menunggu Kitchen
+                    @elseif($item1->Status == "Selesai Kitchen")
+                        Selesai Kitchen
+                    @elseif ($item1->Status == "Diproses")
+                        Diproses Kitchen
+                    @endif
                 </a>
               </td>
               </tr>
@@ -178,7 +206,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
         </div>
 
       </div>
-      
+
 </div>
 @includeIf('dashboard.mejabiliard')
 @includeIf('dashboard.meja')
@@ -197,14 +225,14 @@ function resetform2(url, id, flag){
     location.replace(urldetail)
   }
   }
-  
+
   if(flag==0){
     if (confirm('Yakin ingin me-reset meja terpilih?')) {
     var urlcetak=(`{{url('orderbiliard')}}/cetak/${id}`);
     cetak(urlcetak);
     $.get(url)
     .done((response)=>{
-      location.reload();   
+      location.reload();
         })
     .fail((errors)=>{
     alert('Tidak dapat me-reset data');
@@ -220,7 +248,7 @@ function resetform2(url, id, flag){
     cetak(urlcetak);
     $.get(url)
     .done((response)=>{
-      location.reload();   
+      location.reload();
         })
     .fail((errors)=>{
     alert('Tidak dapat me-reset data');
@@ -256,7 +284,7 @@ i = i + 1;
           var sdnumber=((Number((sd.slice(0, (sdcomma+3))).replace(",", ".")))*60)-i;
           console.log(sdnumber);
           if(sdnumber<0){
-          location.reload(); 
+          location.reload();
           }
 
           if(sdnumber>0){
@@ -266,13 +294,13 @@ i = i + 1;
           m=checkTime(m);
           var s = Math.floor(sdnumber % 3600 % 60);
           s=checkTime(s);
-          document.getElementById("tdsisadurasi{{$item->id_meja_biliard}}").innerHTML=h+":"+m+":"+s;  
+          document.getElementById("tdsisadurasi{{$item->id_meja_biliard}}").innerHTML=h+":"+m+":"+s;
           }
 
       }
       @endforeach
-    } 
-    
+    }
+
 function checkTime(g) {
   if (g < 10) {g = "0" + g};  // add zero in front of numbers < 10
   return g;
@@ -291,12 +319,12 @@ function cetak(url, title) {
         const systemZoom = width / window.screen.availWidth;
         const left       = (width - w) / 2 / systemZoom + dualScreenLeft
         const top        = (height - h) / 2 / systemZoom + dualScreenTop
-        const newWindow  = window.open(url, title, 
+        const newWindow  = window.open(url, title,
         `
             scrollbars=yes,
-            width  = ${w / systemZoom}, 
-            height = ${h / systemZoom}, 
-            top    = ${top}, 
+            width  = ${w / systemZoom},
+            height = ${h / systemZoom},
+            top    = ${top},
             left   = ${left}
         `
         );
