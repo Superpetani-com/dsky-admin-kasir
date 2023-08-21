@@ -29,8 +29,11 @@
         <div class="col-md-12">
           <div class="box">
             <div class="box-header with-border">
-              <button onclick="addForm('{{route('menu.store')}}')" class="btn btn-success  btn-flat"><i class="fa fa-plus-circle">
-              </i> Tambah</button>
+            @if(auth()->user()->level !== 2)
+                <button onclick="addForm('{{route('menu.store')}}')" class="btn btn-success  btn-flat"><i class="fa fa-plus-circle">
+                </i> Tambah</button>
+            @endif
+
             </div>
             <div class="box-body table-responsive">
             <table class="table table-stiped table-bordered table_menu">

@@ -42,32 +42,32 @@
             </span>
           </a>
         </li> -->
-        <li>
+        {{-- <li>
           <a href="{{route('meja.index')}}">
             <i class="fa fa-th"></i> <span>Meja Cafe</span>
             </span>
           </a>
-        </li>
+        </li> --}}
         <!-- <li>
           <a href="{{route('pesanan.index')}}">
             <i class="fa fa-sticky-note"></i> <span>Pesanan</span>
             </span>
           </a>
         </li> -->
-        <li class="header">BILIARD</li>
+        {{-- <li class="header">BILIARD</li> --}}
         <!-- <li>
           <a href="{{route('paketbiliard.index')}}">
             <i class="fa fa-list-ol"></i> <span>Paket Biliard</span>
             </span>
           </a>
         </li> -->
-        <li>
+        {{-- <li>
         <li>
           <a href="{{route('mejabiliard.index')}}" >
             <i class="fa fa-futbol-o"></i> <span>Meja Biliard</span>
             </span>
           </a>
-        </li>
+        </li> --}}
         <!-- <li>
           <a href="{{route('orderbiliard.index')}}">
             <i class="fa fa-sticky-note-o"></i> <span>Order Biliard</span>
