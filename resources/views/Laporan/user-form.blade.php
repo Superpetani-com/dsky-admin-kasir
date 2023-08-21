@@ -11,7 +11,7 @@
                     <div class="form-group row">
                         <label for="name" class="col-md-3 control-label">Nama Lengkap</label>
                         <div class="col-md-7">
-                            <input type="text" name="name" id="name" class="form-control" required autofocus>
+                            <input autocomplete="off" type="text" name="name" id="name" class="form-control" required autofocus>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
@@ -19,7 +19,7 @@
                     <div class="form-group row">
                         <label for="email" class="col-md-3 control-label">Email</label>
                         <div class="col-md-7">
-                            <input type="email" name="email" id="email" class="form-control" required autofocus>
+                            <input autocomplete="off" type="email" name="email" id="email" class="form-control" required autofocus>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
@@ -41,7 +41,7 @@
                     <div class="form-group row">
                         <label for="password" class="col-md-3 control-label">Password</label>
                         <div class="col-md-7">
-                            <input type="password" name="password" id="password" class="form-control" required autofocus>
+                            <input autocomplete="off"  type="password" name="password" id="password" class="form-control" required autofocus>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>

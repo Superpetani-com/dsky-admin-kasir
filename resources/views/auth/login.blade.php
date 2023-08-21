@@ -15,14 +15,14 @@
     <form action="{{route('login')}}" method="post">
       @csrf
       <div class="form-group has-feedback" @error ('email') has-error @enderror>
-        <input type="email" name="email" class="form-control" placeholder="Email" required value={{old('email')}}>
+        <input autocomplete="off" type="email" name="email" class="form-control" placeholder="Email" required value={{old('email')}}>
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
         @error ('email')
             <span class="help-block">{{$message}}</span>
         @enderror
       </div>
       <div class="form-group has-feedback" @error ('password') has-error @enderror>
-        <input type="password" name="password" class="form-control" placeholder="Password" required>
+        <input autocomplete="off" type="password" name="password" class="form-control" placeholder="Password" required>
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
         @error ('password')
             <span class="help-block">{{$message}}</span>

@@ -201,8 +201,9 @@ class DataLampuController extends Controller
     public function register(Request $request)
     {
         $user = User::create($request->all());
+        return view('laporan.users');
 
-        return response()->json('Data berhasil disimpan', 200);
+        // return response()->json('Data berhasil disimpan', 200);
     }
 
      /**
