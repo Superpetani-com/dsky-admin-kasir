@@ -173,7 +173,7 @@ class PesananDetailController extends Controller
         $bayar = $total + $ppn - ($diskon / 100 * $total);
         $kembali =$diterima - ceil($bayar / 100) * 100;
         $bayar = ceil($bayar / 100) * 100;
-
+        // dd($bayar);
         $data  = [
             'totalrp' => format_uang($total),
             'bayar' => $bayar,

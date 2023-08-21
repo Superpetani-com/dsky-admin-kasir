@@ -70,9 +70,9 @@
         <p style="float: right">Kasir: {{ ucwords(auth()->user()->name) }}</p>
     </div>
     <div class="clear-both" style="clear: both;"></div>
-    <p>Customer : {{ ($pesanan->customer) }}</p>
-    <p>No Pesanan : {{ ($pesanan->Id_pesanan) }}</p>
-    <p>No Meja &nbsp&nbsp: {{ ($nama_meja) }}</p>
+    <p>Customer &nbsp&nbsp&nbsp&nbsp&nbsp: {{ ($pesanan->customer) }}</p>
+    <p>No Pesanan &nbsp: {{ ($pesanan->Id_pesanan) }}</p>
+    <p>No Meja &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp: {{ ($nama_meja) }}</p>
 
     <p class="text-center">===================================</p>
     <br>
@@ -92,34 +92,34 @@
     <p class="text-center">===================================</p>
 
     <table width="100%" style="border: 0;">
-        <tr>
+        {{-- <tr>
             <td>Total Item:</td>
             <td class="text-right">{{ format_uang($pesanan->TotalItem) }} Item</td>
         </tr>
         <tr>
             <td>Total Harga:</td>
             <td class="text-right">Rp.{{ format_uang(ceil($pesanan->TotalHarga / 100) * 100) }}</td>
-        </tr>
-        <tr>
+        </tr> --}}
+        {{-- <tr>
             <td>Diskon:</td>
             <td class="text-right">{{ format_uang($pesanan->Diskon) }}%</td>
-        </tr>
-        <tr>
+        </tr> --}}
+        {{-- <tr>
             <td>PPN10%:</td>
             <td class="text-right">Rp.{{ format_uang($pesanan->ppn) }}</td>
-        </tr>
+        </tr> --}}
         <tr>
             <td>Total Bayar:</td>
             <td class="text-right">Rp.{{ format_uang($pesanan->TotalBayar) }}</td>
         </tr>
-        <tr>
+        {{-- <tr>
             <td>Diterima:</td>
             <td class="text-right">Rp.{{ format_uang($pesanan->Diterima) }}</td>
-        </tr>
-        <tr>
+        </tr> --}}
+        {{-- <tr>
             <td>Kembali:</td>
             <td class="text-right">Rp.{{ format_uang($pesanan->Kembali) }}</td>
-        </tr>
+        </tr> --}}
     </table>
     <p class="text-center">===================================</p>
     <p class="text-center">-- TERIMA KASIH --</p>

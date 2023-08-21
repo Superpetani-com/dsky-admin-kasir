@@ -151,9 +151,10 @@
                                 </div>
                             </div> --}}
                             <div class="form-group row">
-                                <label for="diterima" class="col-lg-2 control-label">Diterima</label>
+                                {{-- <label for="diterima" class="col-lg-2 control-label">Diterima</label> --}}
+                                {{-- {{dd($pesanan);}} --}}
                                 <div class="col-lg-8">
-                                    <input type="number" name="diterima" id="diterima" class="form-control" value="{{ $pesanan->Diterima }}">
+                                    <input type="hidden" name="diterima" id="diterima" class="form-control">
                                </div>
                             </div>
                             {{-- <div class="form-group row">
@@ -381,6 +382,7 @@
     .done(response => {
                 $('#totalrp').val('Rp. '+ response.totalrp);
                 $('#bayarrp').val('Rp. '+ response.bayarrp);
+                $('#diterima').val(response.bayar);
                 $('#bayar').val(response.bayar);
                 $('#kembali').val(response.kembali);
                 $('#ppn').val(response.ppn);
@@ -388,10 +390,10 @@
                 $('.tampil-bayar').text('Bayar: Rp. '+ response.bayarrp);
                 $('.tampil-terbilang').text('Terbilang: '+response.terbilang);
                 $('#kembalirp').val('Rp.'+ response.kembalirp);
-                if ($('#diterima').val() != 0) {
-                    $('.tampil-bayar').text('Kembali: Rp. '+ response.kembalirp);
-                    $('.tampil-terbilang').text(response.kembali_terbilang);
-                }
+                // if ($('#diterima').val() != 0) {
+                //     $('.tampil-bayar').text('Kembali: Rp. '+ response.kembalirp);
+                //     $('.tampil-terbilang').text(response.kembali_terbilang);
+                // }
       })
     .fail(errors => {
                 alert('Tidak dapat menampilkan data');

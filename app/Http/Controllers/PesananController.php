@@ -90,6 +90,7 @@ class PesananController extends Controller
         ->limit(20)
         ->get();
         //return [$updatestatus, $pesanan];
+        // dd($request);
         foreach ($updatestatus as $item){
         $item->status="Selesai";
         $item->update();}
