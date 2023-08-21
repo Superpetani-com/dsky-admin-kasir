@@ -70,9 +70,9 @@
         <p style="float: right">Kasir: {{ ucwords(auth()->user()->name) }}</p>
     </div>
     <div class="clear-both" style="clear: both;"></div>
-    <p>Cutomer: {{ ucwords($order->customer) }}</p>
-    <p>No Order: {{ ($order->id_order_biliard) }}</p>
-    <p>No Meja: {{ ($nama_meja) }}</p>
+    <p>Cutomer &nbsp;&nbsp;&nbsp;: {{ ucwords($order->customer) }}</p>
+    <p>No Order &nbsp;&nbsp;: {{ ($order->id_order_biliard) }}</p>
+    <p>No Meja &nbsp;&nbsp;&nbsp;: {{ ($nama_meja) }}</p>
     <p class="text-center">===================================</p>
     <br>
     <table width="100%" style="border: 0;">
@@ -87,11 +87,12 @@
             </tr>
         @endforeach
     </table>
+    <br>
     {{-- <p class="text-center">-----------------------------------</p> --}}
     <p class="text-center">===================================</p>
 
     <table width="100%" style="border: 0;">
-        <tr>
+        {{-- <tr>
             <td>Total Jam:</td>
             <td class="text-right">{{ ($order->totaljam) }} Jam</td>
         </tr>
@@ -102,19 +103,19 @@
         <tr>
             <td>Diskon:</td>
             <td class="text-right">{{ format_uang($order->diskon) }}%</td>
-        </tr>
+        </tr> --}}
         <tr>
             <td>Total Bayar:</td>
             <td class="text-right">Rp.{{ format_uang($order->totalbayar) }}</td>
         </tr>
-        <tr>
+        {{-- <tr>
             <td>Diterima:</td>
             <td class="text-right">Rp.{{ format_uang($order->diterima) }}</td>
         </tr>
         <tr>
             <td>Kembali:</td>
             <td class="text-right">Rp.{{ format_uang($order->kembali) }}</td>
-        </tr>
+        </tr> --}}
     </table>
     <p class="text-center">===================================</p>
     <p class="text-center">-- TERIMA KASIH --</p>

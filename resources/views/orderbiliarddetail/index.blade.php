@@ -24,11 +24,11 @@
     }
   .table-order tbody tr:nth-child(even) {
   background-color: #cef0b1;
-    } 
+    }
   .table-order  thead{background-color: #96bf73;}
   .table-mejabiliard tbody tr:nth-child(even) {
   background-color: #cef0b1;
-    } 
+    }
   .table-mejabiliard  thead{background-color: #96bf73;}
   table{font-size: 12pt;}
   input[type="text"]{font-size:12pt;}
@@ -38,7 +38,7 @@
   background-color: #35b50e;
   color: white;
   text-align: center;
-  }   
+  }
 .div-red {
   background-color: #db1107;
   color: white;
@@ -79,7 +79,7 @@
             padding-top: 5px;
         }
     }
-    
+
 </style>
 @endpush
 @section('breadcrumb')
@@ -103,11 +103,11 @@
                   <td>Nomor Order</td>
                   <td>:{{$id_order_biliard}}</td>
                 </tr>
-              </table>         
+              </table>
             </div>
             <div class="box-body">
                 <form class="form-paket">
-                  @csrf  
+                  @csrf
                   <!--div class="form-group row">
                     <label for="nama_paket" class="col-lg-2">Tambah Jam</label>
                     <div class="col-lg-5">
@@ -126,16 +126,16 @@
                     <input type="hidden" name="id_paket_biliard" id="id_paket_biliard">
                     <input type="hidden" name="id_order_biliard" id="id_order_biliard" value="{{$id_order_biliard}}">
                     <input type="hidden" name="seting_paket" id="seting_paket">
-                  </div>  
+                  </div>
                   <label for="nama_cust" class="col-lg-1">Customer</label>
                   <div class="col-lg-3">
-                    <input type="text" class="form-control" name="nama_cust" id="nama_cust" maxlength="50" value="{{$order->customer}}" required> 
+                    <input type="text" class="form-control" name="nama_cust" id="nama_cust" maxlength="50" value="{{$order->customer}}" required>
                     <span class="help-block with-errors"></span>
                   </div>
                   <div class="input-group-btn">
                      <button onclick="tampilpaket()" class="btn btn-info btn-tambah" type="button"><i class="fa fa-plus-circle"></i> Tambah Jam</button>
                      <button onclick="tampilmeja()" class="btn btn-danger btn-pindah" type="button"><i class="fa fa-arrows"></i> Pindah Meja</button>
-                  </div>        
+                  </div>
                 </form>
               </div>
               <table class="table table-stiped table-bordered table-order">
@@ -172,37 +172,37 @@
                             <input type="hidden" name="status_meja_biliard" id="status_meja_biliard" value="{{ $mejabiliard->status }}">
                             <input type="hidden" name="status_order_biliard" id="status_order_biliard" value="{{ $order->status }}">
                             <input type="hidden" name="nama_cust2" id="nama_cust2" value="{{$order->customer}}">
-                            <div class="form-group row">
+                            {{-- <div class="form-group row">
                                 <label for="totalrp" class="col-lg-3 control-label">Total</label>
                                 <div class="col-lg-8">
                                     <input type="text" id="totalrp" class="form-control" readonly>
                                 </div>
-                            </div>
+                            </div> --}}
                             <!-- <div class="form-group row">
                                 <label for="diskon" class="col-lg-3 control-label">Diskon</label>
                                 <div class="col-lg-8">
                                     <input type="number" name="diskon" id="diskon" class="form-control" value="{{ $order->diskon }}">
                                 </div>
                             </div> -->
-                            <div class="form-group row">
+                            {{-- <div class="form-group row">
                                 <label for="bayarrp" class="col-lg-3 control-label">Bayar</label>
                                 <div class="col-lg-8">
                                     <input type="text" id="bayarrp" class="form-control" readonly>
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="form-group row">
-                                <label for="diterima" class="col-lg-3 control-label">Diterima</label>
+                                {{-- <label for="diterima" class="col-lg-3 control-label">Diterima</label> --}}
                                 <div class="col-lg-8">
-                                    <input type="number" name="diterima" id="diterima" class="form-control" value="{{ $order->diterima }}">
+                                    <input type="hidden" name="diterima" id="diterima" class="form-control" value="{{ $order->diterima }}">
                                </div>
                             </div>
-                            <div class="form-group row">
+                            {{-- <div class="form-group row">
                                 <label for="kembalirp" class="col-lg-3 control-label">Kembali</label>
                                 <div class="col-lg-8">
                                     <input type="text" id="kembalirp" class="form-control" readonly>
                                </div>
-                            </div>
-                            
+                            </div> --}}
+
                           </form>
                         </div>
                       </div>
@@ -249,7 +249,7 @@
      dom:'Brt',
      bSort: false,
      "lengthMenu": [[-1], ["All"]]
-     
+
    })
    .on('draw.dt', function(){
      setTimeout(() => {
@@ -266,14 +266,14 @@
             }
             loadform($(this).val(), $('#diterima').val());
         },300));
-  
+
     $('#diterima').on('input', debounce(function() {
             if ($(this).val() == "") {
                 $(this).val(0).select();
           }
           loadform($('#diskon').val(), $(this).val());
         },300));
-       
+
     $('#nama_cust').change(function() {
     $('#nama_cust2').val($(this).val());
     });
@@ -286,20 +286,20 @@
       }
       $('.form-order').submit();
         });
-    
+
     $('.btn-cetak').on('click', function () {
-     
+
     $('.form-order').submit();
-    cetak('{{ route('orderbiliard.cetak', $id_order_biliard) }}', 'Nota');  
+    cetak('{{ route('orderbiliard.cetak', $id_order_biliard) }}', 'Nota');
         });
-    
+
     $('.btn-cetakselesai').on('click', function () {
     $('.form-order').submit();
     cetak('{{ route('orderbiliard.cetak', $id_order_biliard) }}', 'Nota');
-    $.get('{{route('mejabiliard.reset', $mejabiliard->id_meja_biliard)}}');  
+    $.get('{{route('mejabiliard.reset', $mejabiliard->id_meja_biliard)}}');
         });
-    
-      
+
+
   });
 
   const debounce = (func, wait, immediate)=> {
@@ -307,18 +307,18 @@
     return function executedFunction() {
         var context = this;
         var args = arguments;
-            
+
         var later = function() {
         timeout = null;
         if (!immediate) func.apply(context, args);
         };
 
         var callNow = immediate && !timeout;
-        
+
         clearTimeout(timeout);
 
         timeout = setTimeout(later, wait);
-        
+
         if (callNow) func.apply(context, args);
         };
     };
@@ -339,7 +339,7 @@ $(document).on('input','.quantity', debounce(function(){
      let jumlah=($(this).val());
      let dataexist = $(this).attr('max');
      console.log()
-     
+
      if(jumlah < dataexist) {
         alert('Jumlah tidak boleh kurang dari angka awal');
         $(this).val(dataexist);
@@ -363,14 +363,14 @@ $(document).on('input','.quantity', debounce(function(){
      })
      .done(response=>{
         loadform($('#diskon').val(), $('#diterima').val());
-        table.ajax.reload();       
+        table.ajax.reload();
       })
       .fail(errors=>{
         alert('Tidak dapat menyimpan data');
         return;
       });
     },300));
-  
+
   function tampilmeja(){
     let status2=($('#status_order_biliard').val());
     if (status2=="Aktif"){
@@ -388,10 +388,10 @@ $(document).on('input','.quantity', debounce(function(){
 
   function hidepaket(){
     $('#modal-paket').modal('hide');
-    
+
   }
 
-  function pilihpaket(id, nama){ 
+  function pilihpaket(id, nama){
     $('#id_paket_biliard').val(id);
     $('#nama_paket').val(nama);
     $('#seting_paket').val($('.seting').val());
@@ -440,7 +440,7 @@ $(document).on('input','.quantity', debounce(function(){
                     alert('Tidak dapat menghapus data');
                     return;
                     });
-    } 
+    }
   }
 
   function loadform(diskon = 0, diterima = 0){
@@ -453,14 +453,15 @@ $(document).on('input','.quantity', debounce(function(){
                 $('#totalrp').val('Rp. '+ response.totalrp);
                 $('#bayarrp').val('Rp. '+ response.bayarrp);
                 $('#bayar').val(response.bayar);
+                $('#diterima').val(response.bayar);
                 $('#kembali').val(response.kembali);
                 $('.tampil-bayar').text('Bayar: Rp. '+ response.bayarrp);
                 $('.tampil-terbilang').text('Terbilang: '+response.terbilang);
                 $('#kembalirp').val('Rp.'+ response.kembalirp);
-                if ($('#diterima').val() != 0) {
-                    $('.tampil-bayar').text('Kembali: Rp. '+ response.kembalirp);
-                    $('.tampil-terbilang').text(response.kembali_terbilang);
-                }
+                // if ($('#diterima').val() != 0) {
+                //     $('.tampil-bayar').text('Kembali: Rp. '+ response.kembalirp);
+                //     $('.tampil-terbilang').text(response.kembali_terbilang);
+                // }
       })
     .fail(errors => {
                 alert('Tidak dapat menampilkan data');
@@ -483,12 +484,12 @@ $(document).on('input','.quantity', debounce(function(){
         const systemZoom = width / window.screen.availWidth;
         const left       = (width - w) / 2 / systemZoom + dualScreenLeft
         const top        = (height - h) / 2 / systemZoom + dualScreenTop
-        const newWindow  = window.open(url, title, 
+        const newWindow  = window.open(url, title,
         `
             scrollbars=yes,
-            width  = ${w / systemZoom}, 
-            height = ${h / systemZoom}, 
-            top    = ${top}, 
+            width  = ${w / systemZoom},
+            height = ${h / systemZoom},
+            top    = ${top},
             left   = ${left}
         `
         );
