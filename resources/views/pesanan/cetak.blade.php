@@ -82,9 +82,9 @@
                 <td colspan="3">{{ $item->menu->Nama_menu }}</td>
             </tr>
             <tr>
-                <td>{{ $item->jumlah }} x {{ format_uang($item->harga) }}</td>
+                <td>{{ $item->jumlah }} x {{ format_uang(ceil($item->harga / 100) * 100) }}</td>
                 <td></td>
-                <td class="text-right">{{ format_uang($item->jumlah * $item->harga) }}</td>
+                <td class="text-right">{{ format_uang($item->jumlah * ceil($item->harga / 100) * 100) }}</td>
             </tr>
         @endforeach
     </table>
@@ -98,7 +98,7 @@
         </tr>
         <tr>
             <td>Total Harga:</td>
-            <td class="text-right">Rp.{{ format_uang($pesanan->TotalHarga) }}</td>
+            <td class="text-right">Rp.{{ format_uang(ceil($pesanan->TotalHarga / 100) * 100) }}</td>
         </tr>
         <tr>
             <td>Diskon:</td>

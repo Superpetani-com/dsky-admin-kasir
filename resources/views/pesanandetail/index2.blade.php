@@ -126,19 +126,19 @@
                             <input type="hidden" name="bayar" id="bayar">
                             <input type="hidden" name="kembali" id="kembali">
                             <input type="hidden" name="ppn" id="ppn">
-                            <div class="form-group row">
+                            {{-- <div class="form-group row">
                                 <label for="totalrp" class="col-lg-2 control-label">Total</label>
                                 <div class="col-lg-8">
                                     <input type="text" id="totalrp" class="form-control" readonly>
                                 </div>
-                            </div>
+                            </div> --}}
                             <!-- <div class="form-group row">
                                 <label for="diskon" class="col-lg-2 control-label">Diskon</label>
                                 <div class="col-lg-8">
                                     <input type="number" name="diskon" id="diskon" class="form-control" value="{{ $pesanan->Diskon }}">
                                 </div>
                             </div> -->
-                            <div class="form-group row">
+                            {{-- <div class="form-group row">
                                 <label for="ppnrp" class="col-lg-2 control-label">PPN 10%</label>
                                 <div class="col-lg-8">
                                     <input type="text" name="ppnrp" id="ppnrp" class="form-control" readonly>
@@ -149,19 +149,19 @@
                                 <div class="col-lg-8">
                                     <input type="text" id="bayarrp" class="form-control" readonly>
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="form-group row">
                                 <label for="diterima" class="col-lg-2 control-label">Diterima</label>
                                 <div class="col-lg-8">
                                     <input type="number" name="diterima" id="diterima" class="form-control" value="{{ $pesanan->Diterima }}">
                                </div>
                             </div>
-                            <div class="form-group row">
+                            {{-- <div class="form-group row">
                                 <label for="kembalirp" class="col-lg-2 control-label">Kembali</label>
                                 <div class="col-lg-8">
                                     <input type="text" id="kembalirp" class="form-control" readonly>
                                </div>
-                            </div>
+                            </div> --}}
 
                           </form>
                         </div>

@@ -70,10 +70,10 @@ class PesananDetailController extends Controller
 
             // total * ppn
             $item->subtotal = $item->subtotal + $item->subtotal * 10 / 100;
-            $item->subtotal = ceil($item->subtotal / 1000) * 1000;
+            $item->subtotal = ceil($item->subtotal / 100) * 100;
 
             $row['nama_menu'] = $item->menu['Nama_menu'];
-            $row['harga']       = 'Rp. '. format_uang($item->harga);
+            $row['harga']       = 'Rp. '. format_uang(ceil($item->harga / 100) * 100);
             if ( $status=="Selesai"){
                 $row['jumlah']      = '<input type="number" class="form-control input-sm quantity" data-id="'. $item->id_pesanan_detail .'" value="'. $item->jumlah .'" readonly>';
             }
@@ -171,8 +171,8 @@ class PesananDetailController extends Controller
         //0.1 karena ppn 10%
         $ppn=intval(0.1*$total);
         $bayar = $total + $ppn - ($diskon / 100 * $total);
-        $kembali =$diterima - ceil($bayar / 1000) * 1000;
-        $bayar = ceil($bayar / 1000) * 1000;
+        $kembali =$diterima - ceil($bayar / 100) * 100;
+        $bayar = ceil($bayar / 100) * 100;
 
         $data  = [
             'totalrp' => format_uang($total),

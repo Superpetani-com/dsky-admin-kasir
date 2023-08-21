@@ -82,7 +82,14 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
                 {data: 'jumlah'},
                 {data: 'order.totalharga'},
                 {data: 'order.status'},
-                {data: 'created_at'},
+                {
+                    "data": "created_at",
+                    "render": function (data) {
+                        var date = new Date(data);
+                        var month = date.getMonth() + 1;
+                        return (date.getDate() < 9 ? '0' + date.getDate() : date.getDate()) + "/"  + (month.toString().length > 1 ? month : "0" + month) + "/" + date.getFullYear() + " Pukul " + (date.getHours() < 9 ? '0' + date.getHours(): date.getHours()) + ":" + date.getMinutes() + ' WIB';
+                    }
+                },
                 {data: 'order.created_by'},
             ],
             bSort: false,

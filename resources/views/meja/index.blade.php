@@ -52,9 +52,13 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
 
 </style>
 @endpush
+@if(auth()->user()->level != 5)
+
 @section('title')
     Daftar Meja Cafe
 @endsection
+
+@endif
 
 @section('breadcrumb')
     @parent
@@ -64,9 +68,15 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
 @section('content')
 <!-- Small boxes (Stat box) -->
 <div class="row">
-      <div class="row">
+
+      <div class="">
         <div class="col-md-12">
+        @if(auth()->user()->level == 5)
+
+            <h3>Pesanan Diproses</h3>
+        @endif
           <div class="box">
+
             @if(auth()->user()->level != 5)
             <div class="box-header with-border">
               <button onclick="addForm()" class="btn btn-success  btn-flat"><i class="fa fa-plus-circle">
@@ -95,6 +105,45 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
         </div>
       </div>
 </div>
+
+@if(auth()->user()->level == 5)
+<div class="row">
+    <div class="">
+      <div class="col-md-12">
+        <h3>Pesanan Menunggu</h3>
+
+        <div class="box">
+
+          @if(auth()->user()->level != 5)
+          <div class="box-header with-border">
+            <button onclick="addForm()" class="btn btn-success  btn-flat"><i class="fa fa-plus-circle">
+            </i> Tambah</button>
+          </div>
+          @endif
+          <p id="level" style="display: none;">{{auth()->user()->level}}</p>
+          <h1 id="new-order"></h1>
+          <div class="box-body table-responsive"  style="width:100%">
+          <table class="table table-stiped table-bordered table-mejacafe-diproses" id="table-mejacafe">
+            <thead>
+              <th width="5%">No</th>
+              <th>Nama Meja</th>
+              <th>No.Order</th>
+              @if(auth()->user()->level == 5)
+              <th>Pesanan </th>
+              @endif
+              <th>Status</th>
+              <th>Tanggal</th>
+              <th width="20%"><i class="fa fa-cog"></i></th>
+            </thead>
+            <tbody></tbody>
+          </table>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+@endif
+
 
 <audio id="alertSound">
     <source src="./sound.mp3" type="audio/mpeg">
@@ -126,6 +175,47 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
 
   function load(){
    if(level == '5') {
+    table= $('.table-mejacafe-diproses').DataTable({
+     responsive:true,
+     processing: true,
+     serverSide: true,
+     autoWidth:false,
+     ajax: {
+        url: '{{route('meja.dataDiproses')}}',
+     },
+     columns:[
+        {data:'DT_RowIndex', searchable:false, sortable:false},
+        {data:'nama_meja'},
+        {
+          "mData": "Id_pesanan",
+          "mRender": function (data, type, row) {
+            return `<a href='#'>${data}</a>`;
+          }
+        },
+        {
+          "mData": "pesanan_detail",
+          "mRender": function (data, type, row) {
+            let pesanan = '';
+            data.map((item) => {
+              pesanan += `${item.Nama_menu} (${item.jumlah}) , `
+            });
+
+            // Remove the trailing comma and space
+            pesanan = pesanan.slice(0, -2);
+
+            return `<ol>${pesanan.split(',').map(item => `<li>${item}</li>`).join('')}</ol>`;
+          }
+        },
+        {data:'status'},
+        {data:'updated_at', "render": function (data) {
+          var date = new Date(data);
+          var month = date.getMonth() + 1;
+          return (month.toString().length > 1 ? month : "0" + month) + "/" + date.getDate() + "/" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes();
+        }},
+        {data:'aksi', searchable:false, sortable:false},
+     ],
+     bPaginate:false,
+    });
     table= $('.table-mejacafe').DataTable({
      responsive:true,
      processing: true,
