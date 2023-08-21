@@ -14,7 +14,7 @@
     }
   .table-pesanan tbody tr:nth-child(even) {
   background-color: #cef0b1;
-    } 
+    }
   .table-pesanan  thead{background-color: #96bf73;}
   table{font-size: 12pt;}
   input[type="text"]{font-size:12pt;}
@@ -22,7 +22,7 @@
 
   .table-menu tbody tr:nth-child(even) {
   background-color: #cef0b1;
-    } 
+    }
   .table-menu  thead{background-color: #96bf73;}
 
   .tampil-bayar {
@@ -36,7 +36,7 @@
     }
   .table-pesanan tbody tr:last-child {
         display:none;
-    }  
+    }
   @media(max-width: 768px) {
         .tampil-bayar {
             font-size: 3em;
@@ -44,7 +44,7 @@
             padding-top: 5px;
         }
     }
-    
+
 </style>
 @endpush
 @section('breadcrumb')
@@ -68,11 +68,11 @@
                   <td>No.Pesanan:</td>
                   <td>{{$Id_pesanan}}</td>
                 </tr>
-              </table>         
+              </table>
             </div>
             <div class="box-body">
                 <form class="form-menu">
-                  @csrf  
+                  @csrf
                   <!--div class="form-group row">
                     <label for="nama_menu" class="col-lg-2">Tambah Menu</label>
                     <div class="col-lg-5">
@@ -88,13 +88,13 @@
                   <input type="hidden" name="id_pesanan" id="id_pesanan" value="{{$Id_pesanan}}">
                     <label for="nama_cust" class="col-lg-1">Customer</label>
                     <div class="col-lg-3">
-                      <input type="text" class="form-control" name="nama_cust" id="nama_cust" maxlength="50" value="{{$pesanan->customer}}" required> 
+                      <input type="text" class="form-control" name="nama_cust" id="nama_cust" maxlength="50" value="{{$pesanan->customer}}" required>
                       <span class="help-block with-errors"></span>
                     </div>
                     <div class="input-group-btn">
                           <button onclick="tampilmenu()" class="btn btn-info btn-flat btn-tambah" type="button"><i class="fa fa-plus-circle"></i> Tambah Menu</button>
                     </div>
-                    </div>            
+                    </div>
                 </form>
 
               <table class="table table-stiped table-bordered table-pesanan">
@@ -162,7 +162,7 @@
                                     <input type="text" id="kembalirp" class="form-control" readonly>
                                </div>
                             </div>
-                            
+
                           </form>
                         </div>
                       </div>
@@ -220,26 +220,26 @@
     return function executedFunction() {
         var context = this;
         var args = arguments;
-            
+
         var later = function() {
         timeout = null;
         if (!immediate) func.apply(context, args);
         };
 
         var callNow = immediate && !timeout;
-        
+
         clearTimeout(timeout);
 
         timeout = setTimeout(later, wait);
-        
+
         if (callNow) func.apply(context, args);
         };
-    }; 
+    };
 
    $(document).on('input','.quantity',debounce(function(){
      let id=$(this).data('id');
      let jumlah=parseInt($(this).val());
-     
+
      if(jumlah<1){
         alert('Jumlah tidak boleh kurang dari 1');
         $(this).val(1);
@@ -258,7 +258,7 @@
      })
      .done(response=>{
         loadform($('#diskon').val(), $('#diterima').val());
-        table.ajax.reload();       
+        table.ajax.reload();
       })
       .fail(errors=>{
         alert('Tidak dapat menyimpan data');
@@ -272,14 +272,14 @@
             }
             loadform($(this).val(), $('#diterima').val());
         },300));
-  
+
   $('#diterima').on('input', debounce(function () {
             if ($(this).val() == "") {
                 $(this).val(0).select();
             }
             loadform($('#diskon').val(), $(this).val());
         },300));
-    
+
   $('#nama_cust').change(function() {
     $('#nama_cust2').val($(this).val());
     });
@@ -295,17 +295,17 @@
 
   $('.btn-cetak').on('click', function () {
       $('.form-pesanan').submit();
-      cetak('{{ route('pesanan.cetak', $Id_pesanan) }}', 'Nota');  
+      cetak('{{ route('pesanan.cetak', $Id_pesanan) }}', 'Nota');
         });
   $('.btn-cetakselesai').on('click', function () {
       $('.form-pesanan').submit();
-      $.get('{{route('meja.reset', $meja->id_meja)}}'); 
-      cetak('{{ route('pesanan.cetak', $Id_pesanan) }}', 'Nota'); 
-      
-        });     
+      $.get('{{route('meja.reset', $meja->id_meja)}}');
+      cetak('{{ route('pesanan.cetak', $Id_pesanan) }}', 'Nota');
+
+        });
 });
-    
-  
+
+
   function tampilmenu(){
     let status=($('#status_pesanan').val());
     if (status=="Aktif"){
@@ -315,10 +315,10 @@
 
   function hidemenu(){
     $('#modal-menu').modal('hide');
-    
+
   }
 
-  function pilihmenu(id, nama){ 
+  function pilihmenu(id, nama){
     $('#id_menu').val(id);
     $('#nama_menu').val(nama);
     hidemenu()
@@ -339,7 +339,7 @@
 
   function deleteData(url) {
     let status=($('#status_pesanan').val());
-    if (status=="Aktif"){
+    // if (status=="Aktif"){
         if (confirm('Yakin ingin menghapus data terpilih?')) {
           $.ajax({
               url: url,
@@ -371,7 +371,7 @@
             //         return;
             //     });
         }
-      }
+    //   }
     }
 
   function loadform(diskon = 0, diterima = 0){
@@ -413,12 +413,12 @@
         const systemZoom = width / window.screen.availWidth;
         const left       = (width - w) / 2 / systemZoom + dualScreenLeft
         const top        = (height - h) / 2 / systemZoom + dualScreenTop
-        const newWindow  = window.open(url, title, 
+        const newWindow  = window.open(url, title,
         `
             scrollbars=yes,
-            width  = ${w / systemZoom}, 
-            height = ${h / systemZoom}, 
-            top    = ${top}, 
+            width  = ${w / systemZoom},
+            height = ${h / systemZoom},
+            top    = ${top},
             left   = ${left}
         `
         );

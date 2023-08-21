@@ -33,7 +33,7 @@
               </span>
             </a>
           </li>
-        <li class="header">CAFE</li>
+        {{-- <li class="header">CAFE</li> --}}
 
 
         <!-- <li>

@@ -3,15 +3,15 @@
 
 @section('login')
 <div class="login-box">
-  
+
   <!-- /.login-logo -->
   <div class="login-box-body">
   <div class="login-logo">
   <a href="{{url('/')}}">
-      <img src="{{asset('img/dsky.jpeg')}}" alt="dsky'jpeg" width="100">
-  </a>  
+      <img src="{{asset('img/jogja_billiard.jpeg')}}" alt="logo" width="100">
+  </a>
   </div>
-    
+
     <form action="{{route('login')}}" method="post">
       @csrf
       <div class="form-group has-feedback" @error ('email') has-error @enderror>
@@ -44,7 +44,7 @@
       </div>
     </form>
 
-    
+
   </div>
   <!-- /.login-box-body -->
 </div>

@@ -253,7 +253,8 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
                 dataType: "json",
                 success: callback,
                 error: function(request, status, error) {
-                    alert(status);
+                    // alert(status);
+                    console.log(error, status, request)
                 }
             });
         }
