@@ -67,6 +67,11 @@ class PesananDetailController extends Controller
         $total_item = 0;
         foreach ($detail as $item) {
             $row = array();
+
+            // total * ppn
+            $item->subtotal = $item->subtotal + $item->subtotal * 10 / 100;
+            $item->subtotal = ceil($item->subtotal / 1000) * 1000;
+
             $row['nama_menu'] = $item->menu['Nama_menu'];
             $row['harga']       = 'Rp. '. format_uang($item->harga);
             if ( $status=="Selesai"){
@@ -80,10 +85,12 @@ class PesananDetailController extends Controller
                                     <button onclick="deleteData(`'.route('pesanandetail.destroy', $item->id_pesanan_detail).'`)" class="btn btn-xs btn-danger btn-flat btn-hapus"><i class="fa fa-trash"></i> Hapus</button>
                                     </div>';
             $data[] = $row;
+            // dd($item->harga);
 
             $total += $item->harga * $item->jumlah;
             $total_item += $item->jumlah;
         }
+
         $data[] = [
             'nama_menu'=> '',
             'harga'=>'',
@@ -164,7 +171,9 @@ class PesananDetailController extends Controller
         //0.1 karena ppn 10%
         $ppn=intval(0.1*$total);
         $bayar = $total + $ppn - ($diskon / 100 * $total);
-        $kembali =$diterima - $bayar;
+        $kembali =$diterima - ceil($bayar / 1000) * 1000;
+        $bayar = ceil($bayar / 1000) * 1000;
+
         $data  = [
             'totalrp' => format_uang($total),
             'bayar' => $bayar,
