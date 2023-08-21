@@ -70,9 +70,9 @@
         <p style="float: right">Kasir: {{ ucwords(auth()->user()->name) }}</p>
     </div>
     <div class="clear-both" style="clear: both;"></div>
-    <p>Customer &nbsp&nbsp&nbsp&nbsp&nbsp: {{ ($pesanan->customer) }}</p>
+    <p>Customer &nbsp&nbsp&nbsp: {{ ($pesanan->customer) }}</p>
     <p>No Pesanan &nbsp: {{ ($pesanan->Id_pesanan) }}</p>
-    <p>No Meja &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp: {{ ($nama_meja) }}</p>
+    <p>No Meja &nbsp&nbsp&nbsp&nbsp: {{ ($nama_meja) }}</p>
 
     <p class="text-center">===================================</p>
     <br>
