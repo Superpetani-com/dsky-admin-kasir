@@ -48,9 +48,9 @@
   </div>
   <!-- /.login-box-body -->
 </div>
-
+<!-- 
 @push('scripts')
 <script>
   $.get('{{route('mejabiliard.updatetime')}}');
 </script>
-@endpush
+@endpush -->

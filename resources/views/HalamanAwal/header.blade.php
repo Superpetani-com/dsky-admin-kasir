@@ -39,7 +39,11 @@
                   <a href="#" class="btn btn-default btn-flat">Profile</a>
                 </div>
                 <div class="pull-right">
-                  <a href="#" class="btn btn-default btn-flat" onclick="$('#logout-form').submit()">Keluar</a>
+                  <form action="{{ route('logout') }}" method="post" id="logout-form" style="">
+                      @csrf
+                      <button class="btn btn-default btn-flat" type="submit">Keluar</button>
+                  </form>
+                  <!-- <a href="#" class="btn btn-default btn-flat" onclick="$('#logout-form').submit()">Keluar</a> -->
                 </div>
               </li>
             </ul>
@@ -49,6 +53,4 @@
     </nav>
   </header>
 
-  <form action="{{ route('logout') }}" method="post" id="logout-form" style="display: none;">
-    @csrf
-</form>
+
