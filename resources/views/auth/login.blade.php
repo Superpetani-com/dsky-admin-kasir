@@ -13,7 +13,7 @@
   </div>
 
     <form action="{{route('login')}}" method="post">
-      @csrf
+      {{ csrf_field() }}
       <div class="form-group has-feedback" @error ('email') has-error @enderror>
         <input autocomplete="off" type="email" name="email" class="form-control" placeholder="Email" required value={{old('email')}}>
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>

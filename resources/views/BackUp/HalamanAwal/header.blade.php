@@ -31,7 +31,7 @@
 
                 <p>
                 {{auth()->user()->name}} - {{auth()->user()->email}}
-                  
+
                 </p>
               </li>
               <li class="user-footer">
@@ -50,5 +50,5 @@
   </header>
 
   <form action="{{ route('logout') }}" method="post" id="logout-form" style="display: none;">
-    @csrf
+    {{ csrf_field() }}
 </form>
