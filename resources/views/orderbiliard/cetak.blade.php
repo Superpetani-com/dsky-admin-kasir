@@ -66,7 +66,7 @@
     <br>
     <div>
     <div>
-        <p style="float: left;">{{ date('d-m-Y') }}</p>
+        <p style="float: left;">{{ $order->created_at }}</p>
         <p style="float: right">Kasir: {{ ucwords(auth()->user()->name) }}</p>
     </div>
     <div class="clear-both" style="clear: both;"></div>
@@ -92,11 +92,11 @@
     <p class="text-center">===================================</p>
 
     <table width="100%" style="border: 0;">
-        {{-- <tr>
+        <tr>
             <td>Total Jam:</td>
             <td class="text-right">{{ ($order->totaljam) }} Jam</td>
         </tr>
-        <tr>
+        {{-- <tr>
             <td>Total Harga:</td>
             <td class="text-right">Rp.{{ format_uang($order->totalharga) }}</td>
         </tr>

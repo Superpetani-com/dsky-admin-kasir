@@ -66,7 +66,7 @@
     <br>
     <div>
     <div>
-        <p style="float: left;">{{ date('d-m-Y') }}</p>
+        <p style="float: left;">{{ $pesanan->created_at }}</p>
         <p style="float: right">Kasir: {{ ucwords(auth()->user()->name) }}</p>
     </div>
     <div class="clear-both" style="clear: both;"></div>
