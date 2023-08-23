@@ -105,7 +105,7 @@
             <td class="text-right">{{ format_uang($pesanan->Diskon) }}%</td>
         </tr> --}}
         <tr>
-            <td>PPN10%:</td>
+            <td>Pajak:</td>
             <td class="text-right">Rp.{{ format_uang($pesanan->ppn) }}</td>
         </tr>
         <tr>
