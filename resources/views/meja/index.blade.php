@@ -95,7 +95,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
                 <th>Pesanan </th>
                 @endif
                 <th>Status</th>
-                <th>Tanggal</th>
+                <th>Nama Pelanggan</th>
                 <th width="20%"><i class="fa fa-cog"></i></th>
               </thead>
               <tbody></tbody>
@@ -132,7 +132,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
               <th>Pesanan </th>
               @endif
               <th>Status</th>
-              <th>Tanggal</th>
+              <th>Nama Pelanggan</th>
               <th width="20%"><i class="fa fa-cog"></i></th>
             </thead>
             <tbody></tbody>
@@ -207,11 +207,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
           }
         },
         {data:'status'},
-        {data:'updated_at', "render": function (data) {
-          var date = new Date(data);
-          var month = date.getMonth() + 1;
-          return (month.toString().length > 1 ? month : "0" + month) + "/" + date.getDate() + "/" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes();
-        }},
+        {data:'pesanan.customer'},
         {data:'aksi', searchable:false, sortable:false},
      ],
      bPaginate:false,
@@ -248,11 +244,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
           }
         },
         {data:'status'},
-        {data:'updated_at', "render": function (data) {
-          var date = new Date(data);
-          var month = date.getMonth() + 1;
-          return (month.toString().length > 1 ? month : "0" + month) + "/" + date.getDate() + "/" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes();
-        }},
+        {data:'pesanan.customer'},
         {data:'aksi', searchable:false, sortable:false},
      ],
      bPaginate:false,
@@ -354,7 +346,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
 
         setInterval(() => {
             let lastLength = 0;
-            getData('{{route('meja.data')}}', function(response) {
+            getData('{{route('meja.dataDiproses')}}', function(response) {
                 console.log(response.data.length, lastLength)
                 if(response.data.length > lastLength  && isOk) {
                     console.log('order baru', response.data.length, lastLength)
@@ -363,6 +355,8 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
                 // alert('The response was: ' + response.data.length, rowCount);
                 // alert('Ada pesanan baru')
             });
+
+            // load();
 
 
             var tables = document.getElementById("table-mejacafe");

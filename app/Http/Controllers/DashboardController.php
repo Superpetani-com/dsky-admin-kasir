@@ -42,6 +42,28 @@ class DashboardController extends Controller
 
         return view('dashboard.index', compact('mejabiliard','meja'));
     }
+
+    public function indexDataMeja()
+    {
+        $state = meja::with('pesanan')
+        ->orderBy('id_meja')->get();
+
+        return datatables()
+            ->of($state)
+            ->make(true);
+    }
+
+    public function indexDataMejaBill()
+    {
+        $state = mejabiliard::with('order')
+        ->orderBy('id_meja_biliard')->get();
+
+        return datatables()
+            ->of($state)
+            ->make(true);
+    }
+
+
     public function store()
     {
 

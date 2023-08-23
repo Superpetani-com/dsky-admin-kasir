@@ -40,6 +40,11 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 
 Route::group(['middleware'=>'auth'], function(){
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::get('/dashboard/meja/data', [DashboardController::class, 'indexDataMeja'])->name('dashboard.indexDataMeja');
+    Route::get('/dashboard/billiard/data', [DashboardController::class, 'indexDataMejaBill'])->name('dashboard.indexDataMejaBill');
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+
     Route::resource('/dashboard',DashboardController::class);
 
     Route::get('/menu/data', [MenuController::class, 'data'])->name('menu.data');

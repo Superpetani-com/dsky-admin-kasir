@@ -161,51 +161,13 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
                 <th>Order</th>
                 <th>Status</th>
               </thead>
-              <tbody>
-              <tbody>
-              @foreach ($meja as $key1=>$item1)
-              <tr>
-              <td>{{$item1->nama_meja}}</td>
-              <td>
-              @if ($item1->pesanan)
-                {{$item1->pesanan['customer']}}
-              @endif
-              </td>
 
-              <td>Rp.
-              @if ($item1->pesanan)
-                {{ number_format(($item1->pesanan['TotalBayar']), 0,",",".")}}
-              @endif
-              </td>
-
-              <td>{{$item1->Id_pesanan}}</td>
-              <td width="12%">
-                <a href="{{route('pesanandetail.index2', $item1->Id_pesanan)}}" class="btn btn-xs btn-flat {{$item1->Status}}">
-                    @if ($item1->Status=='Kosong')
-                        Kosong
-                    @elseif ($item1->Status=='Dipakai')
-                        @if(auth()->user()->level == 1)
-                            Menunggu Kitchen
-                        @else
-                            Sedang Diproses
-                        @endif
-                    @elseif ($item1->Status=='Menunggu Kitchen')
-                        Menunggu Kitchen
-                    @elseif($item1->Status == "Selesai Kitchen")
-                        Selesai Kitchen
-                    @elseif ($item1->Status == "Diproses")
-                        Diproses Kitchen
-                    @endif
-                </a>
-              </td>
-              </tr>
-              @endforeach
-              </tbody>
             </table>
           </div>
         </div>
 
       </div>
+      <p id="level" style="display: none;">{{auth()->user()->level}}</p>
 
 </div>
 @includeIf('dashboard.mejabiliard')
@@ -215,6 +177,83 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
 
 @push('scripts')
 <script>
+  let level = document.getElementById('level').innerHTML;
+
+function load(){
+    table= $('.table-meja').DataTable({
+        "bDestroy": true,
+
+     responsive:true,
+     processing: true,
+     serverSide: true,
+     autoWidth:false,
+     "ordering": false,
+     ajax: {
+        url: '{{route('dashboard.indexDataMeja')}}',
+     },
+     columns:[
+        {data:'nama_meja'},
+        {
+                    "mData": "pesanan",
+                    "mRender": function (data, type, row) {
+                        if(data) {
+                            return data.customer
+                        }
+                    }
+                },
+        {data:'pesanan.TotalBayar'},
+        {data:'Id_pesanan'},
+        {
+                    "mData": "Status",
+                    "mRender": function (data, type, row) {
+
+                        if(data == 'Dipakai') {
+                            if({{auth()->user()->level == 1}}) {
+                                return `<a class="btn btn-xs btn-flat ${data}" href='{{ url('/pesanandetail/${row.Id_pesanan}') }}'>Menunggu Kitchen</a>`;
+
+                            } else {
+                                return `<a class="btn btn-xs btn-flat ${data}" href='{{ url('/pesanandetail/${row.Id_pesanan}') }}'>Sedang Diproses</a>`;
+
+                            }
+                        } else if(data == "Diproses") {
+                            return `<a class="btn btn-xs btn-flat ${data}" href='{{ url('/pesanandetail/${row.Id_pesanan}') }}'>Diproses Kitchen</a>`;
+                        } else {
+                            return `<a class="btn btn-xs btn-flat ${data}"href='{{ url('/pesanandetail/${row.Id_pesanan}') }}'>${data}</a>`;
+                        }
+                    }
+                },
+     ],
+     columnDefs: [{
+    "defaultContent": "",
+    "targets": "_all"
+  }],
+     bPaginate:false,
+    });
+}
+
+  load();
+  function getData(yt_url, callback) {
+            $.ajax({
+                type: "GET",
+                url: yt_url,
+                dataType: "json",
+                success: callback,
+                error: function(request, status, error) {
+                    // alert(status);
+                    console.log(error, status, request)
+                }
+            });
+        }
+        var currentPath = window.location.pathname;
+        var parts = currentPath.split('/');
+        var lastPart = parts[parts.length - 1];
+
+        if(level == 1 && lastPart == 'dashboard') {
+            setInterval(() => {
+            load();
+        }, 3000);
+        }
+
 
 function addForm1(){$('#modal-form1').modal('show');  }
 function addForm2(){$('#modal-form2').modal('show');  }

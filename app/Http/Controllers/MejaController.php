@@ -27,7 +27,7 @@ class MejaController extends Controller
         $meja = meja::orderBy('id_meja')->get();
 
         if(auth()->user()->level == 5) {
-            $meja = meja::where('Id_pesanan', '!=', '0')->where('status', '=', 'Diproses')->with('pesanan_detail')->orderBy('id_meja')->get();
+            $meja = meja::where('Id_pesanan', '!=', '0')->where('status', '=', 'Diproses')->with('pesanan_detail', 'pesanan')->orderBy('id_meja')->get();
             // dd($meja['pesanan_detail'][0]);
             foreach ($meja as $value) {
                 foreach ($value['pesanan_detail'] as $item) {
@@ -160,7 +160,7 @@ class MejaController extends Controller
         $meja = meja::orderBy('id_meja')->get();
 
         if(auth()->user()->level == 5) {
-            $meja = meja::where('Id_pesanan', '!=', '0')->where('status', '=', 'Dipakai')->with('pesanan_detail')->orderBy('id_meja')->get();
+            $meja = meja::where('Id_pesanan', '!=', '0')->where('status', '=', 'Dipakai')->with('pesanan_detail', 'pesanan')->orderBy('id_meja')->get();
             // dd($meja['pesanan_detail'][0]);
             foreach ($meja as $value) {
                 foreach ($value['pesanan_detail'] as $item) {
