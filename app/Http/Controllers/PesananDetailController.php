@@ -57,6 +57,23 @@ class PesananDetailController extends Controller
         return response()->json('Data berhasil disimpan', 200);
     }
 
+    public function storeWithMeja(Request $request)
+    {
+        $menu = menu::where('Id_Menu', $request->id_menu)->first();
+        if(!$menu){
+            return response()->json('Data gagal disimpan', 400);
+        }
+        $detail= new PesananDetail();
+        $detail->id_pesanan=$request->id_pesanan;
+        $detail->id_menu=$menu->Id_Menu;
+        $detail->harga=$menu->Harga;
+        $detail->jumlah=1;
+        $detail->subtotal=$menu->Harga;
+        $detail->cabang_id='Jogja Billiard';
+        $detail->save();
+        return response()->json('Data berhasil disimpan', 200);
+    }
+
     public function data($id, $status)
     {
         $detail=PesananDetail::with('menu')
@@ -69,11 +86,10 @@ class PesananDetailController extends Controller
             $row = array();
 
             // total * ppn
-            $item->subtotal = $item->subtotal + $item->subtotal * 10 / 100;
-            $item->subtotal = ceil($item->subtotal / 100) * 100;
+            $item->subtotal = $item->subtotal;
 
             $row['nama_menu'] = $item->menu['Nama_menu'];
-            $row['harga']       = 'Rp. '. format_uang(ceil($item->harga / 100) * 100);
+            $row['harga']       = 'Rp. '. format_uang($item->harga);
             if ( $status=="Selesai"){
                 $row['jumlah']      = '<input type="number" class="form-control input-sm quantity" data-id="'. $item->id_pesanan_detail .'" value="'. $item->jumlah .'" readonly>';
             }
@@ -170,7 +186,7 @@ class PesananDetailController extends Controller
     {
         //0.1 karena ppn 10%
         $ppn=intval(0.1*$total);
-        $bayar = $total + $ppn - ($diskon / 100 * $total);
+        $bayar = $total;
         $kembali =$diterima - ceil($bayar / 100) * 100;
         $bayar = ceil($bayar / 100) * 100;
         // dd($bayar);
