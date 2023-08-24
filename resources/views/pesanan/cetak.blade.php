@@ -96,18 +96,18 @@
             <td>Total Item:</td>
             <td class="text-right">{{ format_uang($pesanan->TotalItem) }} Item</td>
         </tr> --}}
-        <tr>
+        {{-- <tr>
             <td>Total Harga:</td>
             <td class="text-right">Rp.{{ format_uang(ceil($pesanan->TotalHarga / 100) * 100) }}</td>
-        </tr>
+        </tr> --}}
         {{-- <tr>
             <td>Diskon:</td>
             <td class="text-right">{{ format_uang($pesanan->Diskon) }}%</td>
         </tr> --}}
-        <tr>
+        {{-- <tr>
             <td>Pajak:</td>
             <td class="text-right">Rp.{{ format_uang($pesanan->ppn) }}</td>
-        </tr>
+        </tr> --}}
         <tr>
             <td>Total Bayar:</td>
             <td class="text-right">Rp.{{ format_uang($pesanan->TotalBayar) }}</td>
