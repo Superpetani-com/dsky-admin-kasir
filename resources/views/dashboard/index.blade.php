@@ -65,6 +65,103 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
   height: 50%;
   padding:2;
 }
+
+.card {
+    background-color: #fff !important;
+    border-radius: 10px;
+    padding-left: 12px;
+    padding-bottom: 12px;
+    padding-top: 12px;
+    padding-right: 12px;
+    margin-top: 10px;
+    box-shadow: 3px 3px 10px 0px rgba(0, 0, 0, 0.20);
+    height: 210px;
+}
+
+.card-cafe {
+    background-color: #fff !important;
+    border-radius: 10px;
+    padding-left: 12px;
+    padding-bottom: 12px;
+    padding-top: 12px;
+    padding-right: 12px;
+    margin-top: 10px;
+    box-shadow: 3px 3px 10px 0px rgba(0, 0, 0, 0.20);
+    margin-left: 50px;
+}
+
+.center {
+    text-align: center;
+}
+p {
+    margin: 0;
+}
+h3 {
+    font-size: 42px;
+    font-weight: bold;
+    color: #000;
+    margin-top: 0px !important;
+}
+
+h5 {
+    font-weight: bold;
+    color: #000;
+}
+
+.button-aksi {
+    height: 30px;
+    border: none;
+    border-radius: 4px;
+}
+
+.bg-black {
+    background-color: #121212;
+}
+
+.bg-blue {
+    background-color: #0C6DFF !important;
+}
+
+.bg-red {
+    background-color: #FF6961 !important;
+    color: black !important;
+}
+
+.bg-red p {
+    color: #000;
+}
+
+.bg-green {
+    background: #30DB5B !important;
+    color: black !important;
+}
+
+.rounded {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    background: #fff;
+    border-radius: 4px;
+    margin-top: 4px;
+}
+
+.grid-container {
+    margin-left: 10px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* Creates 5 equal-width columns */
+  gap: 20px; /* Adds spacing between grid items */
+}
+
+h1 {
+    color: black;
+    font-weight: bold;
+}
+
+h5 {
+    margin: 0;
+}
+
 </style>
 @endpush
 @section('title')
@@ -80,18 +177,129 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
 <!-- Small boxes (Stat box) -->
 <div class="box">
       <div class="row">
-      <div class="col-md-7">
+      <div class="col-md-8">
             <div class="box-header with-border">
-              <button onclick="addForm1()" class="btn btn-success  btn-flat"><i class="fa fa-plus-circle">
-              </i> Order Biliard</button>
+              <h1>Order Meja Billiard</h1>
             </div>
       </div>
-      <div class="col-md-5">
+      <div class="col-md-4">
             <div class="box-header with-border">
-              <button onclick="addForm2()" class="btn btn-primary  btn-flat"><i class="fa fa-plus-circle">
-              </i> Order Cafe</button>
+              <h1 style="margin-left: 30px">Order Kafe</h1>
+              <div class="box-header with-border">
+                <button onclick="addForm2()" class="btn btn-primary  btn-flat"><i class="fa fa-plus-circle">
+                </i> Order Cafe</button>
+              </div>
             </div>
       </div>
+      </div>
+      <div class="row">
+          <div class="col-md-8 grid-container">
+            @foreach ($mejabiliard as $key=>$item)
+              <div class="grid-item">
+                <div class="
+                    @if($item->status == 'Dipakai')
+                        {{ 'card bg-green' }}
+                    @elseif($item->status == 'Bayar')
+                        {{ 'card bg-red' }}
+                    @else
+                    {{'card'}}
+                    @endif
+                    ">
+                    <h3 class="center">{{$key + 1}}</h3>
+                    <h5 class="center rounded @if($item->status == 'Dipakai')
+                        {{ 'bg-green' }}
+                    @elseif($item->status == 'Bayar')
+                        {{ 'bg-red' }}
+                    @endif">
+                    @if($item->status == 'Dipakai')
+                        {{ 'SEDANG DIPAKAI' }}
+                    @elseif($item->status == 'Bayar')
+                        {{ 'WAKTU HABIS' }}
+                    @else
+                        {{ 'KOSONG' }}
+                    @endif
+                    </h5>
+
+                    @if($item->status !== 'Kosong')
+                    <div style="display: flex; justify-content: space-between;" class="">
+                        <div><p><b>Mulai</b></p></div>
+                        <div><p>{{date("H:i:s", strtotime($item->jammulai))}}</p></div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;" class="">
+                        <div><p><b>Selesai</b></p></div>
+                        <div><p>{{date("H:i:s", strtotime($item->jamselesai))}}</p></div>
+                    </div>
+                    @if($item->flag == 1)
+                        <div style="display: flex; justify-content: space-between;" class="">
+                            <div><p><b>Durasi</b></p></div>
+                            <div><p id="tddurasi{{$item->id_meja_biliard}}">{{$item->sisadurasi}}</p></div>
+                        </div>
+                    @else
+                        <div style="display: flex; justify-content: space-between;" class="">
+                            <div><p><b>Sisa</b></p></div>
+                            <div><p id="tdsisadurasi{{$item->id_meja_biliard}}">{{$item->sisadurasi}}</p></div>
+                        </div>
+                    @endif
+
+                    <div style="display: flex; justify-content: space-between;margin-top: 10px;">
+                        {{-- @if($item->flag == 1) --}}
+                            {{-- <a href="{{route('orderbiliarddetail.index2', $item->id_order_biliard)}}"> --}}
+                                {{-- <h5 class="center"><button onclick="stopseting({{$item->id_order_biliard_detail, $item->id_meja_biliard}})" class="button-aksi bg-red">STOP</button></h5> --}}
+                            {{-- </a> --}}
+                        {{-- @else --}}
+                            <button class="button-aksi bg-black" onclick="printNota({{$item->id_order_biliard}})">PRINT</button>
+                        {{-- @endif --}}
+                        <div style="display: inline-flex">
+                        @if($item->status == 'Dipakai')
+                        <a href="{{route('orderbiliarddetail.index2', $item->id_order_biliard)}}">
+                            <button class="button-aksi bg-blue">TAMBAH</button>
+                        </a>
+                        <button type="button" onclick="resetform2('{{route('mejabiliard.reset', $item->id_meja_biliard)}}', '{{$item->id_order_biliard}}','{{$item->flag}}')" class="button-aksi bg-red">SELESAI</button>
+                        @elseif($item->status == 'Bayar')
+                            <button type="button" onclick="resetform2('{{route('mejabiliard.reset', $item->id_meja_biliard)}}', '{{$item->id_order_biliard}}','{{$item->flag}}')" class="button-aksi bg-blue">SELESAI</button>
+                        @endif
+                        </div>
+                    </div>
+                    @else
+                    <br>
+                    <a href="{{route('orderbiliard.create', $item->id_meja_biliard)}}">
+                        <h5 class="center"><button class="button-aksi bg-blue">TAMBAH</button></h5>
+                    </a>
+                    <br>
+                    @endif
+
+
+                </div>
+              </div>
+            @endforeach
+
+          </div>
+
+          <div class="col-md-3">
+            <div class="row">
+                <div class="card-cafe center">
+                    <h3 class="center">1</h3>
+                    <h5 class="center">KOSONG</h5>
+                    <br>
+                    <button class="button-aksi bg-blue center">TAMBAH</button>
+                </div>
+                <div class="card-cafe center bg-green">
+                    <h3 class="center">2</h3>
+                    <h5 class="center">DIPROSES</h5>
+                    <button class="button-aksi bg-blue center">TAMBAH</button>
+                </div>
+                <div class="card-cafe center bg-red">
+                    <h3 class="center">3</h3>
+                    <h5 class="center">BELUM BAYAR</h5>
+                    <button class="button-aksi bg-blue center">SELESAI</button>
+                </div>
+                <div class="card-cafe center">
+                    <h3 class="center">3</h3>
+                    <h5 class="center">KOSONG</h5>
+                    <button class="button-aksi bg-blue center">TAMBAH</button>
+                </div>
+            </div>
+          </div>
       </div>
       <div class="row">
             <div class="col-md-7">
@@ -151,7 +359,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
             </table>
             </div>
             </div>
-        <div class="col-md-5">
+        <div class="col-md-4">
           <div class="box-body table-responsive">
             <table class="table table-meja table-striped table-bordered">
               <thead>
@@ -178,7 +386,16 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
 @push('scripts')
 <script>
   let level = document.getElementById('level').innerHTML;
-
+  function stopseting(iddetail, idmeja, totalflag){
+    if (confirm('Yakin ingin berhenti MANUAL?')) {
+        $.get(`{{url('orderbiliarddetail')}}/${iddetail}/${idmeja}/0/stop`)
+        .done((response) => {table.ajax.reload();})
+        .fail((errors)   => {
+                        alert('Tidak dapat menghapus data');
+                        return;
+                        });
+    }
+  }
 function load(){
     table= $('.table-meja').DataTable({
         "bDestroy": true,
@@ -188,6 +405,9 @@ function load(){
      serverSide: true,
      autoWidth:false,
      "ordering": false,
+     error: function(xhr, textStatus, errorThrown) {
+                console.log('Ajax error:', textStatus, errorThrown);
+            },
      ajax: {
         url: '{{route('dashboard.indexDataMeja')}}',
      },
@@ -231,32 +451,26 @@ function load(){
     });
 }
 
-  load();
-  function getData(yt_url, callback) {
-            $.ajax({
-                type: "GET",
-                url: yt_url,
-                dataType: "json",
-                success: callback,
-                error: function(request, status, error) {
-                    // alert(status);
-                    console.log(error, status, request)
-                }
-            });
-        }
-        var currentPath = window.location.pathname;
-        var parts = currentPath.split('/');
-        var lastPart = parts[parts.length - 1];
+    load();
+    var currentPath = window.location.pathname;
+    var parts = currentPath.split('/');
+    var lastPart = parts[parts.length - 1];
 
-        if(level == 1 && lastPart == 'dashboard') {
+    if(level == 1 && lastPart == 'dashboard') {
             setInterval(() => {
             load();
         }, 3000);
-        }
+    }
 
 
 function addForm1(){$('#modal-form1').modal('show');  }
 function addForm2(){$('#modal-form2').modal('show');  }
+
+function printNota(id) {
+    var urlcetak=(`{{url('orderbiliard')}}/cetak/${id}`);
+    cetak(urlcetak);
+}
+
 function resetform2(url, id, flag){
   if(flag>0){
     if (confirm('Stop dan Simpan Jam Manual Dahulu')) {
@@ -299,9 +513,11 @@ $.get('{{route('mejabiliard.updatetime')}}');
 $('body').addClass('sidebar-collapse');
 let i;
 i = 0;
+
 const myInterval1 = setInterval(myTimer1, 1000);
+
 function myTimer1() {
-i = i + 1;
+    i = i + 1;
       @foreach ($mejabiliard as $key=>$item)
       var status="{{$item->status}}";
       var sd = document.getElementById("tdsisadurasidummy{{$item->id_meja_biliard}}").innerHTML;
@@ -347,9 +563,6 @@ function checkTime(g) {
 
 function cetak(url, title) {
     popupCenter(url, title, 625, 500);
-
-    }
-
     function popupCenter(url, title, w, h) {
         const dualScreenLeft = window.screenLeft !==  undefined ? window.screenLeft : window.screenX;
         const dualScreenTop  = window.screenTop  !==  undefined ? window.screenTop  : window.screenY;
@@ -369,6 +582,7 @@ function cetak(url, title) {
         );
         if (window.focus) newWindow.focus();
     }
+}
 
 
 </script>

@@ -7,7 +7,10 @@ use App\Models\OrderBiliard;
 use App\Models\OrderBiliardDetail;
 use App\Models\MejaBiliard;
 use App\Models\PaketBiliard;
+use App\Models\PesananDetail;
 use App\Models\Meja;
+use App\Models\Pesanan;
+use App\Models\Menu;
 
 class OrderBiliardDetailController extends Controller
 {
@@ -40,7 +43,21 @@ class OrderBiliardDetailController extends Controller
         $order=orderbiliard::where('id_order_biliard', $id)->first();
         $mejabiliard=mejabiliard::where('id_meja_biliard', $order->id_meja_biliard)->first();
         $mejadetail = mejabiliard::orderBy('id_meja_biliard')->get();
-        return view('orderbiliarddetail.index', compact('id_order_biliard','paket','order','mejabiliard', 'mejadetail'));
+        $menu=menu::orderBy('Nama_menu')->get();
+
+        if ($id==0){
+            return "Belum Ada Order";
+        }
+        $Id_pesanan=$order->id_pesanan;
+
+        if($Id_pesanan != 0) {
+            $pesanan=pesanan::where('Id_pesanan', $order->id_pesanan)->first();
+            $meja=meja::where('Id_meja', $pesanan->Id_meja)->first();
+            return view('orderbiliarddetail.index', compact('id_order_biliard','paket','order','mejabiliard', 'mejadetail','Id_pesanan','menu','meja','pesanan'));
+        }
+
+
+        return view('orderbiliarddetail.index', compact('id_order_biliard','paket','order','mejabiliard', 'mejadetail','Id_pesanan','menu'));
 
     }
 
@@ -105,7 +122,7 @@ class OrderBiliardDetailController extends Controller
             // dd($item['order']['id_meja_biliard']);
             $mejabiliard=mejabiliard::where('id_meja_biliard', $item['order']['id_meja_biliard'])->first();
 
-
+            // dd($item);
             $row = array();
             $row['nama_paket'] = $item->paket['nama_paket'];
             $row['harga']       = 'Rp. '. format_uang($item->harga);
@@ -154,14 +171,28 @@ class OrderBiliardDetailController extends Controller
             $total_flag += $item->flag;
             $total_menit += $item->menit;
         }
+        // dd($total);
+
+        $order = OrderBiliard::where('id_order_biliard', '=', $id)->first();
+        $detail=PesananDetail::with('menu')
+        ->where('id_pesanan', $order->id_pesanan)
+        ->get();
+        $totalpesanan = 0;
+        $total_item = 0;
+        foreach ($detail as $item) {
+            $totalpesanan += $item->harga * $item->jumlah;
+            $total_item += $item->jumlah;
+        }
+
         $data[] = [
             'nama_paket'=> '',
             'harga'=>'',
             'jumlah'=>'
-            <div class="total hide">'. $total .'</div>
-            <div class="total_jam hide">'. $total_jam .'</div>,
-            <div class="total_menit hide">'. $total_menit .'</div>,
-            <div class="total_flag hide">'. $total_flag .'</div>',
+            <div class="totalbil hide">'. $total .'</div>
+            <div class="total_jam hide">'. $total_jam .'</div>
+            <div class="total_menit hide">'. $total_menit .'</div>
+            <div class="total_flag hide">'. $total_flag .'</div>
+            <div class="total_item hide">'. $total_item .'</div>',
             'menit'=>'',
             'seting'=>'',
             'subtotal'=>'',
@@ -259,24 +290,29 @@ class OrderBiliardDetailController extends Controller
         $detail->update();
         $detail1=OrderBiliardDetail::where('id_order_biliard', $detail->id_order_biliard)
         ->get();
-        foreach ($detail1 as $item) {
-        $total_flag += $item->flag;
-        }
-        $meja = Mejabiliard::find($meja);
-        $meja->flag=$total_flag;
-        $meja->update();
+
+        // dd($detail);
+        // foreach ($detail1 as $item) {
+        //     dd($item);
+        //     $total_flag += $item->flag;
+        // }
+        // $meja = Mejabiliard::find($meja);
+        // $meja->flag=$total_flag;
+        // $meja->update();
         return response(null, 204);
     }
 
     public function loadform($diskon, $total, $diterima)
     {
+        // dd($total);
+        // $total += $total;
         $bayar = $total - ($diskon / 100 * $total);
         $kembali =$diterima - $bayar;
         $data  = [
             'totalrp' => format_uang($total),
             'bayar' => $bayar,
             'kembali'=>$kembali,
-            'bayarrp' => format_uang($bayar),
+            'bayarrp' => $bayar,
             'terbilang' => ucwords(terbilang($bayar). ' Rupiah'),
             'kembalirp' => format_uang($kembali),
             'kembali_terbilang' => ucwords(terbilang($kembali). ' Rupiah'),

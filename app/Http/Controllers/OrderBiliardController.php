@@ -7,6 +7,8 @@ use App\Models\OrderBiliard;
 use App\Models\OrderBiliardDetail;
 use App\Models\MejaBiliard;
 use App\Models\PaketBiliard;
+use Ramsey\Uuid\Uuid;
+use App\Models\Pesanan;
 
 class OrderBiliardController extends Controller
 {
@@ -39,7 +41,26 @@ class OrderBiliardController extends Controller
         $order->status='Aktif';
         $order->cabang_id='Jogja Billiard';
         $order->created_by = auth()->user()->name;
+
+        $uuid = Uuid::uuid4();
+        $pesanan=new pesanan();
+        $pesanan->Id_meja=$id;
+        $pesanan->TotalItem=0;
+        $pesanan->TotalHarga=0;
+        $pesanan->Diskon=0;
+        $pesanan->TotalBayar=0;
+        $pesanan->Diterima=0;
+        $pesanan->Kembali=0;
+        $pesanan->ppn=10;
+        $pesanan->status='Aktif';
+        $pesanan->cabang_id='Jogja Billiard';
+        $pesanan->created_by = auth()->user()->name;
+        $pesanan->uuid = $uuid->toString();
+        $pesanan->save();
+
+        $order->id_pesanan =  $pesanan->Id_pesanan;
         $order->save();
+
         return redirect()->route('orderbiliarddetail.index2', $order->id_order_biliard);
     }
 
@@ -105,6 +126,7 @@ class OrderBiliardController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request);
         $mejabiliard = MejaBiliard::find($request->id_meja_biliard);
         $order = orderbiliard::findOrFail($request->id_order_biliard);
         $updatestatus = orderbiliard::where('id_meja_biliard',$request->id_meja_biliard)
@@ -118,10 +140,12 @@ class OrderBiliardController extends Controller
         $order->totaljam= $request->total_jam;
         //$order->totalflag= $request->total_flag;
         $order->diskon = 0;
-        $order->totalharga = $request->total;
+        $order->totalharga = $request->bayar;
         $order->totalbayar = $request->bayar;
         $order->diterima=$request->diterima;
-        $order->kembali=$request->kembali;
+        // $order->kembali=$request->kembali;
+        $order->kembali=0;
+
         $order->customer=$request->nama_cust2;
         $order->update();
 
@@ -163,7 +187,10 @@ class OrderBiliardController extends Controller
         $mejabiliard->update();
         }
 
-        return redirect()->route('dashboard.index');
+        // dd($mejabiliard);
+
+        // return redirect()->route('dashboard.index');
+        return ['status' => 'ok'];
     }
 
     /**

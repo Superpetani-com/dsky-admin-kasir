@@ -83,6 +83,7 @@ class PesananController extends Controller
     }
     public function store(request $request)
     {
+        // dd($request);
         $pesanan = Pesanan::findOrFail($request->id_pesanan);
         $updatestatus = Pesanan::where('Id_meja',$request->id_meja_cafe)
         ->orderBy('Id_pesanan', 'desc')
@@ -97,9 +98,10 @@ class PesananController extends Controller
         $pesanan->TotalItem= $request->total_item;
         $pesanan->TotalHarga = $request->total;
         $pesanan->Diskon = 0;
-        $pesanan->TotalBayar = $request->bayar;
-        $pesanan->Diterima=$request->diterima;
-        $pesanan->Kembali=$request->kembali;
+        $pesanan->TotalBayar = $request->total;
+        $pesanan->Diterima=$request->total;
+        // $pesanan->Kembali=$request->kembali;
+        $pesanan->Kembali=0;
         $pesanan->customer=$request->nama_cust2;
         $pesanan->ppn=$request->ppn;
         $pesanan->update();
