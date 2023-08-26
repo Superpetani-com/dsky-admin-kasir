@@ -127,7 +127,6 @@ class OrderBiliardController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request);
         $mejabiliard = MejaBiliard::find($request->id_meja_biliard);
         $order = orderbiliard::findOrFail($request->id_order_biliard);
         $updatestatus = orderbiliard::where('id_meja_biliard',$request->id_meja_biliard)
@@ -147,7 +146,7 @@ class OrderBiliardController extends Controller
         // $order->kembali=$request->kembali;
         $order->kembali=0;
 
-        $order->customer=$request->nama_cust2;
+        $order->customer=$request->nama_cust3;
         $order->update();
 
         if ($order->status=="Aktif"){
@@ -243,6 +242,7 @@ class OrderBiliardController extends Controller
     }
     public function cetak($id)
     {
+        // dd($id);
         $detail=OrderBiliardDetail::with('paket')
         ->where('id_order_biliard', $id)
         ->get();

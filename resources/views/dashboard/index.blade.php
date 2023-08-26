@@ -479,30 +479,31 @@ function resetform2(url, id, flag){
   }
   }
 
-  if(flag==0){
-    if (confirm('Yakin ingin me-reset meja terpilih?')) {
-    var urlcetak=(`{{url('orderbiliard')}}/cetak/${id}`);
-    cetak(urlcetak);
-    $.get(url)
-    .done((response)=>{
-      location.reload();
-        })
-    .fail((errors)=>{
-    alert('Tidak dapat me-reset data');
-    return;
-        })
+    if(flag==0){
+        if (confirm('Yakin ingin me-reset meja terpilih?')) {
+        var urlcetak=(`{{url('orderbiliard')}}/cetak/${id}`);
+        cetak(urlcetak);
+        // Introduce a delay of 2 seconds
+        setTimeout(() => {
+            $.get(url)
+                .done((response) => {
+                location.reload();
+            }).fail((errors) => {
+                alert('Tidak dapat me-reset data');
+                return;
+            });
+        }, 2000); // 2000 milliseconds = 2 seconds
     }
   }
-
-  }
+}
   function resetform1(url, id){
     if (confirm('Yakin ingin me-reset meja terpilih?')) {
     var urlcetak=(`{{url('pesanan')}}/cetak/${id}`);
     cetak(urlcetak);
     $.get(url)
     .done((response)=>{
-      location.reload();
-        })
+    //   location.reload();
+    })
     .fail((errors)=>{
     alert('Tidak dapat me-reset data');
     return;

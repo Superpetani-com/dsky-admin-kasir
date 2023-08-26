@@ -139,7 +139,7 @@
                   </div>
                   <label for="nama_cust" class="col-lg-1">Customer</label>
                   <div class="col-lg-3">
-                    <input type="text" class="form-control" name="nama_cust" id="nama_cust" maxlength="50" value="{{$order->customer}}" required>
+                    <input type="text" class="form-control" name="nama_cust" id="nama_cust" maxlength="50" value="{{$pesanan->customer}}" required>
                     <span class="help-block with-errors"></span>
                   </div>
                   <div class="input-group-btn">
@@ -275,7 +275,7 @@
                             <input type="hidden" name="id_meja_biliard" id="id_meja_biliard" value="{{ $mejabiliard->id_meja_biliard }}">
                             <input type="hidden" name="status_meja_biliard" id="status_meja_biliard" value="{{ $mejabiliard->status }}">
                             <input type="hidden" name="status_order_biliard" id="status_order_biliard" value="{{ $order->status }}">
-                            <input type="hidden" name="nama_cust2" id="nama_cust2" value="{{$order->customer}}">
+                            <input type="hidden" name="nama_cust3" id="nama_cust3" value="{{$pesanan->customer}}">
                             {{-- <div class="form-group row">
                                 <label for="totalrp" class="col-lg-3 control-label">Total</label>
                                 <div class="col-lg-8">
@@ -313,7 +313,7 @@
                     </div>
               <div class="box-footer p-3">
                 <button type="submit" class="btn btn-primary btn-sm btn-flat pull-right btn-simpan "><i class="fa fa-floppy-o"></i> Simpan Transaksi</button>
-                <button type="submit" class="btn btn-warning btn-sm btn-flat pull-right btn-cetak "><i class="fa fa-print"></i> Cetak Transaksi</button>
+                {{-- <button type="submit" class="btn btn-warning btn-sm btn-flat pull-right btn-cetak "><i class="fa fa-print"></i> Cetak Transaksi</button> --}}
                 <!--button type="submit" class="btn btn-danger btn-sm btn-flat pull-right btn-cetakselesai "><i class="fa fa-check"></i> Cetak & Selesai</button-->
             </div>
         </div>
@@ -416,7 +416,8 @@
         },300));
 
     $('#nama_cust').change(function() {
-    $('#nama_cust2').val($(this).val());
+        $('#nama_cust2').val($(this).val());
+        $('#nama_cust3').val($(this).val());
     });
 
     $('.btn-simpan').on('click', async function () {
@@ -643,13 +644,15 @@
     // $('#bayar').val(19999);
     $.get(`{{ url('/orderbiliarddetail/loadform') }}/${diskon}/${totalAll}/${diterima}`)
     .done(response => {
+        let totals = parseInt(response.bayarrp) + parseInt(totalText, 10);
+
                 $('#totalrp').val('Rp. '+ response.totalrp);
                 $('#bayarrp').val('Rp. '+ response.bayarrp);
                 $('#bayar').val(response.bayar);
                 $('#diterima').val(response.bayar);
                 $('#kembali').val(response.kembali);
-                $('.tampil-bayar').text('Bayar: Rp. '+ (parseInt(response.bayarrp) + parseInt(totalText, 10)));
-                $('.tampil-terbilang').text('Terbilang: '+response.terbilang);
+                $('.tampil-bayar').text('Bayar: Rp. '+ totals.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+                // $('.tampil-terbilang').text('Terbilang: '+response.terbilang);
                 $('#kembalirp').val('Rp.'+ response.kembalirp);
                 // if ($('#diterima').val() != 0) {
                 //     $('.tampil-bayar').text('Kembali: Rp. '+ response.kembalirp);
