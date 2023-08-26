@@ -7,6 +7,7 @@ use App\Models\OrderBiliard;
 use App\Models\OrderBiliardDetail;
 use App\Models\MejaBiliard;
 use App\Models\PaketBiliard;
+use App\Models\PesananDetail;
 use Ramsey\Uuid\Uuid;
 use App\Models\Pesanan;
 
@@ -248,8 +249,14 @@ class OrderBiliardController extends Controller
         $order=OrderBiliard::where('id_order_biliard', $id)->first();
         $meja=MejaBiliard::where('id_meja_biliard', $order->id_meja_biliard)->first();
         $nama_meja=$meja->namameja;
+
+        $detailpesanan=PesananDetail::with('menu')
+        ->where('id_pesanan', $order->id_pesanan)
+        ->get();
+        $pesanan=pesanan::where('Id_pesanan', $order->id_pesanan)->first();
         //return ($detail);
-        return view('orderbiliard.cetak', compact('detail','order', 'nama_meja'));
+        // dd($pesanan, $detail);
+        return view('orderbiliard.cetak', compact('detail','order', 'nama_meja', 'pesanan', 'detailpesanan', 'meja'));
     }
 
 }

@@ -57,7 +57,7 @@
 <button class="btn-print" style="position: absolute; right: 1rem; top: rem;" onclick="window.print()">Print</button>
     <div class="text-center">
         {{-- <h3 style="margin-bottom: 5px;">{{ strtoupper("NOTA BILIARD") }}</h3> --}}
-        <h3 style="margin-bottom: 5px;">{{ strtoupper("Nota Jogja Billiard") }}</h3>
+        <h3 style="margin-bottom: 5px;">{{ strtoupper("Jogja Billiard") }}</h3>
         <p>{{ ucwords("Jl. Urip Sumoharjo No.3-5") }}</p>
         <p>{{ ucwords("BCA : 0376-616-333(Billiard Indonesia)") }}</p>
         <p>{{ ucwords("WA : 081225557100") }}</p>
@@ -66,13 +66,16 @@
     <br>
     <div>
     <div>
-        <p style="float: left;">{{ $order->created_at }}</p>
-        <p style="float: right">Kasir: {{ ucwords(auth()->user()->name) }}</p>
+        {{-- <p style="float: left;">{{ $order->created_at }}</p> --}}
+        <p style="float: left">Kasir: {{ ucwords(auth()->user()->name) }}</p>
     </div>
     <div class="clear-both" style="clear: both;"></div>
-    <p>Cutomer &nbsp;&nbsp;&nbsp;: {{ ucwords($order->customer) }}</p>
-    <p>No Order &nbsp;&nbsp;: {{ ($order->id_order_biliard) }}</p>
-    <p>No Meja &nbsp;&nbsp;&nbsp;: {{ ($nama_meja) }}</p>
+    <p>Cutomer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ ucwords($order->customer) }}</p>
+    <p>No Order &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ ($order->id_order_biliard) }}-{{ $order->id_pesanan }}</p>
+    <p>No Meja &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ ($nama_meja) }}</p>
+    <p>Jam Mulai &nbsp;&nbsp;&nbsp;: {{ ($meja->jammulai) }}</p>
+    <p>Jam Selesai : {{ ($meja->jamselesai) }}</p>
+
     <p class="text-center">===================================</p>
     <br>
     <table width="100%" style="border: 0;">
@@ -87,15 +90,15 @@
             </tr>
         @endforeach
     </table>
-    <br>
+    {{-- <br> --}}
     {{-- <p class="text-center">-----------------------------------</p> --}}
-    <p class="text-center">===================================</p>
+    {{-- <p class="text-center">===================================</p> --}}
 
     <table width="100%" style="border: 0;">
-        <tr>
+        {{-- <tr>
             <td>Total Jam:</td>
             <td class="text-right">{{ ($order->totaljam) }} Jam</td>
-        </tr>
+        </tr> --}}
         {{-- <tr>
             <td>Total Harga:</td>
             <td class="text-right">Rp.{{ format_uang($order->totalharga) }}</td>
@@ -104,10 +107,10 @@
             <td>Diskon:</td>
             <td class="text-right">{{ format_uang($order->diskon) }}%</td>
         </tr> --}}
-        <tr>
+        {{-- <tr>
             <td>Total Bayar:</td>
             <td class="text-right">Rp.{{ format_uang($order->totalbayar) }}</td>
-        </tr>
+        </tr> --}}
         {{-- <tr>
             <td>Diterima:</td>
             <td class="text-right">Rp.{{ format_uang($order->diterima) }}</td>
@@ -117,7 +120,55 @@
             <td class="text-right">Rp.{{ format_uang($order->kembali) }}</td>
         </tr> --}}
     </table>
+    {{-- <p class="text-center">===================================</p> --}}
+    {{-- <br> --}}
+    <table width="100%" style="border: 0;">
+        @foreach ($detailpesanan as $item)
+            <tr>
+                <td colspan="3">{{ $item->menu->Nama_menu }}</td>
+            </tr>
+            <tr>
+                <td>{{ $item->jumlah }} x {{ format_uang(ceil($item->harga / 100) * 100) }}</td>
+                <td></td>
+                <td class="text-right">{{ format_uang($item->jumlah * ceil($item->harga / 100) * 100) }}</td>
+            </tr>
+        @endforeach
+    </table>
+    {{-- <p class="text-center">-----------------------------------</p> --}}
+    <br>
     <p class="text-center">===================================</p>
+    <table width="100%" style="border: 0;">
+        {{-- <tr>
+            <td>Total Item:</td>
+            <td class="text-right">{{ format_uang($pesanan->TotalItem) }} Item</td>
+        </tr> --}}
+        {{-- <tr>
+            <td>Total Harga:</td>
+            <td class="text-right">Rp.{{ format_uang(ceil($pesanan->TotalHarga / 100) * 100) }}</td>
+        </tr> --}}
+        {{-- <tr>
+            <td>Diskon:</td>
+            <td class="text-right">{{ format_uang($pesanan->Diskon) }}%</td>
+        </tr> --}}
+        {{-- <tr>
+            <td>Pajak:</td>
+            <td class="text-right">Rp.{{ format_uang($pesanan->ppn) }}</td>
+        </tr> --}}
+        <tr>
+            <td>Total:</td>
+            <td class="text-right">Rp.{{ format_uang($order->totalharga + $pesanan->TotalBayar) }}</td>
+        </tr>
+        {{-- <tr>
+            <td>Diterima:</td>
+            <td class="text-right">Rp.{{ format_uang($pesanan->Diterima) }}</td>
+        </tr> --}}
+        {{-- <tr>
+            <td>Kembali:</td>
+            <td class="text-right">Rp.{{ format_uang($pesanan->Kembali) }}</td>
+        </tr> --}}
+    </table>
+    <p class="text-center">===================================</p>
+
     <p class="text-center">-- TERIMA KASIH --</p>
 
     <script>
