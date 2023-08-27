@@ -148,9 +148,49 @@ h5 {
 
 .grid-container {
     margin-left: 10px;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr); /* Creates 5 equal-width columns */
-  gap: 20px; /* Adds spacing between grid items */
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* Creates 5 equal-width columns */
+    gap: 20px; /* Adds spacing between grid items */
+}
+
+/* Media query for screens smaller than 1200px */
+@media (max-width: 1200px) {
+    .grid-container {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+    }
+}
+
+/* Media query for screens smaller than 992px */
+@media (max-width: 992px) {
+    .grid-container {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+}
+
+/* Media query for screens smaller than 768px */
+@media (max-width: 768px) {
+    .grid-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+}
+
+/* Media query for screens smaller than 576px */
+@media (max-width: 576px) {
+    .grid-container {
+        grid-template-columns: 1fr;
+        gap: 5px;
+    }
+}
+
+/* Media query for screens smaller than 480px */
+@media (max-width: 480px) {
+    .grid-container {
+        grid-template-columns: 1fr; /* Single column for the smallest screens */
+        gap: 5px; /* Further reduce gap for smallest screens */
+    }
 }
 
 h1 {
@@ -160,6 +200,11 @@ h1 {
 
 h5 {
     margin: 0;
+}
+
+.table-meja td, .table-meja th {
+    font-size: 16px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif'
 }
 
 </style>
@@ -183,15 +228,23 @@ h5 {
             </div>
       </div>
       <div class="col-md-4">
+
             <div class="box-header with-border">
-              <h1 style="margin-left: 30px">Order Kafe</h1>
-              <div class="box-header with-border">
-                <button onclick="addForm2()" class="btn btn-primary  btn-flat"><i class="fa fa-plus-circle">
-                </i> Order Cafe</button>
-              </div>
+                <div class="d-flex row">
+                    <div class="col-md-6">
+                      <h1 style="display: block;">Order Kafe</h1>
+                    </div>
+                    <div class="col-md-6">
+                        <br>
+                      <button onclick="addForm2()" class="btn btn-primary  btn-flat">
+                          <i class="fa fa-plus-circle"></i> Order Cafe
+                      </button>
+                    </div>
+                </div>
             </div>
       </div>
       </div>
+
       <div class="row">
           <div class="col-md-8 grid-container">
             @foreach ($mejabiliard as $key=>$item)
@@ -276,6 +329,21 @@ h5 {
           </div>
 
           <div class="col-md-3">
+            <div class="box-body table-responsive">
+              <table class="table table-meja table-striped table-bordered table-meja">
+                <thead>
+                  <th>Meja</th>
+                  {{-- <th>Customer</th> --}}
+                  {{-- <th>Bayar</th> --}}
+                  {{-- <th>Order</th> --}}
+                  <th>Status</th>
+                </thead>
+
+              </table>
+            </div>
+          </div>
+
+          {{-- <div class="col-md-3">
             <div class="row">
                 <div class="card-cafe center">
                     <h3 class="center">1</h3>
@@ -299,82 +367,33 @@ h5 {
                     <button class="button-aksi bg-blue center">TAMBAH</button>
                 </div>
             </div>
-          </div>
+          </div> --}}
       </div>
+      <br><br>
       <div class="row">
-            <div class="col-md-7">
-            <div class="box-body table-responsive">
-            <table class="table table-mejabiliard table-striped table-bordered">
-              <thead>
-                <th>Meja</th>
-                <th>Jam Mulai</th>
-                <th>Jam Selesai</th>
-                <th>Durasi</th>
-                <th>Sisa Durasi</th>
-                <th>Customer</th>
-                <th>Bayar</th>
-                <th>Order</th>
-                <th>Status</th>
-              </thead>
-              <tbody>
-              @foreach ($mejabiliard as $key=>$item)
-            <tr>
-              <td>{{$item->namameja}}</td>
-              <td>{{$item->jammulai}}</td>
-              <td>{{$item->jamselesai}}</td>
-              <td id="tddurasi{{$item->id_meja_biliard}}">{{$item->durasi}} Menit</td>
-              <td id="tdsisadurasi{{$item->id_meja_biliard}}">{{$item->sisadurasi}} Menit</td>
-              <td>
-                @if($item->order)
-                {{$item->order['customer']}}
-                @endif
-              </td>
-              <td>Rp.
-                @if($item->order)
-                {{number_format(($item->order['totalbayar']), 0,",",".")}}
-                @endif
-                </td>
-              <td>{{$item->id_order_biliard}}</td>
-              <td width="12%">
-                <a href="{{route('orderbiliarddetail.index2', $item->id_order_biliard)}}" class="btn btn-xs btn-flat {{$item->status}}" id="tdstatus{{$item->id_meja_biliard}}">
-                  {{$item->status}}
-                </a>
-              </td>
-            </tr>
-            @endforeach
-            @foreach ($mejabiliard as $key=>$item)
-            <tr class="tr-dummy">
-              <td>{{$item->namameja}}</td>
-              <td>{{$item->jammulai}}</td>
-              <td>{{$item->jamselesai}}</td>
-              <td id="tddurasidummy{{$item->id_meja_biliard}}">{{$item->durasi}} Menit</td>
-              <td id="tdsisadurasidummy{{$item->id_meja_biliard}}">{{$item->sisadurasi}} Menit</td>
-              <td>{{$item->id_order_biliard}}</td>
-              <td width="12%">
-                <a href="" class="btn btn-xs btn-flat {{$item->status}}">{{$item->status}}</a>
-              </td>
-            </tr>
-            @endforeach
-              </tbody>
-            </table>
-            </div>
-            </div>
-        <div class="col-md-4">
-          <div class="box-body table-responsive">
-            <table class="table table-meja table-striped table-bordered">
-              <thead>
-                <th>Meja</th>
-                <th>Customer</th>
-                <th>Bayar</th>
-                <th>Order</th>
-                <th>Status</th>
-              </thead>
+        <div class="col-md-7">
+        <div class="box-body table-responsive">
+        <table class="table table-mejabiliard table-striped table-bordered">
 
-            </table>
-          </div>
+        @foreach ($mejabiliard as $key=>$item)
+        <tr class="tr-dummy">
+          <td>{{$item->namameja}}</td>
+          <td>{{$item->jammulai}}</td>
+          <td>{{$item->jamselesai}}</td>
+          <td id="tddurasidummy{{$item->id_meja_biliard}}">{{$item->durasi}} Menit</td>
+          <td id="tdsisadurasidummy{{$item->id_meja_biliard}}">{{$item->sisadurasi}} Menit</td>
+          <td>{{$item->id_order_biliard}}</td>
+          <td width="12%">
+            <a href="" class="btn btn-xs btn-flat {{$item->status}}">{{$item->status}}</a>
+          </td>
+        </tr>
+        @endforeach
+          </tbody>
+        </table>
+        </div>
         </div>
 
-      </div>
+  </div>
       <p id="level" style="display: none;">{{auth()->user()->level}}</p>
 
 </div>
@@ -404,6 +423,7 @@ function load(){
      processing: true,
      serverSide: true,
      autoWidth:false,
+     searching: false,
      "ordering": false,
      error: function(xhr, textStatus, errorThrown) {
                 console.log('Ajax error:', textStatus, errorThrown);
@@ -413,16 +433,16 @@ function load(){
      },
      columns:[
         {data:'nama_meja'},
-        {
-                    "mData": "pesanan",
-                    "mRender": function (data, type, row) {
-                        if(data) {
-                            return data.customer
-                        }
-                    }
-                },
-        {data:'pesanan.TotalBayar'},
-        {data:'Id_pesanan'},
+        // {
+        //             "mData": "pesanan",
+        //             "mRender": function (data, type, row) {
+        //                 if(data) {
+        //                     return data.customer
+        //                 }
+        //             }
+        //         },
+        // {data:'pesanan.TotalBayar'},
+        // {data:'Id_pesanan'},
         {
                     "mData": "Status",
                     "mRender": function (data, type, row) {

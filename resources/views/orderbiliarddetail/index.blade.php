@@ -487,6 +487,37 @@
       console.log(currentValue, val)
       // if(val)
     }
+
+    $(document).on('input','.quantity-pesanan',debounce(function(){
+     let id=$(this).data('id');
+     let jumlah=parseInt($(this).val());
+
+     if(jumlah<1){
+        alert('Jumlah tidak boleh kurang dari 1');
+        $(this).val(1);
+        return;
+     }
+     if(jumlah>2000){
+        alert('Jumlah tidak boleh melebihi 2000');
+        $(this).val(2000);
+        return;
+     }
+
+     $.post (`{{url('/pesanandetail')}}/${id}`,{
+      '_token': $('[name=csrf-token]').attr('content'),
+      '_method': 'put',
+      'jumlah':jumlah
+     })
+     .done(response=>{
+        loadform($('#diskon').val(), $('#diterima').val());
+        table3.ajax.reload();
+      })
+      .fail(errors=>{
+        alert('Tidak dapat menyimpan data');
+        return;
+      });
+    },300));
+
     $(document).on('input','.quantity', debounce(function(){
      let id=$(this).data('id');
      let jumlah=($(this).val());
@@ -504,7 +535,7 @@
         return;
      }
      if(jumlah>2000){
-        alert('Jumlah tidak boleh melebihi 2000');
+        alert('Jumlah tidak boleh melebihi 20000');
         $(this).val(2000);
         return;
      }
@@ -515,8 +546,9 @@
       'jumlah':jumlah
      })
      .done(response=>{
+         console.log(response, 'aksndaknd');
         loadform($('#diskon').val(), $('#diterima').val());
-        table.ajax.reload();
+        table3.ajax.reload();
       })
       .fail(errors=>{
         alert('Tidak dapat menyimpan data');

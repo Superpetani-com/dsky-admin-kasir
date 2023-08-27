@@ -237,7 +237,7 @@
         };
     };
 
-   $(document).on('input','.quantity',debounce(function(){
+   $(document).on('input','.quantity-pesanan',debounce(function(){
      let id=$(this).data('id');
      let jumlah=parseInt($(this).val());
 
