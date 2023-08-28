@@ -71,6 +71,7 @@ Route::group(['middleware'=>'auth'], function(){
     Route::get('/meja/{id}/cancel', [MejaController::class, 'cancel'])->name('meja.cancel');
     Route::get('/meja/{id}/proses', [MejaController::class, 'proses'])->name('meja.proses');
     Route::get('/meja/data', [MejaController::class, 'data'])->name('meja.data');
+    Route::get('/meja/data/pesanan', [MejaController::class, 'dataPesanan'])->name('meja.dataPesanan');
     Route::get('/meja/data/menunggu', [MejaController::class, 'dataDiproses'])->name('meja.dataDiproses');
     Route::resource('/meja',MejaController::class);
 

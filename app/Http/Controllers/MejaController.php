@@ -7,6 +7,9 @@ use App\Models\Meja;
 use App\Models\Pesanan;
 use App\Models\PesananDetail;
 use App\Models\Menu;
+use App\Models\OrderBiliard;
+use App\Models\MejaBiliard;
+
 
 class MejaController extends Controller
 {
@@ -20,6 +23,73 @@ class MejaController extends Controller
         $meja = meja::orderBy('id_meja')->get();
         // dd('test');
         return view('meja.index', compact('meja'));
+    }
+
+    public function dataPesanan()
+    {
+        $pesanan = pesanan::where('status', '!=', 'selesai')->with('meja', 'pesananDetail', 'meja_biliard')->orderBy('created_at', 'desc')->groupBy('Id_meja')->get();
+
+        foreach ($pesanan as $value) {
+            $order = orderbiliard::where('id_pesanan', '=', $value->Id_pesanan)->get();
+            // dd($order);
+            $value->isOrder = false;
+            if(count($order) > 0) {
+                // dd($value);
+                $value->namas_meja = '[Biliard]'. strval($value->Id_meja);
+                $value->isOrder = true;
+            }
+            foreach ($value->pesananDetail as $item) {
+                // dd($value['pesananDetail']);
+
+                if($item->id_menu) {
+                    // dd($item->id_menu);
+                    $menu = menu::where('Id_Menu', '=', $item->id_menu)->get()[0];
+                    // dd($menu);
+                    $item->Nama_menu = $menu['Nama_menu'];
+                }
+
+            }
+        }
+
+        // dd($pesanan);
+
+        return datatables()
+            ->of($pesanan)
+            ->addIndexColumn()
+            ->addColumn('tanggal', function ($pesanan) {
+            $tanggalid=tanggal_indonesia($pesanan->created_at, false);
+            //$tanggal=substr($order->created_at, 11, 8);
+            $waktu=substr($pesanan->created_at, 11, 5);
+            return $tanggalid.' '.$waktu;
+            })
+            ->addColumn('meja', function ($pesanan) {
+                if($pesanan->meja) {
+                    return $pesanan->meja->nama_meja;
+                }
+            })
+            ->addColumn('status', function ($order) {
+                if ($order->status=='Aktif'){
+                    return '<div class="div-red">Aktif</div>';
+                }
+                elseif ($order->status=='Selesai'){
+                    return '<div class="div-green">Selesai</div>';
+                }
+            })
+            ->addColumn('aksi', function($pesanan){
+                if (auth()->user()->level==3){return '
+                <div class="btn-group">
+                   <button onclick="editForm(`'.route('pesanandetail.index2', $pesanan->Id_pesanan).'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil"> </i> Edit</button>
+                   <button onclick="deleteData(`'.route('pesanan.destroy', $pesanan->Id_pesanan).'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"> </i> Hapus</button>
+                </div>
+                   ';}
+                if (auth()->user()->level==1){return '
+                    <div class="btn-group">
+                       <button onclick="editForm(`'.route('pesanandetail.index2', $pesanan->Id_pesanan).'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil"> </i> Edit</button>
+                    </div>
+                       ';}
+            })
+            ->rawColumns(['aksi', 'status'])
+            ->make(true);
     }
 
     public function data()

@@ -68,11 +68,9 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
 @section('content')
 <!-- Small boxes (Stat box) -->
 <div class="row">
-
       <div class="">
         <div class="col-md-12">
         @if(auth()->user()->level == 5)
-
             <h3>Pesanan Diproses</h3>
         @endif
           <div class="box">
@@ -91,12 +89,11 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
                 <th width="5%">No</th>
                 <th>Nama Meja</th>
                 <th>No.Order</th>
-                @if(auth()->user()->level == 5)
                 <th>Pesanan </th>
-                @endif
                 <th>Status</th>
                 <th>Nama Pelanggan</th>
-                <th width="20%"><i class="fa fa-cog"></i></th>
+                <th>Jam</th>
+                {{-- <th width="20%"><i class="fa fa-cog"></i></th> --}}
               </thead>
               <tbody></tbody>
             </table>
@@ -106,7 +103,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
       </div>
 </div>
 
-@if(auth()->user()->level == 5)
+@if(auth()->user()->level == 55)
 <div class="row">
     <div class="">
       <div class="col-md-12">
@@ -133,7 +130,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
               @endif
               <th>Status</th>
               <th>Nama Pelanggan</th>
-              <th width="20%"><i class="fa fa-cog"></i></th>
+              {{-- <th width="20%"><i class="fa fa-cog"></i></th> --}}
             </thead>
             <tbody></tbody>
           </table>
@@ -174,28 +171,38 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
   let level = document.getElementById('level').innerHTML;
 
   function load(){
-   if(level == '5') {
-    table= $('.table-mejacafe-diproses').DataTable({
+    table= $('.table-mejacafe').DataTable({
      responsive:true,
      processing: true,
      serverSide: true,
      autoWidth:false,
      ajax: {
-        url: '{{route('meja.dataDiproses')}}',
+        url: '{{route('meja.dataPesanan')}}',
      },
      columns:[
         {data:'DT_RowIndex', searchable:false, sortable:false},
-        {data:'nama_meja'},
+        {
+          "mData": "meja",
+          "mRender": function (data, type, row) {
+            if(row.isOrder) {
+                return row.meja_biliard.namameja + ' Biliard';
+            }
+            return data;
+          }
+        },
         {
           "mData": "Id_pesanan",
           "mRender": function (data, type, row) {
-            return `<a href='#'>${data}</a>`;
+            return `<a class="btn btn-primary" href='{{ url('/pesanandetail/${data}') }}'>${data}</a>`;
           }
         },
         {
           "mData": "pesanan_detail",
           "mRender": function (data, type, row) {
             let pesanan = '';
+            // console.log(data);
+            if(data.length > 0) {
+
             data.map((item) => {
               pesanan += `${item.Nama_menu} (${item.jumlah}) , `
             });
@@ -204,80 +211,21 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
             pesanan = pesanan.slice(0, -2);
 
             return `<ol>${pesanan.split(',').map(item => `<li>${item}</li>`).join('')}</ol>`;
+            }
           }
         },
         {data:'status'},
-        {data:'pesanan.customer'},
-        {data:'aksi', searchable:false, sortable:false},
-     ],
-     bPaginate:false,
-    });
-    table= $('.table-mejacafe').DataTable({
-     responsive:true,
-     processing: true,
-     serverSide: true,
-     autoWidth:false,
-     ajax: {
-        url: '{{route('meja.data')}}',
-     },
-     columns:[
-        {data:'DT_RowIndex', searchable:false, sortable:false},
-        {data:'nama_meja'},
-        {
-          "mData": "Id_pesanan",
-          "mRender": function (data, type, row) {
-            return `<a href='#'>${data}</a>`;
-          }
-        },
-        {
-          "mData": "pesanan_detail",
-          "mRender": function (data, type, row) {
-            let pesanan = '';
-            data.map((item) => {
-              pesanan += `${item.Nama_menu} (${item.jumlah}) , `
-            });
-
-            // Remove the trailing comma and space
-            pesanan = pesanan.slice(0, -2);
-
-            return `<ol>${pesanan.split(',').map(item => `<li>${item}</li>`).join('')}</ol>`;
-          }
-        },
-        {data:'status'},
-        {data:'pesanan.customer'},
-        {data:'aksi', searchable:false, sortable:false},
-     ],
-     bPaginate:false,
-    });
-   } else {
-    table= $('.table-mejacafe').DataTable({
-     responsive:true,
-     processing: true,
-     serverSide: true,
-     autoWidth:false,
-     ajax: {
-        url: '{{route('meja.data')}}',
-     },
-     columns:[
-        {data:'DT_RowIndex', searchable:false, sortable:false},
-        {data:'nama_meja'},
-        {
-          "mData": "Id_pesanan",
-          "mRender": function (data, type, row) {
-            return `<a href='{{ url('/pesanandetail/${data}') }}'>${data}</a>`;
-          }
-        },
-        {data:'status'},
-        {data:'updated_at', "render": function (data) {
+        {data:'customer'},
+        {data:'created_at', "render": function (data) {
           var date = new Date(data);
           var month = date.getMonth() + 1;
-          return (month.toString().length > 1 ? month : "0" + month) + "/" + date.getDate() + "/" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes();
+          return date.getHours() + ":" + date.getMinutes();
         }},
         {data:'aksi', searchable:false, sortable:false},
      ],
      bPaginate:false,
    });
-   }
+
    table2= $('.table-order').DataTable();
 
     $('#modal-form').validator().on('submit', function (e){
@@ -299,7 +247,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
     })
   };
 
-  load(); // Call the load function initially
+    load(); // Call the load function initially
 
     var audioIsPlaying = false;
 
@@ -344,36 +292,30 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
 
         let isOk = true;
 
-        setInterval(() => {
-            let lastLength = 0;
-            getData('{{route('meja.dataDiproses')}}', function(response) {
-                console.log(response.data.length, lastLength)
-                if(response.data.length > lastLength  && isOk) {
-                    console.log('order baru', response.data.length, lastLength)
-                    showAlert()
-                }
-                // alert('The response was: ' + response.data.length, rowCount);
-                // alert('Ada pesanan baru')
-            });
-
-            // load();
-
-
-            var tables = document.getElementById("table-mejacafe");
-            lastLength = tables.rows.length;
-
-            document.getElementById("okButton").addEventListener("click", function() {
-                $('#customAlert').modal('hide');
-                isOk = false;
-            });
-
-            console.log(isOk, 'ok')
-        }, 3000);
         // setInterval(() => {
-        //     if ($.fn.DataTable.isDataTable('.table-mejacafe')) {
-        //         $('.table-mejacafe').DataTable().destroy();
-        //     }
-        //     load()
+        //     let lastLength = 0;
+        //     getData('{{route('meja.dataPesanan')}}', function(response) {
+        //         console.log(response.data.length, lastLength)
+        //         if(response.data.length > lastLength  && isOk) {
+        //             console.log('order baru', response.data.length, lastLength)
+        //             showAlert()
+        //         }
+        //         // alert('The response was: ' + response.data.length, rowCount);
+        //         // alert('Ada pesanan baru')
+        //     });
+
+        //     // load();
+
+
+        //     var tables = document.getElementById("table-mejacafe");
+        //     lastLength = tables.rows.length;
+
+        //     document.getElementById("okButton").addEventListener("click", function() {
+        //         $('#customAlert').modal('hide');
+        //         isOk = false;
+        //     });
+
+        //     console.log(isOk, 'ok')
         // }, 3000);
     }
 

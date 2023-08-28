@@ -45,6 +45,7 @@ class PesananController extends Controller
         $pesanan = pesanan::with('meja')
         ->orderBy('Id_pesanan', 'desc')
         ->get();
+        // dd($pesanan);
         return datatables()
             ->of($pesanan)
             ->addIndexColumn()
@@ -55,7 +56,9 @@ class PesananController extends Controller
             return $tanggalid.' '.$waktu;
             })
             ->addColumn('meja', function ($pesanan) {
-                return $pesanan->meja['nama_meja'];
+                if($pesanan->meja) {
+                    return $pesanan->meja->nama_meja;
+                }
             })
             ->addColumn('status', function ($order) {
                 if ($order->status=='Aktif'){
@@ -81,6 +84,8 @@ class PesananController extends Controller
             ->rawColumns(['aksi', 'status'])
             ->make(true);
     }
+
+
     public function store(request $request)
     {
         // dd($request);
