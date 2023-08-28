@@ -172,19 +172,19 @@
     <p class="text-center">-- TERIMA KASIH --</p>
 
     <script>
-    window.onload = function() {
-    if(!window.location.hash) {
-        window.location = window.location + '#loaded';
-        window.location.reload();
-    }
-    window.print()
-    }
+        window.onload = function() {
+            if(!window.location.hash) {
+                window.location = window.location + '#loaded';
+                window.location.reload();
+            }
+            window.print()
+        }
         let body = document.body;
         let html = document.documentElement;
         let height = Math.max(
-                body.scrollHeight, body.offsetHeight,
-                html.clientHeight, html.scrollHeight, html.offsetHeight
-            );
+            body.scrollHeight, body.offsetHeight,
+            html.clientHeight, html.scrollHeight, html.offsetHeight
+        );
         document.cookie = "innerHeight=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         document.cookie = "innerHeight="+ ((height + 40) * 0.264583);
     </script>

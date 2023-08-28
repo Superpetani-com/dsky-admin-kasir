@@ -602,6 +602,11 @@ function cetak(url, title) {
         `
         );
         if (window.focus) newWindow.focus();
+        if (newWindow) {
+            setTimeout(() => {
+                newWindow.close();
+            }, 500); // Wait for 2000 milliseconds (2 seconds)
+        }
     }
 }
 
