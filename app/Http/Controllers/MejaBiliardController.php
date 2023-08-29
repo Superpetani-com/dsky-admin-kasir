@@ -22,7 +22,8 @@ class MejaBiliardController extends Controller
     }
     public function data()
     {
-        $mejabiliard=mejabiliard::orderBy('id_meja_biliard')->get();
+        $mejabiliard=mejabiliard::orderBy('id_meja_biliard')->with('orderDetail')->get();
+        // dd($mejabiliard);
         return datatables()
             ->of($mejabiliard)
             ->addIndexColumn()

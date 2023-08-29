@@ -15,4 +15,16 @@ class Pesanan extends Model
     {
         return $this->hasOne(meja::class, 'id_meja', 'Id_meja');
     }
+
+
+    public function meja_biliard()
+    {
+        return $this->hasOne(mejabiliard::class, 'id_meja_biliard', 'Id_meja');
+    }
+
+
+    public function pesananDetail()
+    {
+        return $this->hasMany(pesananDetail::class, 'id_pesanan', 'Id_pesanan');
+    }
 }

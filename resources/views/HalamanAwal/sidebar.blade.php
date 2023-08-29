@@ -33,6 +33,25 @@
               </span>
             </a>
           </li>
+          <li class="header">REPORT</li>
+        <li>
+          <a href="{{route('laporan.index')}}">
+            <i class="fa fa-file-pdf-o"></i> <span>Report Singkat</span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="{{route('laporan.indexcafe')}}">
+            <i class="fa fa-file-text-o"></i> <span>Report Cafe</span>
+            </span>
+          </a>
+        </li>
+        <li>
+            <a href="{{route('laporan.indexbiliard')}}">
+              <i class="fa fa-file-text-o"></i> <span>Report Biliard</span>
+              </span>
+            </a>
+          </li>
         {{-- <li class="header">CAFE</li> --}}
 
 

@@ -176,6 +176,7 @@
         </div>
     </div>
 </div>
+<p id="level" style="display: none;">{{auth()->user()->level}}</p>
 
 @includeIf('pesanandetail.menu')
 
@@ -184,7 +185,9 @@
 @push('scripts')
 <script>
   let table, table2;
+  let level = document.getElementById('level').innerHTML;
 
+    console.log(level)
   $(function(){
    table= $('.table-pesanan').DataTable({
      responsive:true,
@@ -214,6 +217,10 @@
 
    });
 
+    if (level == 6 ||level == 5) {
+        table.column(5).visible(false);
+    }
+
    table2= $('.table-menu').DataTable();
 
    const debounce = (func, wait, immediate)=> {
@@ -237,7 +244,7 @@
         };
     };
 
-   $(document).on('input','.quantity',debounce(function(){
+   $(document).on('input','.quantity-pesanan',debounce(function(){
      let id=$(this).data('id');
      let jumlah=parseInt($(this).val());
 

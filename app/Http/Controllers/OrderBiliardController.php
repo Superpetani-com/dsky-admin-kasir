@@ -7,6 +7,9 @@ use App\Models\OrderBiliard;
 use App\Models\OrderBiliardDetail;
 use App\Models\MejaBiliard;
 use App\Models\PaketBiliard;
+use App\Models\PesananDetail;
+use Ramsey\Uuid\Uuid;
+use App\Models\Pesanan;
 
 class OrderBiliardController extends Controller
 {
@@ -39,7 +42,26 @@ class OrderBiliardController extends Controller
         $order->status='Aktif';
         $order->cabang_id='Jogja Billiard';
         $order->created_by = auth()->user()->name;
+
+        $uuid = Uuid::uuid4();
+        $pesanan=new pesanan();
+        $pesanan->Id_meja=$id;
+        $pesanan->TotalItem=0;
+        $pesanan->TotalHarga=0;
+        $pesanan->Diskon=0;
+        $pesanan->TotalBayar=0;
+        $pesanan->Diterima=0;
+        $pesanan->Kembali=0;
+        $pesanan->ppn=10;
+        $pesanan->status='Aktif';
+        $pesanan->cabang_id='Jogja Billiard';
+        $pesanan->created_by = auth()->user()->name;
+        $pesanan->uuid = $uuid->toString();
+        $pesanan->save();
+
+        $order->id_pesanan =  $pesanan->Id_pesanan;
         $order->save();
+
         return redirect()->route('orderbiliarddetail.index2', $order->id_order_biliard);
     }
 
@@ -118,11 +140,13 @@ class OrderBiliardController extends Controller
         $order->totaljam= $request->total_jam;
         //$order->totalflag= $request->total_flag;
         $order->diskon = 0;
-        $order->totalharga = $request->total;
+        $order->totalharga = $request->bayar;
         $order->totalbayar = $request->bayar;
         $order->diterima=$request->diterima;
-        $order->kembali=$request->kembali;
-        $order->customer=$request->nama_cust2;
+        // $order->kembali=$request->kembali;
+        $order->kembali=0;
+
+        $order->customer=$request->nama_cust3;
         $order->update();
 
         if ($order->status=="Aktif"){
@@ -163,7 +187,10 @@ class OrderBiliardController extends Controller
         $mejabiliard->update();
         }
 
-        return redirect()->route('dashboard.index');
+        // dd($mejabiliard);
+
+        // return redirect()->route('dashboard.index');
+        return ['status' => 'ok'];
     }
 
     /**
@@ -215,14 +242,21 @@ class OrderBiliardController extends Controller
     }
     public function cetak($id)
     {
+        // dd($id);
         $detail=OrderBiliardDetail::with('paket')
         ->where('id_order_biliard', $id)
         ->get();
         $order=OrderBiliard::where('id_order_biliard', $id)->first();
         $meja=MejaBiliard::where('id_meja_biliard', $order->id_meja_biliard)->first();
         $nama_meja=$meja->namameja;
+
+        $detailpesanan=PesananDetail::with('menu')
+        ->where('id_pesanan', $order->id_pesanan)
+        ->get();
+        $pesanan=pesanan::where('Id_pesanan', $order->id_pesanan)->first();
         //return ($detail);
-        return view('orderbiliard.cetak', compact('detail','order', 'nama_meja'));
+        // dd($pesanan, $detail);
+        return view('orderbiliard.cetak', compact('detail','order', 'nama_meja', 'pesanan', 'detailpesanan', 'meja'));
     }
 
 }

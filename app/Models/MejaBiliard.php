@@ -18,7 +18,12 @@ class MejaBiliard extends Model
     return $this->hasOne(OrderBiliard::class, 'id_order_biliard', 'id_order_biliard')->ofMany('id_order_biliard', 'max');;
 }
     public function order()
-{
-    return $this->hasOne(OrderBiliard::class, 'id_order_biliard', 'id_order_biliard');
-}
+    {
+        return $this->hasOne(OrderBiliard::class, 'id_order_biliard', 'id_order_biliard');
+    }
+
+    public function orderDetail()
+    {
+        return $this->hasMany(OrderBiliardDetail::class, 'id_order_biliard', 'id_order_biliard');
+    }
 }

@@ -91,12 +91,13 @@ class PesananDetailController extends Controller
             $row['nama_menu'] = $item->menu['Nama_menu'];
             $row['harga']       = 'Rp. '. format_uang($item->harga);
             if ( $status=="Selesai"){
-                $row['jumlah']      = '<input type="number" class="form-control input-sm quantity" data-id="'. $item->id_pesanan_detail .'" value="'. $item->jumlah .'" readonly>';
+                $row['jumlah']      = '<input type="number" class="form-control input-sm quantity-pesanan" data-id="'. $item->id_pesanan_detail .'" value="'. $item->jumlah .'" readonly>';
             }
             else{
-                $row['jumlah']      = '<input type="number" class="form-control input-sm quantity" data-id="'. $item->id_pesanan_detail .'" value="'. $item->jumlah .'">';
+                $row['jumlah']      = '<input type="number" class="form-control input-sm quantity-pesanan" data-id="'. $item->id_pesanan_detail .'" value="'. $item->jumlah .'">';
             }
             $row['subtotal']    = 'Rp. '. format_uang($item->subtotal);
+
             $row['aksi']        =  ' <div class="btn-group">
                                     <button onclick="deleteData(`'.route('pesanandetail.destroy', $item->id_pesanan_detail).'`)" class="btn btn-xs btn-danger btn-flat btn-hapus"><i class="fa fa-trash"></i> Hapus</button>
                                     </div>';

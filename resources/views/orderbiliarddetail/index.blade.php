@@ -6,6 +6,16 @@
 
 @push('css')
 <style>
+      .table-pesanan tbody tr:last-child {
+        display:none;
+    }
+  .table-pesanan tbody tr:nth-child(even) {
+  background-color: #cef0b1;
+    }
+  .table-pesanan  thead{background-color: #96bf73;}
+  .table-pesanan tbody tr:last-child {
+        display:none;
+    }
   .form-paket, .btn-hapus, .btn-stop, .btn-simpan, .btn-cetak, .btn-tambah,.btn-pindah,.btn-cetakselesai{
     font-size:12pt;
   }
@@ -129,16 +139,44 @@
                   </div>
                   <label for="nama_cust" class="col-lg-1">Customer</label>
                   <div class="col-lg-3">
-                    <input type="text" class="form-control" name="nama_cust" id="nama_cust" maxlength="50" value="{{$order->customer}}" required>
+                    <input type="text" class="form-control" name="nama_cust" id="nama_cust" maxlength="50" value="{{$pesanan->customer}}" required>
                     <span class="help-block with-errors"></span>
                   </div>
                   <div class="input-group-btn">
                      <button onclick="tampilpaket()" class="btn btn-info btn-tambah" type="button"><i class="fa fa-plus-circle"></i> Tambah Jam</button>
                      <button onclick="tampilmeja()" class="btn btn-danger btn-pindah" type="button"><i class="fa fa-arrows"></i> Pindah Meja</button>
+                     <button onclick="tampilmenu()" class="btn btn-success btn-pindah" type="button"><i class="fa fa-plus"></i> Tambah Menu Cafe</button>
                   </div>
                 </form>
+                <form class="form-menu">
+                    @csrf
+                    <!--div class="form-group row">
+                      <label for="nama_menu" class="col-lg-2">Tambah Menu</label>
+                      <div class="col-lg-5">
+                        <div class="input-group">
+                          <input type="hidden" name="id_menu" id="id_menu">
+                          <input type="hidden" name="id_pesanan" id="id_pesanan" value="{{$Id_pesanan}}">
+                          <input type="text" class="form-control" name="nama_menu" id="nama_menu">
+                        </div>
+                      </div>
+                    </div-->
+                    <div class="form-group row">
+                    <input type="hidden" name="id_menu" id="id_menu">
+                    <input type="hidden" name="id_pesanan" id="id_pesanan" value="{{$Id_pesanan}}">
+                      {{-- <label for="nama_cust" class="col-lg-1">Customer</label> --}}
+                      {{-- <div class="col-lg-3">
+                        <input type="text" class="form-control" name="nama_cust" id="nama_cust" maxlength="50" value="{{$pesanan->customer}}" required>
+                        <span class="help-block with-errors"></span>
+                      </div>
+                      <div class="input-group-btn">
+                            <button onclick="tampilmenu()" class="btn btn-info btn-flat btn-tambah" type="button"><i class="fa fa-plus-circle"></i> Tambah Menu</button>
+                      </div> --}}
+                      </div>
+                  </form>
               </div>
               <table class="table table-stiped table-bordered table-order">
+                <h3>Order Meja Billiard</h3>
+
                 <thead>
                   <th width="4%">No</th>
                   <th>Nama Paket</th>
@@ -153,12 +191,78 @@
                 </thead>
                 <tbody></tbody>
               </table>
+              <table class="table table-stiped table-bordered table-pesanan">
+                  <h3>Pesanan Cafe</h3>
+                <thead>
+                  <th width="5%">No</th>
+                  <th>Menu</th>
+                  <th>Harga</th>
+                  <th width="15%">Jumlah Item</th>
+                  <th>SubTotal</th>
+                  <th width="15%"><i class="fa fa-cog"></i></th>
+                </thead>
+                <tbody></tbody>
+              </table>
               <div class="row">
                     <div class="col-lg-8">
                         <div class="tampil-bayar bg-primary"></div>
                         <div class="tampil-terbilang"></div>
                     </div>
                     <div class="col-lg-4">
+                        {{-- {{dd($order);}} --}}
+                        <form action="{{ route('pesanan.store') }}" class="form-pesanan" method="post">
+                            @csrf
+                            <input type="hidden" name="id_meja_cafe" id="id_meja_cafe" value="{{ $meja->id_meja }}">
+                            <input type="hidden" name="status_meja" id="status_meja" value="{{ $meja->Status }}">
+                            <input type="hidden" name="status_pesanan" id="status_pesanan" value="{{ $pesanan->status }}">
+                            <input type="hidden" name="nama_cust2" id="nama_cust2" value="{{$pesanan->customer}}">
+                            <input type="hidden" name="id_pesanan" value="{{ $Id_pesanan }}">
+                            <input type="hidden" name="total" id="total">
+                            <input type="hidden" name="total_item" id="total_item">
+                            <input type="hidden" name="bayar" id="#">
+                            <input type="hidden" name="kembali" id="kembali" value="0">
+                            <input type="hidden" name="ppn" id="ppn" value="0">
+                            <input type="hidden" name="diterima" value="0">
+                            {{-- <div class="form-group row">
+                                <label for="totalrp" class="col-lg-2 control-label">Total</label>
+                                <div class="col-lg-8">
+                                    <input type="text" id="totalrp" class="form-control" readonly>
+                                </div>
+                            </div> --}}
+                            <!-- <div class="form-group row">
+                                <label for="diskon" class="col-lg-2 control-label">Diskon</label>
+                                <div class="col-lg-8">
+                                    <input type="number" name="diskon" id="diskon" class="form-control" value="{{ $pesanan->Diskon }}">
+                                </div>
+                            </div> -->
+                            {{-- <div class="form-group row">
+                                <label for="ppnrp" class="col-lg-2 control-label">PPN 10%</label>
+                                <div class="col-lg-8">
+                                    <input type="text" name="ppnrp" id="ppnrp" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="bayar" class="col-lg-2 control-label">Bayar</label>
+                                <div class="col-lg-8">
+                                    <input type="text" id="bayarrp" class="form-control" readonly>
+                                </div>
+                            </div> --}}
+                            <div class="form-group row">
+                                {{-- <label for="diterima" class="col-lg-2 control-label">Diterima</label> --}}
+                                {{-- {{dd($pesanan);}} --}}
+                                <div class="col-lg-8">
+                                    <input type="hidden" name="diterima" id="diterima" class="form-control">
+                               </div>
+                            </div>
+                            {{-- <div class="form-group row">
+                                <label for="kembalirp" class="col-lg-2 control-label">Kembali</label>
+                                <div class="col-lg-8">
+                                    <input type="text" id="kembalirp" class="form-control" readonly>
+                               </div>
+                            </div> --}}
+
+                          </form>
+                        </div>
                         <form action="{{ route('orderbiliard.store') }}" class="form-order" method="post">
                             @csrf
                             <input type="hidden" name="id_order_biliard"  value="{{ $id_order_biliard }}">
@@ -166,12 +270,12 @@
                             <input type="hidden" name="total_jam" id="total_jam">
                             <input type="hidden" name="total_menit" id="total_menit">
                             <input type="hidden" name="total_flag" id="total_flag" value="0">
-                            <input type="hidden" name="bayar" id="bayar">
+                            <input type="hidden" name="bayar" id="bayar" class="totalbil">
                             <input type="hidden" name="kembali" id="kembali">
                             <input type="hidden" name="id_meja_biliard" id="id_meja_biliard" value="{{ $mejabiliard->id_meja_biliard }}">
                             <input type="hidden" name="status_meja_biliard" id="status_meja_biliard" value="{{ $mejabiliard->status }}">
                             <input type="hidden" name="status_order_biliard" id="status_order_biliard" value="{{ $order->status }}">
-                            <input type="hidden" name="nama_cust2" id="nama_cust2" value="{{$order->customer}}">
+                            <input type="hidden" name="nama_cust3" id="nama_cust3" value="{{$pesanan->customer}}">
                             {{-- <div class="form-group row">
                                 <label for="totalrp" class="col-lg-3 control-label">Total</label>
                                 <div class="col-lg-8">
@@ -209,7 +313,7 @@
                     </div>
               <div class="box-footer p-3">
                 <button type="submit" class="btn btn-primary btn-sm btn-flat pull-right btn-simpan "><i class="fa fa-floppy-o"></i> Simpan Transaksi</button>
-                <button type="submit" class="btn btn-warning btn-sm btn-flat pull-right btn-cetak "><i class="fa fa-print"></i> Cetak Transaksi</button>
+                {{-- <button type="submit" class="btn btn-warning btn-sm btn-flat pull-right btn-cetak "><i class="fa fa-print"></i> Cetak Transaksi</button> --}}
                 <!--button type="submit" class="btn btn-danger btn-sm btn-flat pull-right btn-cetakselesai "><i class="fa fa-check"></i> Cetak & Selesai</button-->
             </div>
         </div>
@@ -218,14 +322,50 @@
 
 @includeIf('orderbiliarddetail.mejabilliard')
 @includeIf('orderbiliarddetail.paket')
+@includeIf('orderbiliarddetail.menu')
 
 @endsection
 
 @push('scripts')
 <script>
-  let table, table2;
+  let table, table2, table3;
+
+
 
   $(function(){
+    const idPesananValue = document.getElementById('id_pesanan').value;
+    const pesananStatus = '{{ $pesanan->status ?? "Aktif" }}';
+    const url = '{{ route('pesanandetail.data', [$Id_pesanan, "REPLACE_STATUS"]) }}';
+    const finalUrl = url.replace("REPLACE_STATUS", pesananStatus);
+
+    table3= $('.table-pesanan').DataTable({
+        responsive:true,
+        processing: true,
+        serverSide: true,
+        autoWidth:false,
+        ajax: {
+            url: finalUrl,
+        },
+        columns:[
+            {data:'DT_RowIndex', searchable:false, sortable:false},
+            {data:'nama_menu'},
+            {data:'harga'},
+            {data:'jumlah'},
+            {data:'subtotal'},
+            {data:'aksi', searchable:false, sortable:false},
+        ],
+        dom:'Brt',
+        bSort: false,
+        "lengthMenu": [[-1], ["All"]]
+        })
+        .on('draw.dt', function(){
+            loadform($('#diskon').val());
+            setTimeout(() => {
+                        $('#diterima').trigger('input');
+                    }, 300);
+
+    });
+
    table= $('.table-order').DataTable({
      responsive:true,
      processing: true,
@@ -259,6 +399,7 @@
    });
 
    table2= $('.table-paket').DataTable();
+   table2= $('.table-menu').DataTable();
 
     $(document).on('input', '#diskon', debounce(function() {
             if ($(this).val() == "") {
@@ -275,17 +416,29 @@
         },300));
 
     $('#nama_cust').change(function() {
-    $('#nama_cust2').val($(this).val());
+        $('#nama_cust2').val($(this).val());
+        $('#nama_cust3').val($(this).val());
     });
 
-    $('.btn-simpan').on('click', function () {
+    $('.btn-simpan').on('click', async function () {
       var myInput = document.getElementById("nama_cust");
       if (myInput.value=="") {
       alert("Nama Customer Harus Diisi");
       return false;
       }
-      $('.form-order').submit();
+
+        // Submit the first form
+        $.post($('.form-order').attr('action'), $('.form-order').serialize(), function(response) {
+            if(response.status) {
+                // Wait for a certain time before submitting the second form
+                // setTimeout(function() {
+                    $('.form-pesanan').submit();
+                // }, 2000); // 2000 milliseconds (2 seconds) delay
+            }
+            console.log(response.status); // Process the response here
         });
+
+    });
 
     $('.btn-cetak').on('click', function () {
 
@@ -334,7 +487,38 @@
       console.log(currentValue, val)
       // if(val)
     }
-$(document).on('input','.quantity', debounce(function(){
+
+    $(document).on('input','.quantity-pesanan',debounce(function(){
+     let id=$(this).data('id');
+     let jumlah=parseInt($(this).val());
+
+     if(jumlah<1){
+        alert('Jumlah tidak boleh kurang dari 1');
+        $(this).val(1);
+        return;
+     }
+     if(jumlah>2000){
+        alert('Jumlah tidak boleh melebihi 2000');
+        $(this).val(2000);
+        return;
+     }
+
+     $.post (`{{url('/pesanandetail')}}/${id}`,{
+      '_token': $('[name=csrf-token]').attr('content'),
+      '_method': 'put',
+      'jumlah':jumlah
+     })
+     .done(response=>{
+        loadform($('#diskon').val(), $('#diterima').val());
+        table3.ajax.reload();
+      })
+      .fail(errors=>{
+        alert('Tidak dapat menyimpan data');
+        return;
+      });
+    },300));
+
+    $(document).on('input','.quantity', debounce(function(){
      let id=$(this).data('id');
      let jumlah=($(this).val());
      let dataexist = $(this).attr('max');
@@ -351,7 +535,7 @@ $(document).on('input','.quantity', debounce(function(){
         return;
      }
      if(jumlah>2000){
-        alert('Jumlah tidak boleh melebihi 2000');
+        alert('Jumlah tidak boleh melebihi 20000');
         $(this).val(2000);
         return;
      }
@@ -362,8 +546,9 @@ $(document).on('input','.quantity', debounce(function(){
       'jumlah':jumlah
      })
      .done(response=>{
+         console.log(response, 'aksndaknd');
         loadform($('#diskon').val(), $('#diterima').val());
-        table.ajax.reload();
+        table3.ajax.reload();
       })
       .fail(errors=>{
         alert('Tidak dapat menyimpan data');
@@ -413,6 +598,38 @@ $(document).on('input','.quantity', debounce(function(){
     },500);
   }
 
+
+  function tampilmenu(){
+    let status=($('#status_pesanan').val());
+    // if (status=="Aktif"){
+      $('#modal-menu').modal('show');
+    // }
+    }
+
+  function hidemenu(){
+    $('#modal-menu').modal('hide');
+
+  }
+
+  function pilihmenu(id, nama){
+    $('#id_menu').val(id);
+    $('#nama_menu').val(nama);
+    hidemenu()
+    tambahmenu()
+  }
+
+  function tambahmenu(){
+    $.post('{{route('pesanandetail.store')}}', $('.form-menu').serialize())
+      .done(response=>{
+        $('#nama_menu').focus();
+        table3.ajax.reload();
+      })
+      .fail(errors=>{
+        alert('Tidak dapat menyimpan data');
+        return;
+      });
+  }
+
   function deleteData(url) {
     // harusnya tidak bisa dihapus, bisa dihapus ketika data menitnya lebih besar dari data awal
         if (confirm('Yakin ingin menghapus data terpilih?')) {
@@ -422,6 +639,7 @@ $(document).on('input','.quantity', debounce(function(){
                 })
                 .done((response) => {
                     table.ajax.reload();
+                    table3.ajax.reload();
                 })
                 .fail((errors) => {
                     alert('Tidak dapat menghapus data');
@@ -444,19 +662,29 @@ $(document).on('input','.quantity', debounce(function(){
   }
 
   function loadform(diskon = 0, diterima = 0){
+    var totalText = $('.total').text();
+    var totalBil = $('.totalbil').text() || 0;
+    let totalAll = parseInt(totalBil, 10);
+
+    console.log(totalText, totalBil)
+
     $('#total').val($('.total').text());
     $('#total_jam').val($('.total_jam').text());
     $('#total_menit').val($('.total_menit').text());
     $('#total_flag').val($('.total_flag').text());
-    $.get(`{{ url('/orderbiliarddetail/loadform') }}/${diskon}/${$('.total').text()}/${diterima}`)
+    $('#total_item').val($('.total_item').text());
+    // $('#bayar').val(19999);
+    $.get(`{{ url('/orderbiliarddetail/loadform') }}/${diskon}/${totalAll}/${diterima}`)
     .done(response => {
+        let totals = parseInt(response.bayarrp) + parseInt(totalText, 10);
+
                 $('#totalrp').val('Rp. '+ response.totalrp);
                 $('#bayarrp').val('Rp. '+ response.bayarrp);
                 $('#bayar').val(response.bayar);
                 $('#diterima').val(response.bayar);
                 $('#kembali').val(response.kembali);
-                $('.tampil-bayar').text('Bayar: Rp. '+ response.bayarrp);
-                $('.tampil-terbilang').text('Terbilang: '+response.terbilang);
+                $('.tampil-bayar').text('Bayar: Rp. '+ totals.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+                // $('.tampil-terbilang').text('Terbilang: '+response.terbilang);
                 $('#kembalirp').val('Rp.'+ response.kembalirp);
                 // if ($('#diterima').val() != 0) {
                 //     $('.tampil-bayar').text('Kembali: Rp. '+ response.kembalirp);
@@ -471,9 +699,8 @@ $(document).on('input','.quantity', debounce(function(){
 
   }
 
-  function cetak(url, title) {
-    popupCenter(url, title, 625, 500);
-
+    function cetak(url, title) {
+        popupCenter(url, title, 625, 500);
     }
 
     function popupCenter(url, title, w, h) {
