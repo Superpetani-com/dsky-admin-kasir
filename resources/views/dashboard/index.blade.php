@@ -75,7 +75,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
     padding-right: 12px;
     margin-top: 10px;
     box-shadow: 3px 3px 10px 0px rgba(0, 0, 0, 0.20);
-    height: 210px;
+    height: 230px;
 }
 
 .card-cafe {
@@ -283,6 +283,10 @@ h5 {
                         {{ 'KOSONG' }}
                     @endif
                     </h5>
+                    <p class="center">
+                    @if ($item->order)
+                        {{$item->order->customer}}
+                    @endif</p>
 
                     @if($item->status !== 'Kosong')
                     <div style="display: flex; justify-content: space-between;" class="">
