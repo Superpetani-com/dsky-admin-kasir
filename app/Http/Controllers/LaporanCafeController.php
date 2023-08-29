@@ -41,7 +41,7 @@ class LaporanCafeController extends Controller
                 foreach ($order as $item) {
                     $row = array();
                     $row['DT_RowIndex'] = $no++;
-                    $row['tanggal']     = tanggal_indonesia($tanggal, false);
+                    $row['tanggal']     = date($item->created_at);
                     $row['No.Order']    = $item->Id_pesanan;
                     $row['No.Meja']     = $item->meja['nama_meja'];
                     $row['Customer']    = $item->customer;
