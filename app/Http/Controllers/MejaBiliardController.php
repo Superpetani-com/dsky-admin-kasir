@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\MejaBiliard;
 use App\Models\OrderBiliard;
 use App\Models\OrderBiliardDetail;
+use App\Models\Meja;
+use App\Models\Pesanan;
+use App\Models\PesananDetail;
+use App\Models\Menu;
 
 class MejaBiliardController extends Controller
 {
@@ -209,6 +213,36 @@ class MejaBiliardController extends Controller
         $mejabiliard->jamselesai = 0;
         $mejabiliard->id_order_biliard = 0;
         $mejabiliard->flag = 0;
+
+        // dd($order->id_pesanan);
+        if($order->id_pesanan > 0) {
+            $meja = meja::where('Id_pesanan', '=', $order->id_pesanan)->first();
+            $pesanan = pesanan::find($order->id_pesanan);
+            $detail = Pesanandetail::where('id_pesanan', $order->id_pesanan)->get();
+            $pesanan->status="Selesai";
+
+            // dd($meja, $order->id_pesanan);
+            if($meja) {
+                $meja->Id_pesanan = 0;
+                $meja->Status = "Kosong";
+
+                $pesanan->update();
+                $meja->update();
+
+                if(auth()->user()->level != 5) {
+                    foreach ($detail as $item2){
+                        $menu=menu::find($item2->id_menu);
+                        if($menu->jenis=="Update Stok" && $menu->stok>0 && $pesanan->status!="Selesai"){
+                            $menu->stok=$menu->stok-$item2->jumlah;
+                            $menu->update();
+                        }
+                    }
+                }
+
+                $mejabiliard->update();
+            }
+        }
+
         $mejabiliard->update();
     }
 

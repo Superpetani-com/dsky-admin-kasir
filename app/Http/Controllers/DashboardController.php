@@ -10,14 +10,24 @@ use App\Models\OrderBiliardDetail;
 use App\Models\Pesanan;
 use App\Models\User;
 
+
 class DashboardController extends Controller
 {
     public function index()
     {
         $mejabiliard = mejabiliard::with('order')
         ->orderBy('id_meja_biliard')->get();
-        $meja = meja::with('pesanan')
-        ->orderBy('id_meja')->get();
+
+        $meja = meja::with('pesanan')->orderBy('id_meja')->get();
+        foreach ($meja as $value) {
+            $value->isOrder = false;
+            $order = OrderBiliard::where('id_pesanan', '=', $value->Id_pesanan)->get();
+
+            if(count($order) > 0) {
+                $value->isOrder = true;
+                $value->Status = 'Kosong';
+            }
+        }
 
         // Get the user by their ID
         $user = User::find(auth()->user()->id);
@@ -64,6 +74,17 @@ class DashboardController extends Controller
     {
         $state = meja::with('pesanan')
         ->orderBy('id_meja')->get();
+
+
+        foreach ($state as $value) {
+            $value->isOrder = false;
+            $order = OrderBiliard::where('id_pesanan', '=', $value->Id_pesanan)->get();
+            if(count($order) > 0) {
+                $value->isOrder = true;
+                $value->Status = 'Kosong';
+            }
+        }
+        // dd($state);
 
         return datatables()
             ->of($state)

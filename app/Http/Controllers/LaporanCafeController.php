@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Pesanan;
+use App\Models\OrderBiliard;
 use PDF;
 
 class LaporanCafeController extends Controller
@@ -20,7 +21,7 @@ class LaporanCafeController extends Controller
 
         return view('laporancafe.index', compact('tanggalAwal', 'tanggalAkhir'));
     }
-    
+
     public function getDatacafe($awal, $akhir)
     {
         $no = 1;
@@ -32,27 +33,34 @@ class LaporanCafeController extends Controller
             $tanggal = $awal;
             $awal = date('Y-m-d', strtotime("+1 day", strtotime($awal)));
             $total_cafe = Pesanan::where('created_at', 'LIKE', "%$tanggal%")->sum('TotalBayar');
-            
+
             $total_pendapatan += $total_cafe;
 
             if (Pesanan::where('created_at', 'LIKE', "%$tanggal%")->exists()){
-            $order = Pesanan::with('meja')
-            ->where('created_at', 'LIKE', "%$tanggal%")
-            ->Get();
-            foreach ($order as $item) {
-                $row = array();
-                $row['DT_RowIndex'] = $no++;
-                $row['tanggal']     = tanggal_indonesia($tanggal, false);
-                $row['No.Order']    = $item->Id_pesanan;
-                $row['No.Meja']     = $item->meja['nama_meja'];
-                $row['Customer']    = $item->customer;
-                $row['TotalItem']    = $item->TotalItem.' Item';
-                $row['TotalBayar']  = 'Rp.'.format_uang($item->TotalBayar);
-                $data[] = $row;
+                $order = Pesanan::with('meja')->where('created_at', 'LIKE', "%$tanggal%")->Get();
+                foreach ($order as $item) {
+                    $row = array();
+                    $row['DT_RowIndex'] = $no++;
+                    $row['tanggal']     = tanggal_indonesia($tanggal, false);
+                    $row['No.Order']    = $item->Id_pesanan;
+                    $row['No.Meja']     = $item->meja['nama_meja'];
+                    $row['Customer']    = $item->customer;
+                    $row['TotalItem']    = $item->TotalItem.' Item';
+                    $row['TotalBayar']  = 'Rp.'.format_uang($item->TotalBayar);
+
+                    $item->isOrder = false;
+                    $order = OrderBiliard::where('id_pesanan', '=', $item->Id_pesanan)->get();
+                    // dd($item);
+                    if(count($order) > 0) {
+                        $item->isOrder = true;
+                        $row['No.Meja'] = 'Meja Biliard '.$item->meja['id_meja'];
+                    }
+                    $data[] = $row;
                 }
-            }
-            else {
-                $row = array();
+
+                // dd($data);;
+            } else {
+                 $row = array();
                 $row['DT_RowIndex'] = $no++;
                 $row['tanggal']     = tanggal_indonesia($tanggal, false);
                 $row['No.Order']    = '-';
@@ -61,8 +69,7 @@ class LaporanCafeController extends Controller
                 $row['TotalItem']    = '-';
                 $row['TotalBayar']  = '-';
                 $data[] = $row;
-            }           
-             
+            }
         }
 
         $data[] = [
@@ -91,7 +98,7 @@ class LaporanCafeController extends Controller
         $data = $this->getDatacafe($awal, $akhir);
         $pdf  = PDF::loadView('LaporanCafe.pdf', compact('awal', 'akhir', 'data'));
         $pdf->setPaper('a4', 'potrait');
-        
+
         return $pdf->stream('Laporan-pendapatan-cafe-'. date('Y-m-d-his') .'.pdf');
     }
 
