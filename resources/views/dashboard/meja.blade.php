@@ -29,7 +29,7 @@
             <tr >
               <td width=5%>{{$key+1}}</td>
               <td>{{$item->nama_meja}}
-              @if ($item->pesanan)
+              @if ($item->pesanan && !$item->isOrder)
                 {{$item->pesanan['customer']}}
               @endif
               </td>
