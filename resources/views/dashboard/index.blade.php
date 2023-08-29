@@ -575,7 +575,7 @@ function myTimer1() {
             location.reload();
           }
 
-          if(sdnumber == 600 || sdnumber == 590 || sdnumber == 500 || sdnumber == 400) {
+          if(sdnumber >= 598 && sdnumber <= 600) {
             location.reload();
           }
 
