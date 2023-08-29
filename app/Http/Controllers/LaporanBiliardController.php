@@ -20,7 +20,7 @@ class LaporanBiliardController extends Controller
 
         return view('laporanbiliard.index', compact('tanggalAwal', 'tanggalAkhir'));
     }
-    
+
     public function getDatabiliard($awal, $akhir)
     {
         $no = 1;
@@ -32,12 +32,13 @@ class LaporanBiliardController extends Controller
             $tanggal = $awal;
             $awal = date('Y-m-d', strtotime("+1 day", strtotime($awal)));
             $total_biliard = OrderBiliard::where('created_at', 'LIKE', "%$tanggal%")->sum('totalbayar');
-            
+
             $total_pendapatan += $total_biliard;
 
             if (OrderBiliard::where('created_at', 'LIKE', "%$tanggal%")->exists()){
             $order = OrderBiliard::with('meja')
             ->where('created_at', 'LIKE', "%$tanggal%")
+            ->where('TotalBayar', '>', 0)
             ->Get();
             foreach ($order as $item) {
                 $row = array();
@@ -61,8 +62,8 @@ class LaporanBiliardController extends Controller
                 $row['TotalJam']    = '-';
                 $row['TotalBayar']  = '-';
                 $data[] = $row;
-            }           
-             
+            }
+
         }
 
         $data[] = [
@@ -91,7 +92,7 @@ class LaporanBiliardController extends Controller
         $data = $this->getDatabiliard($awal, $akhir);
         $pdf  = PDF::loadView('LaporanBiliard.pdf', compact('awal', 'akhir', 'data'));
         $pdf->setPaper('a4', 'potrait');
-        
+
         return $pdf->stream('Laporan-pendapatan-biliard-'. date('Y-m-d-his') .'.pdf');
     }
 
