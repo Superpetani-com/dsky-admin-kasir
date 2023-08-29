@@ -49,7 +49,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
                         <th>Customer</th>
                         <th>Jumlah Item</th>
                         <th>TotalBayar</th>
-                        
+                        <th>Pesanan</th>
                     </thead>
                 </table>
             </div>
@@ -82,6 +82,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
                 {data: 'Customer'},
                 {data: 'TotalItem'},
                 {data: 'TotalBayar'},
+                {data: 'menus'},
             ],
             dom: 'Brt',
             bSort: false,
@@ -93,9 +94,12 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
             autoclose: true
         });
         $('.btn-cetak').on('click', function () {
-        cetak('{{ route('laporan.cetakcafe', [$tanggalAwal, $tanggalAkhir]) }}', 'Nota');  
+        cetak('{{ route('laporan.cetakcafe', [$tanggalAwal, $tanggalAkhir]) }}', 'Nota');
          });
     });
+
+    $.fn.dataTable.ext.errMode = 'none';
+
 
     function updatePeriode() {
         $('#modal-form').modal('show');
@@ -114,12 +118,12 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
         const systemZoom = width / window.screen.availWidth;
         const left       = (width - w) / 2 / systemZoom + dualScreenLeft
         const top        = (height - h) / 2 / systemZoom + dualScreenTop
-        const newWindow  = window.open(url, title, 
+        const newWindow  = window.open(url, title,
         `
             scrollbars=yes,
-            width  = ${w / systemZoom}, 
-            height = ${h / systemZoom}, 
-            top    = ${top}, 
+            width  = ${w / systemZoom},
+            height = ${h / systemZoom},
+            top    = ${top},
             left   = ${left}
         `
         );

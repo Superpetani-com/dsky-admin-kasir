@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Pesanan;
 use App\Models\OrderBiliard;
+use App\Models\PesananDetail;
 use PDF;
 
 class LaporanCafeController extends Controller
@@ -47,6 +48,17 @@ class LaporanCafeController extends Controller
                     $row['Customer']    = $item->customer;
                     $row['TotalItem']    = $item->TotalItem.' Item';
                     $row['TotalBayar']  = 'Rp.'.format_uang($item->TotalBayar);
+                    $nama_menu = [];
+
+                    $detail = PesananDetail::where('id_pesanan', '=', $item->Id_pesanan)->with('menu')->get();
+
+                    foreach ($detail as $value) {
+                        array_push($nama_menu, $value->menu->Nama_menu);
+                        // $nama_menu += $value->menu->Nama_menu;
+                    }
+
+
+                    $row['menus'] = $nama_menu;
 
                     $item->isOrder = false;
                     $order = OrderBiliard::where('id_pesanan', '=', $item->Id_pesanan)->get();
