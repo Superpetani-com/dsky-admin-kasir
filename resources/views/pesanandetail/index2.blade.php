@@ -37,6 +37,14 @@
   .table-pesanan tbody tr:last-child {
         display:none;
     }
+    .button-aksi {
+    height: 36px;
+    border: none;
+}
+
+.bg-black {
+    background-color: #121212;
+}
   @media(max-width: 768px) {
         .tampil-bayar {
             font-size: 3em;
@@ -172,6 +180,9 @@
                 <button type="submit" class="btn btn-primary btn-sm btn-flat pull-right btn-simpan "><i class="fa fa-floppy-o"></i> Simpan Transaksi</button>
                 <button type="submit" class="btn btn-warning btn-sm btn-flat pull-right btn-cetak "><i class="fa fa-floppy-o"></i> Cetak Transaksi</button>
                 <!--button type="submit" class="btn btn-danger btn-sm btn-flat pull-right btn-cetakselesai "><i class="fa fa-check"></i> Cetak & Selesai</button-->
+                @if($count_pesanan_detail > 0)
+                <button class="button-aksi bg-black pull-right" style="" onclick="printNotaKitchen({{$Id_pesanan}})">PRINT KITCHEN</button>
+                @endif
             </div>
         </div>
     </div>
@@ -408,6 +419,11 @@
   })
 
   }
+
+  function printNotaKitchen(id) {
+        cetak('{{ route('pesanan.cetakKitchen', $Id_pesanan) }}', 'Nota');
+    }
+
 
   function cetak(url, title) {
     popupCenter(url, title, 625, 500);
