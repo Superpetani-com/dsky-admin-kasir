@@ -84,9 +84,12 @@
                 <td colspan="3">{{ $item->paket->nama_paket }}</td>
             </tr>
             <tr>
+                @if($item->jumlah < 1)
+                    <?php $item->jumlah = 1; ?>
+                @endif
                 <td>{{ $item->jumlah }} Jam x Rp.{{ format_uang($item->harga) }}</td>
                 <td></td>
-                <td class="text-right">Rp.{{ format_uang($item->jumlah * $item->harga) }}</td>
+                <td class="text-right">Rp.{{ format_uang(ceil($item->jumlah * $item->harga / 1000) * 1000) }}</td>
             </tr>
         @endforeach
     </table>

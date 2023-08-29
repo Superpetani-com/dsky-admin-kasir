@@ -10,6 +10,7 @@ use App\Models\Meja;
 use App\Models\Pesanan;
 use App\Models\PesananDetail;
 use App\Models\Menu;
+use Carbon\Carbon;
 
 class MejaBiliardController extends Controller
 {
@@ -90,57 +91,72 @@ class MejaBiliardController extends Controller
 
     public function updatetime()
     {
-        $mejabiliard=mejabiliard::orderBy('id_meja_biliard', 'desc')
-        ->get();
+        $mejabiliard=mejabiliard::orderBy('id_meja_biliard', 'desc')->get();
 
         foreach ($mejabiliard as $item) {
-        $durasi1=0;
-        $detail = orderbiliarddetail::where('id_order_biliard',$item->id_order_biliard)->get();
-        foreach ($detail as $itemd){
-                $timenow = strtotime("now");
-                $durasi1+=$itemd->menit;
-                if ($itemd->flag==1){
-                    $itemd->menit= ($timenow-(strtotime($itemd->created_at)))/60;
-                    $itemd->jumlah= number_format($itemd->menit/60,2);
-                    $itemd->subtotal= $itemd->jumlah*$itemd->harga;
-                    $itemd->update();
+            $durasi1 = 0;
+            $detail = orderbiliarddetail::where('id_order_biliard',$item->id_order_biliard)->get();
+            foreach ($detail as $itemd){
+                    $timenow = strtotime("now");
+                    $durasi1+=$itemd->menit;
+                    if ($itemd->flag==1){
+                        $itemd->menit= ($timenow-(strtotime($itemd->created_at)))/60;
+                        $itemd->jumlah= number_format($itemd->menit/60,2);
+                        $itemd->subtotal= $itemd->jumlah*$itemd->harga;
+                        $itemd->update();
+                    }
+                    if ($item->flag>0){
+                        $jamselesai= date("Y/m/d H:i:s",intval(($durasi1*60)+(strtotime($item->jammulai))));
+                        $item->jamselesai = $jamselesai;
+                        $item->sisadurasi = 99999;
+                    }
+                    $item->durasi = number_format($durasi1,2,",",".");
+            }
+
+
+            // Convert the time from the $item->jamselesai format to a Unix timestamp
+            $jamSelesaiTimestamp = strtotime($item->jamselesai);
+
+            // Get the current Unix timestamp
+            $currentTimestamp = time();
+
+            // Calculate the difference in seconds
+            $timeDifferenceSeconds = $jamSelesaiTimestamp - $currentTimestamp;
+            // dd($timeDifferenceSeconds);
+
+
+            if(strtotime("now")>strtotime($item->jamselesai)){
+
+            if ($item->id_order_biliard!=0 and $item->flag == 0 ){
+                $item->status = "Bayar";
+                //$order = orderbiliard::findOrFail($item->id_order_biliard);
+                //$order->status="Selesai";
+                //$order->update();
+            } elseif ($item->id_order_biliard==0) {
+                $item->status = "Kosong";
+            }   if ($item->flag==0){
+                    //$item->jammulai = 0;
+                    //$item->durasi = 0;
+                    $item->sisadurasi = 0;
+                    //$item->jamselesai = 0;
                 }
-                if ($item->flag>0){
-                    $jamselesai= date("Y/m/d H:i:s",intval(($durasi1*60)+(strtotime($item->jammulai))));
-                    $item->jamselesai = $jamselesai;
-                    $item->sisadurasi = 99999;
+            } elseif (strtotime("now")<strtotime($item->jamselesai) and $item->flag==0) {
+                $selesai=(strtotime($item->jamselesai)-strtotime("now"))/60;
+                $item->sisadurasi=number_format($selesai,2,",",".");
+                $item->status="Dipakai";
+
+                if ($timeDifferenceSeconds < 600) {
+                    // Time difference is less than 10 minutes (600 seconds)
+                    // Perform your actions here
+                    // dd($timeDifferenceSeconds, 'msuk');
+                    if($item->flag == 0) {
+                        $item->status = "Warning";
+                        $item->update();
+                    }
                 }
-                $item->durasi = number_format($durasi1,2,",",".");
-        }
+            }
 
-
-        if(strtotime("now")>strtotime($item->jamselesai)){
-
-        if ($item->id_order_biliard!=0 and $item->flag==0 ){
-            $item->status = "Bayar";
-            //$order = orderbiliard::findOrFail($item->id_order_biliard);
-            //$order->status="Selesai";
-            //$order->update();
-        }
-
-        elseif ($item->id_order_biliard==0) {
-            $item->status = "Kosong";
-        }
-
-        if ($item->flag==0){
-            //$item->jammulai = 0;
-            //$item->durasi = 0;
-            $item->sisadurasi = 0;
-           //$item->jamselesai = 0;
-        }
-        }
-
-        elseif (strtotime("now")<strtotime($item->jamselesai) and $item->flag==0) {
-            $selesai=(strtotime($item->jamselesai)-strtotime("now"))/60;
-            $item->sisadurasi=number_format($selesai,2,",",".");
-            $item->status="Dipakai";
-        }
-        $item->update();
+            $item->update();
         }
 
     }

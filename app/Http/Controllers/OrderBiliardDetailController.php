@@ -142,7 +142,7 @@ class OrderBiliardDetailController extends Controller
             </div>
             </form>';
             }
-            $row['subtotal']    = 'Rp. '. format_uang($item->subtotal);
+            $row['subtotal']    = 'Rp. '. format_uang(ceil($item->subtotal / 1000) * 1000);
             if ($status2<>"Selesai"){
                 $row['aksi']        =  ' <div class="btn-group">
                                         <button onclick="deleteData(`'.route('orderbiliarddetail.destroy', $item->id_order_biliard_detail).'`)" class="btn btn-xs btn-danger btn-flat btn-hapus"><i class="fa fa-trash"></i> H</button>
@@ -160,13 +160,23 @@ class OrderBiliardDetailController extends Controller
                 $row['aksi2']        ='';
 
             }
+
+            $total += $item->harga * $item->jumlah;
+
+            // dd($mejabiliard->durasi);
+            if($mejabiliard->durasi <= 60) {
+                $row['subtotal'] = format_uang($item->harga);
+                $total = $item->harga;
+            }
+
+            // dd($row);
             $row['menit']       = $item->menit;
             $row['seting']      = $item->seting;
             $row['durasi']      = $item->created_at;
             $row['sisadurasi']  = $mejabiliard['sisadurasi'] . ' Menit';
             $data[] = $row;
 
-            $total += $item->harga * $item->jumlah;
+
             $total_jam  += $item->jumlah;
             $total_flag += $item->flag;
             $total_menit += $item->menit;
@@ -188,7 +198,7 @@ class OrderBiliardDetailController extends Controller
             'nama_paket'=> '',
             'harga'=>'',
             'jumlah'=>'
-            <div class="totalbil hide">'. $total .'</div>
+            <div class="totalbil hide">'. ceil($total / 1000) * 1000 .'</div>
             <div class="total_jam hide">'. $total_jam .'</div>
             <div class="total_menit hide">'. $total_menit .'</div>
             <div class="total_flag hide">'. $total_flag .'</div>

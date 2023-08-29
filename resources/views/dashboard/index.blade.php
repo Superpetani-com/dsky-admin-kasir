@@ -136,6 +136,11 @@ h5 {
     color: black !important;
 }
 
+.bg-yellow {
+    background: rgb(255, 204, 0) !important;
+    color: black !important;
+}
+
 .rounded {
     padding-left: 10px;
     padding-right: 10px;
@@ -254,6 +259,8 @@ h5 {
                         {{ 'card bg-green' }}
                     @elseif($item->status == 'Bayar')
                         {{ 'card bg-red' }}
+                    @elseif($item->status == 'Warning')
+                        {{ 'card bg-yellow' }}
                     @else
                     {{'card'}}
                     @endif
@@ -263,11 +270,15 @@ h5 {
                         {{ 'bg-green' }}
                     @elseif($item->status == 'Bayar')
                         {{ 'bg-red' }}
+                    @elseif($item->status == 'Warning')
+                        {{ 'bg-yellow' }}
                     @endif">
                     @if($item->status == 'Dipakai')
                         {{ 'SEDANG DIPAKAI' }}
                     @elseif($item->status == 'Bayar')
                         {{ 'WAKTU HABIS' }}
+                    @elseif($item->status == 'Warning')
+                        {{ 'SEGERA SELESAI' }}
                     @else
                         {{ 'KOSONG' }}
                     @endif
@@ -295,20 +306,14 @@ h5 {
                     @endif
 
                     <div style="display: flex; justify-content: space-between;margin-top: 10px;">
-                        {{-- @if($item->flag == 1) --}}
-                            {{-- <a href="{{route('orderbiliarddetail.index2', $item->id_order_biliard)}}"> --}}
-                                {{-- <h5 class="center"><button onclick="stopseting({{$item->id_order_biliard_detail, $item->id_meja_biliard}})" class="button-aksi bg-red">STOP</button></h5> --}}
-                            {{-- </a> --}}
-                        {{-- @else --}}
-                            <button class="button-aksi bg-black" onclick="printNota({{$item->id_order_biliard}})">PRINT</button>
-                        {{-- @endif --}}
+                        <button class="button-aksi bg-black" onclick="printNota({{$item->id_order_biliard}})">PRINT</button>
                         <div style="display: inline-flex">
                         @if($item->status == 'Dipakai')
                         <a href="{{route('orderbiliarddetail.index2', $item->id_order_biliard)}}">
                             <button class="button-aksi bg-blue">TAMBAH</button>
                         </a>
                         <button type="button" onclick="resetform2('{{route('mejabiliard.reset', $item->id_meja_biliard)}}', '{{$item->id_order_biliard}}','{{$item->flag}}')" class="button-aksi bg-red">SELESAI</button>
-                        @elseif($item->status == 'Bayar')
+                        @elseif($item->status == 'Bayar' || $item->status == 'Warning')
                             <button type="button" onclick="resetform2('{{route('mejabiliard.reset', $item->id_meja_biliard)}}', '{{$item->id_order_biliard}}','{{$item->flag}}')" class="button-aksi bg-blue">SELESAI</button>
                         @endif
                         </div>
@@ -558,7 +563,8 @@ function myTimer1() {
           s=checkTime(s);
           document.getElementById("tddurasi{{$item->id_meja_biliard}}").innerHTML=h+":"+m+":"+s;
       }
-      if(sd!="99999 Menit" && status=="Dipakai"){
+
+      if(sd!="99999 Menit" && (status=="Dipakai" || status == "Warning")){
           var sdnumber=((Number((sd.slice(0, (sdcomma+3))).replace(",", ".")))*60)-i;
           console.log(sdnumber);
           if(sdnumber<0){
