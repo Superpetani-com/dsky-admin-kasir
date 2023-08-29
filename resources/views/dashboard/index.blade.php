@@ -572,7 +572,11 @@ function myTimer1() {
           var sdnumber=((Number((sd.slice(0, (sdcomma+3))).replace(",", ".")))*60)-i;
           console.log(sdnumber);
           if(sdnumber<0){
-          location.reload();
+            location.reload();
+          }
+
+          if(sdnumber == 600 || sdnumber == 590 || sdnumber == 500 || sdnumber == 400) {
+            location.reload();
           }
 
           if(sdnumber>0){
