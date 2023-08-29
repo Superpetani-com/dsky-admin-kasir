@@ -43,7 +43,7 @@ class LaporanBiliardController extends Controller
             foreach ($order as $item) {
                 $row = array();
                 $row['DT_RowIndex'] = $no++;
-                $row['tanggal']     = tanggal_indonesia($tanggal, false);
+                $row['tanggal']     = date($item->created_at);
                 $row['No.Order']    = $item->id_order_biliard;
                 $row['No.Meja']     = $item->meja['namameja'];
                 $row['Customer']    = $item->customer;

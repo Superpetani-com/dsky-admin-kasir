@@ -50,10 +50,10 @@ function tanggal_indonesia($tgl, $tampil_hari = true)
         $hari        = $nama_hari[$urutan_hari];
         $text       .= "$hari, $tanggal$bulan$tahun";
     } else {
-        $text       .= "$tanggal$bulan$tahun";
+        $text       .= "$tanggal $bulan $tahun";
     }
-    
-    return $text; 
+
+    return $text;
 }
 
 function tambah_nol_didepan($value, $threshold = null)
