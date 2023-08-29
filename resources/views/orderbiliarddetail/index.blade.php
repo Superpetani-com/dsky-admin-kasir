@@ -9,6 +9,15 @@
       .table-pesanan tbody tr:last-child {
         display:none;
     }
+
+    .button-aksi {
+        height: 40px;
+        border: none;
+    }
+
+    .bg-black {
+        background: rgb(255, 204, 0) !important;
+    }
   .table-pesanan tbody tr:nth-child(even) {
   background-color: #cef0b1;
     }
@@ -313,6 +322,9 @@
                     </div>
               <div class="box-footer p-3">
                 <button type="submit" class="btn btn-primary btn-sm btn-flat pull-right btn-simpan "><i class="fa fa-floppy-o"></i> Simpan Transaksi</button>
+                @if($count_pesanan_detail > 0)
+                <button class="button-aksi bg-black pull-right" style="margin-right: 10px;" onclick="printNotaKitchen({{$id_order_biliard}})">PRINT KITCHEN</button>
+                @endif
                 {{-- <button type="submit" class="btn btn-warning btn-sm btn-flat pull-right btn-cetak "><i class="fa fa-print"></i> Cetak Transaksi</button> --}}
                 <!--button type="submit" class="btn btn-danger btn-sm btn-flat pull-right btn-cetakselesai "><i class="fa fa-check"></i> Cetak & Selesai</button-->
             </div>
@@ -622,7 +634,8 @@
     $.post('{{route('pesanandetail.store')}}', $('.form-menu').serialize())
       .done(response=>{
         $('#nama_menu').focus();
-        table3.ajax.reload();
+        // table3.ajax.reload();
+        location.reload();
       })
       .fail(errors=>{
         alert('Tidak dapat menyimpan data');
@@ -638,8 +651,7 @@
                     '_method': 'delete'
                 })
                 .done((response) => {
-                    table.ajax.reload();
-                    table3.ajax.reload();
+                    location.reload();
                 })
                 .fail((errors) => {
                     alert('Tidak dapat menghapus data');
@@ -699,6 +711,13 @@
 
   }
 
+
+    function printNotaKitchen(id) {
+        var urlcetak=(`{{url('orderbiliard')}}/cetak-kitchen/${id}`);
+        console.log(id, 'askdansdk')
+        cetak(urlcetak);
+    }
+
     function cetak(url, title) {
         popupCenter(url, title, 625, 500);
     }
@@ -721,6 +740,11 @@
         `
         );
         if (window.focus) newWindow.focus();
+        if (newWindow) {
+            setTimeout(() => {
+                newWindow.close();
+            }, 1000); // Wait for 2000 milliseconds (2 seconds)
+        }
     }
 </script>
 @endpush

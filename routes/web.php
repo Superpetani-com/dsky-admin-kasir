@@ -54,6 +54,7 @@ Route::group(['middleware'=>'auth'], function(){
     Route::resource('/paketbiliard',PaketBiliardController::class);
 
     Route::get('/orderbiliard/data', [OrderBiliardController::class, 'data'])->name('orderbiliard.data');
+    Route::get('/orderbiliard/cetak-kitchen/{id}', [OrderBiliardController::class, 'cetakKitchen'])->name('orderbiliard.cetakKitchen');
     Route::get('/orderbiliard/cetak/{id}', [OrderBiliardController::class, 'cetak'])->name('orderbiliard.cetak');
     Route::get('/orderbiliard/{id}/create', [OrderBiliardController::class, 'create'])->name('orderbiliard.create');
     Route::resource('/orderbiliard',OrderBiliardController::class)

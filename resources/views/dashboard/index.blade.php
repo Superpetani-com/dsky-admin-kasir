@@ -75,7 +75,8 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
     padding-right: 12px;
     margin-top: 10px;
     box-shadow: 3px 3px 10px 0px rgba(0, 0, 0, 0.20);
-    height: 230px;
+    /* height: 260px; */
+    /* max-height: 260px; */
 }
 
 .card-cafe {
@@ -322,6 +323,7 @@ h5 {
                         @endif
                         </div>
                     </div>
+
                     @else
                     <br>
                     <a href="{{route('orderbiliard.create', $item->id_meja_biliard)}}">
@@ -499,6 +501,12 @@ function addForm2(){$('#modal-form2').modal('show');  }
 
 function printNota(id) {
     var urlcetak=(`{{url('orderbiliard')}}/cetak/${id}`);
+    cetak(urlcetak);
+}
+
+function printNotaKitchen(id) {
+    var urlcetak=(`{{url('orderbiliard')}}/cetak-kitchen/${id}`);
+    console.log(id, 'askdansdk')
     cetak(urlcetak);
 }
 

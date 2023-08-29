@@ -53,7 +53,11 @@ class OrderBiliardDetailController extends Controller
         if($Id_pesanan != 0) {
             $pesanan=pesanan::where('Id_pesanan', $order->id_pesanan)->first();
             $meja=meja::where('Id_meja', $pesanan->Id_meja)->first();
-            return view('orderbiliarddetail.index', compact('id_order_biliard','paket','order','mejabiliard', 'mejadetail','Id_pesanan','menu','meja','pesanan'));
+            $pesanan_detail = pesanandetail::where('id_pesanan', $order->id_pesanan)->get();
+
+            $count_pesanan_detail = count($pesanan_detail);
+
+            return view('orderbiliarddetail.index', compact('id_order_biliard','paket','order','mejabiliard', 'mejadetail','Id_pesanan','menu','meja','pesanan', 'count_pesanan_detail'));
         }
 
 
