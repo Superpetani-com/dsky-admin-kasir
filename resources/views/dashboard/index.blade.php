@@ -472,6 +472,8 @@ function load(){
 }
 
     load();
+    $.fn.dataTable.ext.errMode = 'none';
+
     var currentPath = window.location.pathname;
     var parts = currentPath.split('/');
     var lastPart = parts[parts.length - 1];
