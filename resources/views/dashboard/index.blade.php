@@ -607,7 +607,7 @@ function cetak(url, title) {
         if (newWindow) {
             setTimeout(() => {
                 newWindow.close();
-            }, 500); // Wait for 2000 milliseconds (2 seconds)
+            }, 1000); // Wait for 2000 milliseconds (2 seconds)
         }
     }
 }
