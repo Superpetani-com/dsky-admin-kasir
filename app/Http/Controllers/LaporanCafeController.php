@@ -37,7 +37,7 @@ class LaporanCafeController extends Controller
             $total_pendapatan += $total_cafe;
 
             if (Pesanan::where('created_at', 'LIKE', "%$tanggal%")->exists()){
-                $order = Pesanan::with('meja')->where('created_at', 'LIKE', "%$tanggal%")->Get();
+                $order = Pesanan::with('meja')->where('created_at', 'LIKE', "%$tanggal%")->where('TotalBayar', '>', 0)->Get();
                 foreach ($order as $item) {
                     $row = array();
                     $row['DT_RowIndex'] = $no++;
