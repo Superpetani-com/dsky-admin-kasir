@@ -89,7 +89,15 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
                 {data: 'TotalItem'},
                 {data: 'TotalBayar'},
                 {data: 'menus'},
-                {data: 'No.Order'}
+                {
+                    "mData": "No.Order",
+                    "mRender": function (data, type, row) {
+                        if(data > 0) {
+                            return `<button class="button-aksi bg-black" onclick="printNota(${data})">PRINT</button>`
+                        }
+                        // return `<a href='{{ url('/pesanandetail/${data}') }}'>${data}</a>`;
+                    }
+                },
             ],
             dom: 'Brt',
             bSort: false,
@@ -111,6 +119,11 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
     function updatePeriode() {
         $('#modal-form').modal('show');
 
+    }
+
+    function printNota(id) {
+        var urlcetak=(`{{url('pesanan')}}/cetak/${id}`);
+        cetak(urlcetak);
     }
     function cetak(url, title) {
     popupCenter(url, title, 625, 500);
