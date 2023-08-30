@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\OrderBiliard;
 use PDF;
+use DateTime;
 
 class LaporanBiliardController extends Controller
 {
@@ -31,15 +32,21 @@ class LaporanBiliardController extends Controller
         while (strtotime($awal) <= strtotime($akhir)) {
             $tanggal = $awal;
             $awal = date('Y-m-d', strtotime("+1 day", strtotime($awal)));
-            $total_biliard = OrderBiliard::where('created_at', 'LIKE', "%$tanggal%")->sum('totalbayar');
+
+            $awalDate = new DateTime($awal);
+
+            // Move to the next day
+            $awalDate->modify('+1 day');
+
+            $total_biliard = OrderBiliard::whereBetween('created_at', ["$tanggal 12:00:00", $awalDate->format('Y-m-d 04:00:00')])->sum('totalbayar');
 
             $total_pendapatan += $total_biliard;
 
-            if (OrderBiliard::where('created_at', 'LIKE', "%$tanggal%")->exists()){
+            if (OrderBiliard::whereBetween('created_at', ["$tanggal 12:00:00", $awalDate->format('Y-m-d 04:00:00')])->exists()){
             $order = OrderBiliard::with('meja')
-            ->where('created_at', 'LIKE', "%$tanggal%")
+            ->whereBetween('created_at', ["$tanggal 12:00:00", $awalDate->format('Y-m-d 04:00:00')])
             ->where('TotalBayar', '>', 0)
-            ->Get();
+            ->get();
             foreach ($order as $item) {
                 $row = array();
                 $row['DT_RowIndex'] = $no++;

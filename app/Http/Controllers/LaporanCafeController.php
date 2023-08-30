@@ -7,6 +7,7 @@ use App\Models\Pesanan;
 use App\Models\OrderBiliard;
 use App\Models\PesananDetail;
 use PDF;
+use DateTime;
 
 class LaporanCafeController extends Controller
 {
@@ -33,12 +34,17 @@ class LaporanCafeController extends Controller
         while (strtotime($awal) <= strtotime($akhir)) {
             $tanggal = $awal;
             $awal = date('Y-m-d', strtotime("+1 day", strtotime($awal)));
-            $total_cafe = Pesanan::where('created_at', 'LIKE', "%$tanggal%")->sum('TotalBayar');
+
+            $awalDate = new DateTime($awal);
+            // Move to the next day
+            $awalDate->modify('+1 day');
+
+            $total_cafe = Pesanan::whereBetween('created_at', ["$tanggal 12:00:00", $awalDate->format('Y-m-d 04:00:00')])->sum('TotalBayar');
 
             $total_pendapatan += $total_cafe;
 
-            if (Pesanan::where('created_at', 'LIKE', "%$tanggal%")->exists()){
-                $order = Pesanan::with('meja')->where('created_at', 'LIKE', "%$tanggal%")->where('TotalBayar', '>', 0)->Get();
+            if (Pesanan::whereBetween('created_at', ["$tanggal 12:00:00", $awalDate->format('Y-m-d 04:00:00')])->exists()){
+                $order = Pesanan::with('meja')->whereBetween('created_at', ["$tanggal 12:00:00", $awalDate->format('Y-m-d 04:00:00')])->where('TotalBayar', '>', 0)->get();
                 foreach ($order as $item) {
                     $row = array();
                     $row['DT_RowIndex'] = $no++;

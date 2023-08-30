@@ -37,7 +37,7 @@ class LaporanController extends Controller
 
         // Initialize $awal and $akhir to start and end of the specified dates
         $awal = $awalDate->format('Y-m-d 12:00:00');
-        $akhir = $akhirDate->format('Y-m-d 03:00:00');
+        $akhir = $akhirDate->format('Y-m-d 04:00:00');
 
         // dd($awal, $akhir);
 
