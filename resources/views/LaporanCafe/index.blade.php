@@ -50,6 +50,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
                         <th>Jumlah Item</th>
                         <th>TotalBayar</th>
                         <th>Pesanan</th>
+                        <th>Aksi</th>
                     </thead>
                 </table>
             </div>
@@ -77,12 +78,18 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
             columns: [
                 {data: 'DT_RowIndex', searchable: false, sortable: false},
                 {data: 'tanggal'},
-                {data: 'No.Order'},
+                {
+                    "mData": "No.Order",
+                    "mRender": function (data, type, row) {
+                        return `<a href='{{ url('/pesanandetail/${data}') }}'>${data}</a>`;
+                    }
+                },
                 {data: 'No.Meja'},
                 {data: 'Customer'},
                 {data: 'TotalItem'},
                 {data: 'TotalBayar'},
                 {data: 'menus'},
+                {data: 'No.Order'}
             ],
             dom: 'Brt',
             bSort: false,

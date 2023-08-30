@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\OrderBiliard;
 use App\Models\Pesanan;
 use PDF;
+use DateTime;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -23,20 +24,34 @@ class LaporanController extends Controller
 
         return view('laporan.index', compact('tanggalAwal', 'tanggalAkhir'));
     }
+
     public function getData($awal, $akhir)
     {
         $no = 1;
         $data = array();
-        $pendapatan = 0;
         $total_pendapatan = 0;
 
-        while (strtotime($awal) <= strtotime($akhir)) {
-            $tanggal = $awal;
-            $awal = date('Y-m-d', strtotime("+1 day", strtotime($awal)));
+        // Convert string dates to DateTime objects
+        $awalDate = new DateTime($awal);
+        $akhirDate = new DateTime($akhir);
 
-            $total_biliard = OrderBiliard::where('created_at', 'LIKE', "%$tanggal%")->sum('totalbayar');
-            $total_cafe = Pesanan::where('created_at', 'LIKE', "%$tanggal%")->sum('TotalBayar');
+        // Initialize $awal and $akhir to start and end of the specified dates
+        $awal = $awalDate->format('Y-m-d 12:00:00');
+        $akhir = $akhirDate->format('Y-m-d 03:00:00');
 
+        // dd($awal, $akhir);
+
+        while ($awalDate <= $akhirDate) {
+            $tanggal = $awalDate->format('Y-m-d');
+            $tanggalSelanjutnya = $awalDate->format('Y-m-d');
+
+            // Move to the next day
+            $awalDate->modify('+1 day');
+
+            // \DB::enableQueryLog();
+            $total_biliard = OrderBiliard::whereBetween('created_at', ["$tanggal 12:00:00", $awalDate->format('Y-m-d 03:00:00')])->sum('totalbayar');
+            $total_cafe = Pesanan::whereBetween('created_at', ["$tanggal 12:00:00", $awalDate->format('Y-m-d 03:00:00')])->sum('TotalBayar');
+            // dd(\DB::getQueryLog());
             $pendapatan = $total_biliard + $total_cafe;
             $total_pendapatan += $pendapatan;
 

@@ -49,7 +49,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
                         <th>Customer</th>
                         <!--th>Durasi</th-->
                         <th>TotalBayar</th>
-                        
+
                     </thead>
                 </table>
             </div>
@@ -77,7 +77,12 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
             columns: [
                 {data: 'DT_RowIndex', searchable: false, sortable: false},
                 {data: 'tanggal'},
-                {data: 'No.Order'},
+                {
+                    "mData": "No.Order",
+                    "mRender": function (data, type, row) {
+                        return `<a href='{{ url('/orderbiliarddetail/${data}/before') }}'>${data}</a>`;
+                    }
+                },
                 {data: 'No.Meja'},
                 {data: 'Customer'},
                 //{data: 'TotalJam'},
@@ -94,7 +99,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
         });
 
         $('.btn-cetak').on('click', function () {
-        cetak('{{ route('laporan.cetakbiliard', [$tanggalAwal, $tanggalAkhir]) }}', 'Nota');  
+        cetak('{{ route('laporan.cetakbiliard', [$tanggalAwal, $tanggalAkhir]) }}', 'Nota');
          });
     });
 
@@ -115,12 +120,12 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
         const systemZoom = width / window.screen.availWidth;
         const left       = (width - w) / 2 / systemZoom + dualScreenLeft
         const top        = (height - h) / 2 / systemZoom + dualScreenTop
-        const newWindow  = window.open(url, title, 
+        const newWindow  = window.open(url, title,
         `
             scrollbars=yes,
-            width  = ${w / systemZoom}, 
-            height = ${h / systemZoom}, 
-            top    = ${top}, 
+            width  = ${w / systemZoom},
+            height = ${h / systemZoom},
+            top    = ${top},
             left   = ${left}
         `
         );
