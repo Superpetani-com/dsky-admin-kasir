@@ -171,36 +171,20 @@ class OrderBiliardDetailController extends Controller
 
             $total += $item->harga * $item->jumlah;
 
-            // dd($mejabiliard->durasi);
-            // dd($row, $item->subtotal, $mejabiliard, intval($mejabiliard->durasi));
-            // dd($item);
             if(intval($mejabiliard->durasi) <= 60 && intval($mejabiliard->durasi) != 0 && $item->flag >0) {
-                // dd('masuk', $mejabiliard->durasi);
-
                 $row['subtotal'] = format_uang($item->harga);
                 $total = $item->harga;
             }
-
-            // dd($row['subtotal']);
-
-
-
-
-            // dd($row);
 
             $row['menit']       = $item->menit;
             $row['seting']      = $item->seting;
             $row['durasi']      = $item->created_at;
             $row['sisadurasi']  = $mejabiliard['sisadurasi'] . ' Menit';
             $data[] = $row;
-
-
-
             $total_jam  += $item->jumlah;
             $total_flag += $item->flag;
             $total_menit += $item->menit;
         }
-        // dd($total);
 
         $order = OrderBiliard::where('id_order_biliard', '=', $id)->first();
         $detail=PesananDetail::with('menu')
