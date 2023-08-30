@@ -38,7 +38,7 @@ class LaporanController extends Controller
         $akhirDate = new DateTime($akhir);
 
         // Initialize $awal and $akhir to start and end of the specified dates
-        $awal = $awalDate->format('Y-m-d 12:00:00');
+        $awal = $awalDate->format('Y-m-d 09:00:00');
         $akhir = $akhirDate->format('Y-m-d 04:00:00');
 
         // dd($awal, $akhir);
@@ -51,8 +51,8 @@ class LaporanController extends Controller
             $awalDate->modify('+1 day');
 
             // \DB::enableQueryLog();
-            $total_biliard = OrderBiliard::whereBetween('created_at', ["$tanggal 12:00:00", $awalDate->format('Y-m-d 03:00:00')])->sum('totalbayar');
-            $total_cafe = Pesanan::whereBetween('created_at', ["$tanggal 12:00:00", $awalDate->format('Y-m-d 03:00:00')])->sum('TotalBayar');
+            $total_biliard = OrderBiliard::whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 03:00:00')])->sum('totalbayar');
+            $total_cafe = Pesanan::whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 03:00:00')])->sum('TotalBayar');
             // dd(\DB::getQueryLog());
             $pendapatan = $total_biliard + $total_cafe;
             $total_pendapatan += $pendapatan;
