@@ -35,12 +35,13 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
                 <a href="{{ route('laporan.export_pdf', [$tanggalAwal, $tanggalAkhir]) }}" target="_blank" class="btn btn-success btn-xs btn-flat"><i class="fa fa-file-excel-o"></i> Export PDF</a>
             </div>
             <div class="box-body table-responsive">
-                <table class="table table-stiped table-bordered" style="width:50%"> 
+                <table class="table table-stiped table-bordered" style="width:50%">
                     <thead>
                         <th width="5%">No</th>
                         <th>Tanggal</th>
                         <th>Penjualan Biliard</th>
                         <th>Penjualan Cafe</th>
+                        <th>Total Penjualan</th>
                     </thead>
                 </table>
             </div>
@@ -55,7 +56,9 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
 <script src="{{ asset('/AdminLTE-2/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
 <script>
     let table;
-
+    function formatIDR(value) {
+        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(value);
+    }
     $(function () {
         table = $('.table').DataTable({
             responsive: true,
@@ -70,6 +73,17 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
                 {data: 'tanggal'},
                 {data: 'total_biliard'},
                 {data: 'total_cafe'},
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        console.log(parseInt(data.total_biliard.split('.').join('')))
+                        var total_biliard = parseInt(data.total_biliard.split('.').join('')); // Convert to numeric
+                        var total_cafe = parseInt(data.total_cafe.split('.').join('')); // Convert to numeric
+                        var total_all = total_biliard + total_cafe;
+
+                        return formatIDR(total_all); // Format as currency
+                    }
+                }
             ],
             dom: 'Brt',
             bSort: false,

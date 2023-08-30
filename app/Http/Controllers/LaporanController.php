@@ -30,6 +30,8 @@ class LaporanController extends Controller
         $no = 1;
         $data = array();
         $total_pendapatan = 0;
+        $total_biliards = 0;
+        $total_cafes = 0;
 
         // Convert string dates to DateTime objects
         $awalDate = new DateTime($awal);
@@ -54,6 +56,8 @@ class LaporanController extends Controller
             // dd(\DB::getQueryLog());
             $pendapatan = $total_biliard + $total_cafe;
             $total_pendapatan += $pendapatan;
+            $total_biliards += $total_biliard;
+            $total_cafes += $total_cafe;
 
             $row = array();
             $row['DT_RowIndex'] = $no++;
@@ -66,9 +70,10 @@ class LaporanController extends Controller
 
         $data[] = [
             'DT_RowIndex' => '',
-            'tanggal' => '',
-            'total_biliard' => 'Total Pendapatan',
-            'total_cafe' => format_uang($total_pendapatan),
+            'tanggal' => 'Total Pendapatan',
+            'total_biliard' => format_uang($total_biliards),
+            'total_cafe' => format_uang($total_cafes),
+            'total_all' => format_uang($total_pendapatan),
         ];
 
         return $data;
