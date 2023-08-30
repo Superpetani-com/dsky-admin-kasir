@@ -82,8 +82,9 @@ class LaporanBiliardController extends Controller
             'No.Order' => ' ',
             'No.Meja' => ' ',
             'Customer' => ' ',
-            'TotalJam' => 'TotalPendapatan ',
+            'TotalJam' => 'Total Pendapatan ',
             'TotalBayar' => 'Rp.'.format_uang($total_pendapatan),
+            'created_by' => '',
         ];
 
         return $data;
@@ -100,8 +101,13 @@ class LaporanBiliardController extends Controller
     public function exportPDFbiliard($awal, $akhir)
     {
         $data = $this->getDatabiliard($awal, $akhir);
-        $pdf  = PDF::loadView('LaporanBiliard.pdf', compact('awal', 'akhir', 'data'));
-        $pdf->setPaper('a4', 'potrait');
+        $pdf = PDF::loadView('laporanbiliard', [
+            'awal' => $awal,
+            'akhir' => $akhir,
+            'data' => $data
+        ]);
+
+        $pdf->setPaper('a4', 'landscape');
 
         return $pdf->stream('Laporan-pendapatan-biliard-'. date('Y-m-d-his') .'.pdf');
     }
