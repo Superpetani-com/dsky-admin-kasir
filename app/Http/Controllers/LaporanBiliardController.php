@@ -36,16 +36,17 @@ class LaporanBiliardController extends Controller
             $awalDate = new DateTime($awal);
 
             // Move to the next day
-            $awalDate->modify('+1 day');
+            // $awalDate->modify('+1 day');
 
-            $total_biliard = OrderBiliard::whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 04:00:00')])->sum('totalbayar');
+            $total_biliard = OrderBiliard::whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('totalbayar');
 
             $total_pendapatan += $total_biliard;
 
-            if (OrderBiliard::whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 04:00:00')])->exists()){
+            if (OrderBiliard::whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->exists()){
             $order = OrderBiliard::with('meja')
-            ->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 04:00:00')])
+            ->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])
             ->where('TotalBayar', '>', 0)
+            ->orderBy('id_order_biliard', 'desc')
             ->get();
             foreach ($order as $item) {
                 $row = array();

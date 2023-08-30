@@ -148,7 +148,7 @@
                   </div>
                   <label for="nama_cust" class="col-lg-1">Customer</label>
                   <div class="col-lg-3">
-                    <input type="text" class="form-control" name="nama_cust" id="nama_cust" maxlength="50" value="{{$pesanan->customer}}" required>
+                    <input type="text" class="form-control" name="nama_cust" id="nama_cust" maxlength="50" value="{{$order->customer}}" required>
                     <span class="help-block with-errors"></span>
                   </div>
                   <div class="input-group-btn">
@@ -534,7 +534,7 @@
      let id=$(this).data('id');
      let jumlah=($(this).val());
      let dataexist = $(this).attr('max');
-     console.log()
+     console.log(jumlah,id,'asdnaks')
 
      if(jumlah < dataexist) {
         alert('Jumlah tidak boleh kurang dari angka awal');
@@ -561,6 +561,7 @@
          console.log(response, 'aksndaknd');
         loadform($('#diskon').val(), $('#diterima').val());
         table3.ajax.reload();
+        table.ajax.reload();
       })
       .fail(errors=>{
         alert('Tidak dapat menyimpan data');

@@ -37,14 +37,14 @@ class LaporanCafeController extends Controller
 
             $awalDate = new DateTime($awal);
             // Move to the next day
-            $awalDate->modify('+1 day');
+            // $awalDate->modify('+1 day');
 
-            $total_cafe = Pesanan::whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 04:00:00')])->sum('TotalBayar');
-
+            $total_cafe = Pesanan::whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('TotalBayar');
+            // dd($awalDate->format('Y-m-d 07:00:00'));
             $total_pendapatan += $total_cafe;
 
-            if (Pesanan::whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 04:00:00')])->exists()){
-                $order = Pesanan::with('meja')->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 04:00:00')])->where('TotalBayar', '>', 0)->get();
+            if (Pesanan::whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->exists()){
+                $order = Pesanan::with('meja')->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->where('TotalBayar', '>', 0)->orderBy('Id_pesanan', 'desc')->get();
                 foreach ($order as $item) {
                     $row = array();
                     $row['DT_RowIndex'] = $no++;
@@ -54,6 +54,7 @@ class LaporanCafeController extends Controller
                     $row['Customer']    = $item->customer;
                     $row['TotalItem']    = $item->TotalItem.' Item';
                     $row['TotalBayar']  = 'Rp.'.format_uang($item->TotalBayar);
+                    $row['created_by']    = $item->created_by;
                     $nama_menu = [];
 
                     $detail = PesananDetail::where('id_pesanan', '=', $item->Id_pesanan)->with('menu')->get();

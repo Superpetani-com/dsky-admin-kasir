@@ -40,16 +40,17 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-cetak"><i class="fa fa-book"></i> Cetak Laporan</button>
             </div>
             <div class="box-body table-responsive">
-                <table class="table table-stiped table-bordered" style="width:75%">
+                <table class="table table-stiped table-bordered" style="width:100%">
                     <thead>
                         <th width="5%">No</th>
-                        <th>Tanggal</th>
+                        <th width="15%">Tanggal</th>
                         <th>No.Order</th>
                         <th>No.Meja</th>
                         <th>Customer</th>
                         <th>Jumlah Item</th>
                         <th>TotalBayar</th>
                         <th>Pesanan</th>
+                        <th>Kasir</th>
                         <th>Aksi</th>
                     </thead>
                 </table>
@@ -89,6 +90,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
                 {data: 'TotalItem'},
                 {data: 'TotalBayar'},
                 {data: 'menus'},
+                {data: 'created_by'},
                 {
                     "mData": "No.Order",
                     "mRender": function (data, type, row) {
