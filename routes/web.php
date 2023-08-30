@@ -54,6 +54,7 @@ Route::group(['middleware'=>'auth'], function(){
     Route::resource('/paketbiliard',PaketBiliardController::class);
 
     Route::get('/orderbiliard/data', [OrderBiliardController::class, 'data'])->name('orderbiliard.data');
+    Route::get('/orderbiliard/cetak-kitchen/{id}', [OrderBiliardController::class, 'cetakKitchen'])->name('orderbiliard.cetakKitchen');
     Route::get('/orderbiliard/cetak/{id}', [OrderBiliardController::class, 'cetak'])->name('orderbiliard.cetak');
     Route::get('/orderbiliard/{id}/create', [OrderBiliardController::class, 'create'])->name('orderbiliard.create');
     Route::resource('/orderbiliard',OrderBiliardController::class)
@@ -78,6 +79,7 @@ Route::group(['middleware'=>'auth'], function(){
     Route::get('/pesanan/{id}/create', [PesananController::class, 'create'])->name('pesanan.create');
     Route::get('/pesanan/data', [PesananController::class, 'data'])->name('pesanan.data');
     Route::get('/pesanan/cetak/{id}', [PesananController::class, 'cetak'])->name('pesanan.cetak');
+    Route::get('/pesanan/cetak-kitchen/{id}', [PesananController::class, 'cetakKitchen'])->name('pesanan.cetakKitchen');
     Route::get('/pesanan/cetakreset/{id}', [PesananController::class, 'cetakreset'])->name('pesanan.cetakreset');
     Route::resource('/pesanan',PesananController::class)
       ->except('create');

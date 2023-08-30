@@ -29,6 +29,9 @@ class MejaController extends Controller
     {
         $pesanan = pesanan::where('status', '!=', 'selesai')->with('meja', 'pesananDetail', 'meja_biliard')->orderBy('created_at', 'desc')->groupBy('Id_meja')->get();
 
+        if(auth()->user()->level == 5) {
+            $pesanan = pesanan::where('status', '!=', 'selesai')->where('TotalItem', '>', '0')->with('meja', 'pesananDetail', 'meja_biliard')->orderBy('created_at', 'desc')->groupBy('Id_meja')->get();
+        }
         foreach ($pesanan as $value) {
             $order = orderbiliard::where('id_pesanan', '=', $value->Id_pesanan)->get();
             // dd($order);
@@ -51,7 +54,6 @@ class MejaController extends Controller
             }
         }
 
-        // dd($pesanan);
 
         return datatables()
             ->of($pesanan)

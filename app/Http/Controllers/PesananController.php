@@ -133,6 +133,18 @@ class PesananController extends Controller
         return view('pesanan.cetak', compact('detail','pesanan', 'nama_meja'));
     }
 
+    public function cetakKitchen($id)
+    {
+        $detail=PesananDetail::with('menu')
+        ->where('id_pesanan', $id)
+        ->get();
+        $pesanan=pesanan::where('Id_pesanan', $id)->first();
+        $meja=meja::where('id_meja', $pesanan->Id_meja)->first();
+        $nama_meja=$meja->nama_meja;
+        //return ($detail);
+        return view('pesanan.cetak-kitchen', compact('detail','pesanan', 'nama_meja'));
+    }
+
     public function cetakreset($id)
     {
         $detail=PesananDetail::with('menu')

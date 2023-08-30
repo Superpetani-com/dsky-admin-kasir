@@ -247,6 +247,8 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
     })
   };
 
+    $.fn.dataTable.ext.errMode = 'none';
+
     load(); // Call the load function initially
 
     var audioIsPlaying = false;

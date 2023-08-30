@@ -16,7 +16,7 @@
   background-color: #35b50e;
   color: white;
   text-align: center;
-}   
+}
 .div-red {
   background-color: #db1107;
   color: white;
@@ -39,7 +39,7 @@
       <div class="row">
         <div class="col-md-12">
           <div class="box">
-            <div class="box-header with-border">  
+            <div class="box-header with-border">
             </div>
             <div class="box-body table-responsive">
             <table class="table table-pesanan table-stiped table-bordered" style="text-align: center">
@@ -99,14 +99,14 @@
         {data:'status'},
         {data:'aksi', searchable:false, sortable:false},
      ]
-   }); 
+   });
   });
-    
+
   table2= $('.table-pesananbaru').DataTable();
 
   /*function addForm(){
     $('#modal-meja').modal('show');
-    
+
   }*/
 
   function editForm(url){

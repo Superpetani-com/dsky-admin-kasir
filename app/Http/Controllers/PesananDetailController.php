@@ -35,8 +35,10 @@ class PesananDetailController extends Controller
         $menu=menu::orderBy('Nama_menu')->get();
         $pesanan=pesanan::where('Id_pesanan', $id)->first();
         $meja=meja::where('Id_meja', $pesanan->Id_meja)->first();
+        $pesanan_detail = pesanandetail::where('id_pesanan', $id)->get();
 
-        return view('pesanandetail.index2', compact('Id_pesanan','menu','meja','pesanan'));
+        $count_pesanan_detail = count($pesanan_detail);
+        return view('pesanandetail.index2', compact('Id_pesanan','menu','meja','pesanan', 'count_pesanan_detail'));
 
     }
 

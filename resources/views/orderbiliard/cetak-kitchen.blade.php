@@ -57,11 +57,6 @@
 <button class="btn-print" style="position: absolute; right: 1rem; top: rem;" onclick="window.print()">Print</button>
     <div class="text-center">
         {{-- <h3 style="margin-bottom: 5px;">{{ strtoupper("NOTA BILIARD") }}</h3> --}}
-        <h3 style="margin-bottom: 5px;">{{ strtoupper("Jogja Billiard") }}</h3>
-        <p>{{ ucwords("Jl. Urip Sumoharjo No.3-5") }}</p>
-        <p>{{ ucwords("BCA : 0376-616-333(Billiard Indonesia)") }}</p>
-        <p>{{ ucwords("WA : 081225557100") }}</p>
-        <p>{{ ucwords("IG : @jogjabilliard") }}</p>
     </div>
     <br>
     <div>
@@ -73,29 +68,12 @@
     <p>Cutomer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ ucwords($order->customer) }}</p>
     <p>No Order &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ ($order->id_order_biliard) }}-{{ $order->id_pesanan }}</p>
     <p>No Meja &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ ($nama_meja) }}</p>
-    <p>Jam Mulai &nbsp;&nbsp;&nbsp;: {{ ($meja->jammulai) }}</p>
-    <p>Jam Selesai : {{ ($meja->jamselesai) }}</p>
+    <p>Tanggal &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ ($pesanan->created_at) }}</p>
+    {{-- <p>Jam Mulai &nbsp;&nbsp;&nbsp;: {{ ($meja->jammulai) }}</p>
+    <p>Jam Selesai : {{ ($meja->jamselesai) }}</p> --}}
 
     <p class="text-center">===================================</p>
     <br>
-    <table width="100%" style="border: 0;">
-        @foreach ($detail as $item)
-            <tr>
-                <td colspan="3">{{ $item->paket->nama_paket }}</td>
-            </tr>
-            <tr>
-                @if($item->jumlah < 1)
-                    <?php $item->jumlah = 1; ?>
-                @endif
-                <td>{{ $item->jumlah }} Jam x Rp.{{ format_uang($item->harga) }}</td>
-                <td></td>
-                <td class="text-right">Rp.{{ format_uang(ceil($item->jumlah * $item->harga / 1000) * 1000) }}</td>
-            </tr>
-        @endforeach
-    </table>
-    {{-- <br> --}}
-    {{-- <p class="text-center">-----------------------------------</p> --}}
-    {{-- <p class="text-center">===================================</p> --}}
 
     <table width="100%" style="border: 0;">
         {{-- <tr>
@@ -125,17 +103,21 @@
     </table>
     {{-- <p class="text-center">===================================</p> --}}
     {{-- <br> --}}
-    <table width="100%" style="border: 0;">
-        @foreach ($detailpesanan as $item)
+    <table width="100%" style="border:0;text-align: left;">
+        <thead>
             <tr>
-                <td colspan="3">{{ $item->menu->Nama_menu }}</td>
+                <th>Nama Pesanan</th>
+                <th>Kuantitas</th>
             </tr>
+        </thead>
+        <tbody>
+            @foreach ($detailpesanan as $item)
             <tr>
-                <td>{{ $item->jumlah }} x {{ format_uang(ceil($item->harga / 100) * 100) }}</td>
-                <td></td>
-                <td class="text-right">{{ format_uang($item->jumlah * ceil($item->harga / 100) * 100) }}</td>
+                <td>{{ $item->menu->Nama_menu }}</td>
+                <td>{{ $item->jumlah }} buah</td>
             </tr>
-        @endforeach
+            @endforeach
+        </tbody>
     </table>
     {{-- <p class="text-center">-----------------------------------</p> --}}
     <br>
@@ -157,10 +139,10 @@
             <td>Pajak:</td>
             <td class="text-right">Rp.{{ format_uang($pesanan->ppn) }}</td>
         </tr> --}}
-        <tr>
+        {{-- <tr>
             <td>Total:</td>
             <td class="text-right">Rp.{{ format_uang($order->totalharga + $pesanan->TotalBayar) }}</td>
-        </tr>
+        </tr> --}}
         {{-- <tr>
             <td>Diterima:</td>
             <td class="text-right">Rp.{{ format_uang($pesanan->Diterima) }}</td>
@@ -170,9 +152,9 @@
             <td class="text-right">Rp.{{ format_uang($pesanan->Kembali) }}</td>
         </tr> --}}
     </table>
-    <p class="text-center">===================================</p>
+    {{-- <p class="text-center">===================================</p>
 
-    <p class="text-center">-- TERIMA KASIH --</p>
+    <p class="text-center">-- TERIMA KASIH --</p> --}}
 
     <script>
         window.onload = function() {
