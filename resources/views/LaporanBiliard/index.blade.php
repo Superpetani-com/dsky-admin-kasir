@@ -40,7 +40,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-cetak"><i class="fa fa-book"></i> Cetak Laporan</button>
             </div>
             <div class="box-body table-responsive">
-                <table class="table table-stiped table-bordered" style="width:75%">
+                <table class="table table-stiped table-bordered" style="width:100%">
                     <thead>
                         <th width="5%">No</th>
                         <th>Tanggal</th>
@@ -49,7 +49,8 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
                         <th>Customer</th>
                         <!--th>Durasi</th-->
                         <th>TotalBayar</th>
-
+                        <th>Kasir</th>
+                        <th>Aksi</th>
                     </thead>
                 </table>
             </div>
@@ -87,6 +88,16 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
                 {data: 'Customer'},
                 //{data: 'TotalJam'},
                 {data: 'TotalBayar'},
+                {data: 'created_by'},
+                {
+                    "mData": "No.Order",
+                    "mRender": function (data, type, row) {
+                        if(data > 0) {
+                            return `<button class="button-aksi bg-black" onclick="printNota(${data})">PRINT</button>`
+                        }
+                        // return `<a href='{{ url('/pesanandetail/${data}') }}'>${data}</a>`;
+                    }
+                },
             ],
             dom: 'Brt',
             bSort: false,
@@ -103,10 +114,15 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
          });
     });
 
+    $.fn.dataTable.ext.errMode = 'none';
+
     function updatePeriode() {
         $('#modal-form').modal('show');
     }
-
+    function printNota(id) {
+        var urlcetak=(`{{url('orderbiliard')}}/cetak/${id}`);
+        cetak(urlcetak);
+    }
     function cetak(url, title) {
     popupCenter(url, title, 625, 500);
 

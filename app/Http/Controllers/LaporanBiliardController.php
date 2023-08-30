@@ -57,6 +57,7 @@ class LaporanBiliardController extends Controller
                 $row['Customer']    = $item->customer;
                 $row['TotalJam']    = $item->totaljam.'Jam';
                 $row['TotalBayar']  = 'Rp.'.format_uang($item->totalbayar);
+                $row['created_by']    = $item->created_by;
                 $data[] = $row;
                 }
             }
@@ -69,6 +70,7 @@ class LaporanBiliardController extends Controller
                 $row['Customer']    = '-';
                 $row['TotalJam']    = '-';
                 $row['TotalBayar']  = '-';
+                $row['created_by']  = '-';
                 $data[] = $row;
             }
 
