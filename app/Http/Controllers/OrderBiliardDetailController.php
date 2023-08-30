@@ -173,8 +173,8 @@ class OrderBiliardDetailController extends Controller
 
             // dd($mejabiliard->durasi);
             // dd($row, $item->subtotal, $mejabiliard, intval($mejabiliard->durasi));
-
-            if(intval($mejabiliard->durasi) <= 60 && intval($mejabiliard->durasi) != 0) {
+            // dd($item);
+            if(intval($mejabiliard->durasi) <= 60 && intval($mejabiliard->durasi) != 0 && $item->flag >0) {
                 // dd('masuk', $mejabiliard->durasi);
 
                 $row['subtotal'] = format_uang($item->harga);
