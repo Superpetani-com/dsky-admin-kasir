@@ -101,6 +101,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
             autoclose: true
         });
     });
+    $.fn.dataTable.ext.errMode = 'none';
 
     function updatePeriode() {
         $('#modal-form').modal('show');

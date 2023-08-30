@@ -158,13 +158,14 @@ class DataLampuController extends Controller
 
         $state = OrderBiliardDetail::whereIn('id_paket_biliard', $id_paket)->with('order', 'paket')->orderBy('id_order_biliard', 'desc')->get();
         foreach ($state as $item) {
-            $id_meja_biliard = $item->order->id_meja_biliard;
-            // dd($id_meja_biliard);
-            // Retrieve "meja" data using the ID
-            $meja = MejaBiliard::where('id_meja_biliard', '=', $id_meja_biliard)->get()[0];
+            // dd($item->order);
 
-            // Add $meja as a new property to the $item
-            $item->meja = $meja;
+            if($item->order) {
+                $id_meja_biliard = $item->order->id_meja_biliard;
+                $meja = MejaBiliard::where('id_meja_biliard', '=', $id_meja_biliard)->get()[0];
+
+                $item->meja = $meja;
+            }
         }
 
         return datatables()
