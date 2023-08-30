@@ -123,6 +123,7 @@ class OrderBiliardDetailController extends Controller
 
 
         foreach ($detail as $item) {
+            // dd($item);
             // dd($item['order']['id_meja_biliard']);
             $mejabiliard=mejabiliard::where('id_meja_biliard', $item['order']['id_meja_biliard'])->first();
 
@@ -146,7 +147,10 @@ class OrderBiliardDetailController extends Controller
             </div>
             </form>';
             }
+
+
             $row['subtotal']    = 'Rp. '. format_uang(ceil($item->subtotal / 1000) * 1000);
+
             if ($status2<>"Selesai"){
                 $row['aksi']        =  ' <div class="btn-group">
                                         <button onclick="deleteData(`'.route('orderbiliarddetail.destroy', $item->id_order_biliard_detail).'`)" class="btn btn-xs btn-danger btn-flat btn-hapus"><i class="fa fa-trash"></i> H</button>
@@ -168,17 +172,28 @@ class OrderBiliardDetailController extends Controller
             $total += $item->harga * $item->jumlah;
 
             // dd($mejabiliard->durasi);
-            if($mejabiliard->durasi <= 60) {
+            // dd($row, $item->subtotal, $mejabiliard, intval($mejabiliard->durasi));
+
+            if(intval($mejabiliard->durasi) <= 60 && intval($mejabiliard->durasi) != 0) {
+                // dd('masuk', $mejabiliard->durasi);
+
                 $row['subtotal'] = format_uang($item->harga);
                 $total = $item->harga;
             }
 
+            // dd($row['subtotal']);
+
+
+
+
             // dd($row);
+
             $row['menit']       = $item->menit;
             $row['seting']      = $item->seting;
             $row['durasi']      = $item->created_at;
             $row['sisadurasi']  = $mejabiliard['sisadurasi'] . ' Menit';
             $data[] = $row;
+
 
 
             $total_jam  += $item->jumlah;
@@ -252,6 +267,7 @@ class OrderBiliardDetailController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // dd($request);
         $detail=OrderBiliardDetail::with('paket')->find($id);
         $detail->jumlah=$request->jumlah;
         $detail->menit=$request->jumlah*$detail->paket['durasi'];
