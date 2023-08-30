@@ -82,7 +82,9 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
                 {
                     "mData": "No.Order",
                     "mRender": function (data, type, row) {
-                        return `<a href='{{ url('/pesanandetail/${data}') }}'>${data}</a>`;
+                        if(data > 0) {
+                            return `<a href='{{ url('/pesanandetail/${data}') }}'>${data}</a>`;
+                        }
                     }
                 },
                 {data: 'No.Meja'},
