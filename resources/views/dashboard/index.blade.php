@@ -319,7 +319,10 @@ h5 {
                         </a>
                         <button type="button" onclick="resetform2('{{route('mejabiliard.reset', $item->id_meja_biliard)}}', '{{$item->id_order_biliard}}','{{$item->flag}}')" class="button-aksi bg-red">SELESAI</button>
                         @elseif($item->status == 'Bayar' || $item->status == 'Warning')
-                            <button type="button" onclick="resetform2('{{route('mejabiliard.reset', $item->id_meja_biliard)}}', '{{$item->id_order_biliard}}','{{$item->flag}}')" class="button-aksi bg-blue">SELESAI</button>
+                            <a href="{{route('orderbiliarddetail.index2', $item->id_order_biliard)}}">
+                                <button class="button-aksi bg-blue">TAMBAH</button>
+                            </a>
+                            <button type="button" onclick="resetform2('{{route('mejabiliard.reset', $item->id_meja_biliard)}}', '{{$item->id_order_biliard}}','{{$item->flag}}')" class="button-aksi bg-red">SELESAI</button>
                         @endif
                         </div>
                     </div>
