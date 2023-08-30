@@ -174,8 +174,21 @@ class LaporanController extends Controller
     public function exportPDF($awal, $akhir)
     {
         $data = $this->getData($awal, $akhir);
-        $pdf  = PDF::loadView('Laporan.pdf', compact('awal', 'akhir', 'data'));
-        $pdf->setPaper('a4', 'potrait');
+
+        foreach ($data as &$subarray) {
+            $totalBiliard = intval(str_replace('.', '', $subarray['total_biliard']));
+            $totalCafe = intval(str_replace('.', '', $subarray['total_cafe']));
+            $totalAll = $totalBiliard + $totalCafe;
+            $subarray['total_all'] = number_format($totalAll, 0, ',', '.');;
+        }
+
+        $pdf = PDF::loadView('laporan', [
+            'awal' => $awal,
+            'akhir' => $akhir,
+            'data' => $data
+        ]);
+
+        $pdf->setPaper('a4', 'landscape');
 
         return $pdf->stream('Laporan-pendapatan-'. date('Y-m-d-his') .'.pdf');
     }
