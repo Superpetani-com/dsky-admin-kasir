@@ -79,89 +79,6 @@ class LaporanController extends Controller
         return $data;
     }
 
-    // public function getData($awal, $akhir, $filterDate = null)
-    // {
-    //     // $awal = date('Y-m-d', strtotime("+1 day", strtotime($awal)));
-    //     // dd($awal);
-    //     $targetTime = '03:00:00'; // Target time until 03:00 AM
-
-    //     $order_billiard = DB::table('order_biliard')
-    //     ->select(
-    //         DB::raw("DATE_SUB(CASE WHEN created_at >= CONCAT(CURDATE(), ' $targetTime') THEN DATE(created_at) ELSE DATE_SUB(DATE(created_at), INTERVAL 0 DAY) END, INTERVAL 0 DAY) AS order_date"),
-    //         DB::raw('SUM(totalbayar) AS total_sum')
-    //     )
-    //     ->groupBy('order_date');
-
-    //     // Get the query result as an array
-    //     $queryResult = $order_billiard->get()->toArray();
-    //     // dd($queryResult);
-    //     $pesanan = DB::table('pesanan')
-    //     ->select(
-    //         DB::raw("DATE_SUB(CASE WHEN created_at >= CONCAT(CURDATE(), ' $targetTime') THEN DATE(created_at) ELSE DATE_SUB(DATE(created_at), INTERVAL 0 DAY) END, INTERVAL 0 DAY) AS order_date"),
-    //         DB::raw('SUM(TotalBayar) AS total_sum')
-    //     )
-    //     ->groupBy('order_date');
-
-    //     $pesananResult = $pesanan->get()->toArray();
-
-    //     $queryCount = count($queryResult);
-    //     $pesananCount = count($pesananResult);
-    //     $maxCount = max($queryCount, $pesananCount);
-
-    //     for ($i = 0; $i < $maxCount; $i++) {
-    //         // Check if the current index is within bounds for both arrays
-    //         $queryDate = ($i < $queryCount) ? $queryResult[$i]->order_date : null;
-    //         $pesananDate = ($i < $pesananCount) ? $pesananResult[$i]->order_date : null;
-
-    //         if ($queryDate === $pesananDate) {
-    //             $queryResult[$i]->total_sum_cafe = $pesananResult[$i]->total_sum;
-    //         } else {
-    //             $queryResult[$i]->total_sum_cafe = 0;
-    //         }
-    //     }
-
-    //     $filteredArray = Arr::where($queryResult, function ($value, $key) use ($awal, $akhir) {
-    //         $orderDate = $value->order_date;
-    //         return $orderDate >= $awal && $orderDate <= $akhir;
-    //     });
-
-    //     $totalSum = 0;
-    //     $totalPesanan = 0;
-    //     foreach ($filteredArray as $record) {
-    //         $totalSum += $record->total_sum;
-    //         $totalPesanan += $record->total_sum_cafe;
-    //     }
-
-
-    //     $response = [];
-    //     $index = 1;
-    //     foreach ($filteredArray as $record) {
-    //         $response[] = [
-    //             "DT_RowIndex" => $index,
-    //             "tanggal" => $record->order_date,
-    //             "total_biliard" => format_uang($record->total_sum),
-    //             "total_cafe" => format_uang($record->total_sum_cafe),
-    //         ];
-    //         $index++;
-    //     }
-
-    //     $response[] = [
-    //         'DT_RowIndex' => '',
-    //         'tanggal' => 'Sub Total',
-    //         'total_biliard' => format_uang($totalSum),
-    //         'total_cafe' => format_uang($totalPesanan),
-    //     ];
-
-    //     $response[] = [
-    //         'DT_RowIndex' => '',
-    //         'tanggal' => '',
-    //         'total_biliard' => 'Total Pendapatan',
-    //         'total_cafe' => format_uang($totalSum + $totalPesanan),
-    //     ];
-
-    //     return $response;
-    // }
-
     public function data($awal, $akhir)
     {
         $data = $this->getData($awal, $akhir);
@@ -191,6 +108,116 @@ class LaporanController extends Controller
         $pdf->setPaper('a4', 'landscape');
 
         return $pdf->stream('Laporan-pendapatan-'. date('Y-m-d-his') .'.pdf');
+    }
+
+    public function indexTransfer(Request $request)
+    {
+        $tanggalAwal = date('Y-m-d', mktime(0, 0, 0, date('m'), 1, date('Y')));
+        $tanggalAkhir = date('Y-m-d');
+
+        if ($request->has('tanggal_awal') && $request->tanggal_awal != "" && $request->has('tanggal_akhir') && $request->tanggal_akhir) {
+            $tanggalAwal = $request->tanggal_awal;
+            $tanggalAkhir = $request->tanggal_akhir;
+        }
+
+        return view('laporan.transfer', compact('tanggalAwal', 'tanggalAkhir'));
+    }
+
+    public function getTransferData($awal, $akhir)
+    {
+        $no = 1;
+        $data = array();
+        $total_pendapatan = 0;
+        $total_biliards = 0;
+        $total_cafes = 0;
+        $total_biliards_all = 0;
+        $total_cafes_all = 0;
+
+        $total_biliards_all_cash = 0;
+        $total_biliards_all_tf = 0;
+
+        $total_cafes_all_cash = 0;
+        $total_cafes_all_tf = 0;
+
+        // Convert string dates to DateTime objects
+        $awalDate = new DateTime($awal);
+        $akhirDate = new DateTime($akhir);
+
+        // Initialize $awal and $akhir to start and end of the specified dates
+        $awal = $awalDate->format('Y-m-d 09:00:00');
+        $akhir = $akhirDate->format('Y-m-d 04:00:00');
+
+        // dd($awal, $akhir);
+
+        while ($awalDate <= $akhirDate) {
+            $tanggal = $awalDate->format('Y-m-d');
+            $tanggalSelanjutnya = $awalDate->format('Y-m-d');
+
+            // Move to the next day
+            $awalDate->modify('+1 day');
+
+            // \DB::enableQueryLog();
+            $total_biliard_cash = OrderBiliard::where('customer',  'not like', '%tf%')->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('totalbayar');
+            $total_biliard_tf = OrderBiliard::where('customer',  'like', '%tf%')->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('totalbayar');
+
+            $total_cafe_cash = Pesanan::whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->where('customer',  'not like', '%tf%')->sum('TotalBayar');
+            $total_cafe_tf = Pesanan::whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->where('customer',  'like', '%tf%')->sum('TotalBayar');
+
+            // dd(\DB::getQueryLog());
+
+            $total_biliards = $total_biliard_cash + $total_biliard_tf;
+            $total_cafes = $total_cafe_cash + $total_cafe_tf;
+
+            $pendapatan = $total_biliards + $total_cafes;
+            $total_pendapatan += $pendapatan;
+
+            $total_biliards_all += $total_biliards;
+            $total_cafes_all += $total_cafes;
+
+            $total_biliards_all_cash += $total_biliard_cash;
+            $total_biliards_all_tf += $total_biliard_tf;
+
+
+            $total_cafes_all_cash += $total_cafe_cash;
+            $total_cafes_all_tf += $total_cafe_tf;
+
+            $row = array();
+            $row['DT_RowIndex'] = $no++;
+            $row['tanggal'] = tanggal_indonesia($tanggal, false);
+            $row['total_biliard_cash'] = format_uang($total_biliard_cash);
+            $row['total_biliard_tf'] = format_uang($total_biliard_tf);
+            $row['total_biliard'] = format_uang($total_biliards);
+            $row['total_cafe_cash'] = format_uang($total_cafe_cash);
+            $row['total_cafe_tf'] = format_uang($total_cafe_tf);
+            $row['total_cafe'] = format_uang($total_cafes);
+
+            $data[] = $row;
+
+
+        }
+
+        $data[] = [
+            'DT_RowIndex' => '',
+            'tanggal' => 'Total Pendapatan',
+            'total_biliard_cash' => format_uang($total_biliards_all_cash),
+            'total_biliard_tf' => format_uang($total_biliards_all_tf),
+            'total_biliard' => format_uang($total_biliards_all),
+            'total_cafe_cash' => format_uang($total_cafes_all_cash),
+            'total_cafe_tf' => format_uang($total_cafes_all_tf),
+            'total_cafe' => format_uang($total_cafes_all),
+            'total_all' => format_uang($total_pendapatan),
+        ];
+
+        return $data;
+    }
+
+    public function dataTransfer($awal, $akhir)
+    {
+        $data = $this->getTransferData($awal, $akhir);
+
+        return datatables()
+            ->of($data)
+            ->make(true);
     }
 
 }
