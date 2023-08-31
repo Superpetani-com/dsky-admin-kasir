@@ -77,7 +77,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
     box-shadow: 3px 3px 10px 0px rgba(0, 0, 0, 0.20);
     /* height: 260px; */
     /* max-height: 260px; */
-    width: 190px;
+    width: 140px;
 }
 
 .card-cafe {
@@ -111,10 +111,11 @@ h5 {
 }
 
 .button-aksi {
-    height: 30px;
+    height: 22px;
     border: none;
     border-radius: 4px;
-    font-size: 12px;
+    font-size: 10px;
+    padding: 2px !important;
 }
 
 .bg-black {
@@ -161,10 +162,14 @@ h5 {
     gap: 10px; /* Adds spacing between grid items */
 }
 
+h1 {
+    font-size: 24px;
+}
+
 /* Media query for screens smaller than 1200px */
 @media (max-width: 1200px) {
     .grid-container {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(6, 1fr);
         gap: 15px;
     }
 }
@@ -172,7 +177,7 @@ h5 {
 /* Media query for screens smaller than 992px */
 @media (max-width: 992px) {
     .grid-container {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(4, 1fr);
         gap: 10px;
     }
 }
@@ -180,7 +185,7 @@ h5 {
 /* Media query for screens smaller than 768px */
 @media (max-width: 768px) {
     .grid-container {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(4, 1fr);
         gap: 8px;
     }
 }
@@ -188,7 +193,7 @@ h5 {
 /* Media query for screens smaller than 576px */
 @media (max-width: 576px) {
     .grid-container {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
         gap: 5px;
     }
 }
@@ -196,7 +201,7 @@ h5 {
 /* Media query for screens smaller than 480px */
 @media (max-width: 480px) {
     .grid-container {
-        grid-template-columns: 1fr; /* Single column for the smallest screens */
+        grid-template-columns: repeat(2, 1fr); /* Single column for the smallest screens */
         gap: 5px; /* Further reduce gap for smallest screens */
     }
 }
@@ -319,12 +324,12 @@ h5 {
                         <a href="{{route('orderbiliarddetail.index2', $item->id_order_biliard)}}">
                             <button class="button-aksi bg-blue">TAMBAH</button>
                         </a>
-                        <button type="button" onclick="resetform2('{{route('mejabiliard.reset', $item->id_meja_biliard)}}', '{{$item->id_order_biliard}}','{{$item->flag}}')" class="button-aksi bg-red">SELESAI</button>
+                        <button type="button" onclick="resetform2('{{route('mejabiliard.reset', $item->id_meja_biliard)}}', '{{$item->id_order_biliard}}','{{$item->flag}}')" class="button-aksi bg-white">SELESAI</button>
                         @elseif($item->status == 'Bayar' || $item->status == 'Warning')
                             <a href="{{route('orderbiliarddetail.index2', $item->id_order_biliard)}}">
-                                <button class="button-aksi bg-blue">TAMBAH</button>
+                                <button type="button" class="button-aksi bg-blue">TAMBAH</button>
                             </a>
-                            <button type="button" onclick="resetform2('{{route('mejabiliard.reset', $item->id_meja_biliard)}}', '{{$item->id_order_biliard}}','{{$item->flag}}')" class="button-aksi bg-red">SELESAI</button>
+                            <button type="button" onclick="resetform2('{{route('mejabiliard.reset', $item->id_meja_biliard)}}', '{{$item->id_order_biliard}}','{{$item->flag}}')" class="button-aksi bg-white">SELESAI</button>
                         @endif
                         </div>
                     </div>
