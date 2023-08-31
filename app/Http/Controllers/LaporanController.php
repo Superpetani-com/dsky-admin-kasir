@@ -160,8 +160,8 @@ class LaporanController extends Controller
             $total_biliard_cash = OrderBiliard::where('customer',  'not like', '%tf%')->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('totalbayar');
             $total_biliard_tf = OrderBiliard::where('customer',  'like', '%tf%')->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('totalbayar');
 
-            $total_cafe_cash = Pesanan::whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->where('customer',  'not like', '%tf%')->sum('TotalBayar');
-            $total_cafe_tf = Pesanan::whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->where('customer',  'like', '%tf%')->sum('TotalBayar');
+            $total_cafe_cash = Pesanan::where('customer',  'not like', '%tf%')->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('TotalBayar');
+            $total_cafe_tf = Pesanan::where('customer',  'like', '%tf%')->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('TotalBayar');
 
             // dd(\DB::getQueryLog());
 
@@ -192,8 +192,6 @@ class LaporanController extends Controller
             $row['total_cafe'] = format_uang($total_cafes);
 
             $data[] = $row;
-
-
         }
 
         $data[] = [
