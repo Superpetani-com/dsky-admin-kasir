@@ -97,6 +97,8 @@ Route::group(['middleware'=>'auth'], function(){
     Route::resource('/mejabiliard',MejaBiliardController::class);
 
     Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
+    Route::get('/laporan/transfer', [LaporanController::class, 'indexTransfer'])->name('laporan.indextransfer');
+    Route::get('/laporan/data-transfer/{awal}/{akhir}', [LaporanController::class, 'dataTransfer'])->name('laporan.dataTransfer');
     Route::get('/laporan/data/{awal}/{akhir}', [LaporanController::class, 'data'])->name('laporan.data');
     Route::get('/laporan/pdf/{awal}/{akhir}', [LaporanController::class, 'exportPDF'])->name('laporan.export_pdf');
 

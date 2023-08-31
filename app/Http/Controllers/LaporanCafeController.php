@@ -87,6 +87,8 @@ class LaporanCafeController extends Controller
                 $row['Customer']    = '-';
                 $row['TotalItem']    = '-';
                 $row['TotalBayar']  = '-';
+                $row['menus']  = '-';
+                $row['created_by']  = '-';
                 $data[] = $row;
             }
         }
@@ -97,8 +99,10 @@ class LaporanCafeController extends Controller
             'No.Order' => ' ',
             'No.Meja' => ' ',
             'Customer' => ' ',
-            'TotalItem' => 'TotalPendapatan ',
-            'TotalBayar' => 'Rp.'.format_uang($total_pendapatan),
+            'TotalItem' => ' ',
+            'TotalBayar' => ' ',
+            'menus' => 'Total Pendapatan ',
+            'created_by' => 'Rp.'.format_uang($total_pendapatan),
         ];
 
         return $data;
@@ -115,8 +119,20 @@ class LaporanCafeController extends Controller
     public function exportPDFcafe($awal, $akhir)
     {
         $data = $this->getDatacafe($awal, $akhir);
-        $pdf  = PDF::loadView('LaporanCafe.pdf', compact('awal', 'akhir', 'data'));
-        $pdf->setPaper('a4', 'potrait');
+
+        foreach ($data as &$item) {
+            if (isset($item['menus']) && is_array($item['menus'])) {
+                $item['menus'] = implode(', ', $item['menus']);
+            }
+        }
+
+        $pdf = PDF::loadView('laporankafe', [
+            'awal' => $awal,
+            'akhir' => $akhir,
+            'data' => $data
+        ]);
+
+        $pdf->setPaper('a4', 'landscape');
 
         return $pdf->stream('Laporan-pendapatan-cafe-'. date('Y-m-d-his') .'.pdf');
     }

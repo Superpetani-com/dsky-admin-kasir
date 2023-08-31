@@ -51,7 +51,13 @@
               <i class="fa fa-file-text-o"></i> <span>Report Biliard</span>
               </span>
             </a>
-          </li>
+        </li>
+        <li>
+            <a href="{{route('laporan.indextransfer')}}">
+              <i class="fa fa-file-text-o"></i> <span>Report Transfer</span>
+              </span>
+            </a>
+        </li>
         {{-- <li class="header">CAFE</li> --}}
 
 
