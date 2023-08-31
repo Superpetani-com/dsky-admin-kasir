@@ -77,7 +77,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
     box-shadow: 3px 3px 10px 0px rgba(0, 0, 0, 0.20);
     /* height: 260px; */
     /* max-height: 260px; */
-    width: 140px;
+    width: 100%;
 }
 
 .card-cafe {
@@ -157,9 +157,10 @@ h5 {
 
 .grid-container {
     margin-left: 10px;
+    margin-right: 10px;
     display: grid;
     grid-template-columns: repeat(8, 1fr); /* Creates 5 equal-width columns */
-    gap: 10px; /* Adds spacing between grid items */
+    gap: 12px; /* Adds spacing between grid items */
 }
 
 h1 {
