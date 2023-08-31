@@ -157,7 +157,7 @@ h5 {
 }
 
 .grid-container {
-    margin-left: 10px;
+    /* margin-left: 10px; */
     margin-right: 10px;
     display: grid;
     grid-template-columns: repeat(8, 1fr); /* Creates 5 equal-width columns */
