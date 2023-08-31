@@ -108,6 +108,7 @@ h3 {
 h5 {
     font-weight: bold;
     color: #000;
+    padding: 0px !important;
 }
 
 .button-aksi {
@@ -287,7 +288,7 @@ h5 {
                     @elseif($item->status == 'Bayar')
                         {{ 'WAKTU HABIS' }}
                     @elseif($item->status == 'Warning')
-                        {{ 'SEGERA SELESAI' }}
+                        {{ 'SEGERA SELESE' }}
                     @else
                         {{ 'KOSONG' }}
                     @endif
