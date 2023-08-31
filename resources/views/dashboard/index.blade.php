@@ -77,6 +77,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
     box-shadow: 3px 3px 10px 0px rgba(0, 0, 0, 0.20);
     /* height: 260px; */
     /* max-height: 260px; */
+    width: 190px;
 }
 
 .card-cafe {
@@ -113,6 +114,7 @@ h5 {
     height: 30px;
     border: none;
     border-radius: 4px;
+    font-size: 12px;
 }
 
 .bg-black {
@@ -155,8 +157,8 @@ h5 {
 .grid-container {
     margin-left: 10px;
     display: grid;
-    grid-template-columns: repeat(5, 1fr); /* Creates 5 equal-width columns */
-    gap: 20px; /* Adds spacing between grid items */
+    grid-template-columns: repeat(8, 1fr); /* Creates 5 equal-width columns */
+    gap: 10px; /* Adds spacing between grid items */
 }
 
 /* Media query for screens smaller than 1200px */
@@ -252,7 +254,7 @@ h5 {
       </div>
 
       <div class="row">
-          <div class="col-md-8 grid-container">
+          <div class="col-md-12 grid-container">
             @foreach ($mejabiliard as $key=>$item)
               <div class="grid-item">
                 <div class="
@@ -342,20 +344,20 @@ h5 {
 
           </div>
 
-          <div class="col-md-3">
+          {{-- <div class="col-md-3">
             <div class="box-body table-responsive">
               <table class="table table-meja table-striped table-bordered table-meja">
                 <thead>
                   <th>Meja</th>
-                  {{-- <th>Customer</th> --}}
-                  {{-- <th>Bayar</th> --}}
-                  {{-- <th>Order</th> --}}
+                  <th>Customer</th>
+                  <th>Bayar</th>
+                  <th>Order</th>
                   <th>Status</th>
                 </thead>
 
               </table>
             </div>
-          </div>
+          </div> --}}
 
           {{-- <div class="col-md-3">
             <div class="row">

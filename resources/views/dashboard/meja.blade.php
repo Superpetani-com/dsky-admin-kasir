@@ -33,7 +33,7 @@
                 {{$item->pesanan['customer']}}
               @endif
               </td>
-              <td width=20%><div  class="{{$item->Status}}">{{$item->Status}}</div></td>
+              <td width=20%><div class="{{$item->Status}}">  <a style="color: white;" href="{{ url('/pesanandetail/').'/'.$item->Id_pesanan }}"> {{$item->Status}}</a></div></td>
               <td width=15%>
                 <a href="{{route ('pesanan.create', $item->id_meja)}}" class="btn btn-primary btn-sm btn-flat btn-{{$item->Status}}">
                   <i class="fa fa-check-circle"></i>  Pilih
