@@ -288,7 +288,7 @@ h5 {
                     @elseif($item->status == 'Bayar')
                         {{ 'WAKTU HABIS' }}
                     @elseif($item->status == 'Warning')
-                        {{ 'SEGERA SELESE' }}
+                        {{ 'SEGERA SELESAI' }}
                     @else
                         {{ 'KOSONG' }}
                     @endif

@@ -128,7 +128,12 @@ class MejaBiliardController extends Controller
             if(strtotime("now")>strtotime($item->jamselesai)){
 
             if ($item->id_order_biliard!=0 and $item->flag == 0 ){
+                // dd($item);
                 $item->status = "Bayar";
+
+                if($item->status == "Bayar") {
+                    $this->reset($item->id_meja_biliard);
+                }
                 //$order = orderbiliard::findOrFail($item->id_order_biliard);
                 //$order->status="Selesai";
                 //$order->update();
