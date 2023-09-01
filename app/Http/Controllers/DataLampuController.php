@@ -39,7 +39,7 @@ class DataLampuController extends Controller
         }
         $state = MejaBiliard::where('id_meja_biliard', '=', $request->id_meja)->first();
         if($state) {
-            if($state->status != "Dipakai" && $request->duration > 120) {
+            if(($state->status != "Dipakai" || $state->status != "Warning") && $request->duration > 120) {
                 // jika meja tidak sedang dipakai tapi lampu nyala, insert log
                 $meja = new LogSensor();
 
@@ -62,6 +62,10 @@ class DataLampuController extends Controller
 
             if($state->status == "Dipakai") {
                 return response()->json(['code' => 500, 'message'=> 'Meja Sedang Dipakai', 'data' => []], 500);
+            }
+
+            if($state->status == "Warning") {
+                return response()->json(['code' => 500, 'message'=> 'Meja Sedang Dipakai [Warning]', 'data' => []], 500);
             }
 
             if($request->duration < 120) {
