@@ -101,6 +101,8 @@ Route::group(['middleware'=>'auth'], function(){
     Route::get('/laporan/data-transfer/{awal}/{akhir}', [LaporanController::class, 'dataTransfer'])->name('laporan.dataTransfer');
     Route::get('/laporan/data/{awal}/{akhir}', [LaporanController::class, 'data'])->name('laporan.data');
     Route::get('/laporan/pdf/{awal}/{akhir}', [LaporanController::class, 'exportPDF'])->name('laporan.export_pdf');
+    Route::get('/laporan/excel/{awal}/{akhir}', [LaporanController::class, 'exportExcel'])->name('laporan.export_excel');
+
 
     Route::get('/laporan/barang', [LaporanController::class, 'indexBarang'])->name('laporan.indexBarang');
     Route::get('/laporan/data-barang/{awal}/{akhir}', [LaporanController::class, 'dataBarang'])->name('laporan.dataBarang');

@@ -27,8 +27,12 @@
         <thead>
             <tr>
                 <th width="5%">No</th>
-                <th width="15%">Tanggal</th>
+                <th>Tanggal</th>
+                <th>Penjualan Biliard (Cash)</th>
+                <th>Penjualan Biliard (Tf)</th>
                 <th>Penjualan Biliard</th>
+                <th>Penjualan Cafe (Cash)</th>
+                <th>Penjualan Cafe (Tf)</th>
                 <th>Penjualan Cafe</th>
                 <th>Total Penjualan</th>
             </tr>

@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Rap2hpoutre\FastExcel\FastExcel;
+use App\Exports\UsersExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class LaporanController extends Controller
 {
@@ -92,7 +95,7 @@ class LaporanController extends Controller
 
     public function exportPDF($awal, $akhir)
     {
-        $data = $this->getData($awal, $akhir);
+        $data = $this->getTransferData($awal, $akhir);
 
         foreach ($data as &$subarray) {
             $totalBiliard = intval(str_replace('.', '', $subarray['total_biliard']));
@@ -110,6 +113,13 @@ class LaporanController extends Controller
         $pdf->setPaper('a4', 'landscape');
 
         return $pdf->stream('Laporan-pendapatan-'. date('Y-m-d-his') .'.pdf');
+    }
+
+    public function exportExcel($awal, $akhir)
+    {
+        ob_end_clean();
+        ob_start();
+        return Excel::download(new UsersExport($awal, $akhir), 'users.xlsx');
     }
 
     public function indexTransfer(Request $request)
