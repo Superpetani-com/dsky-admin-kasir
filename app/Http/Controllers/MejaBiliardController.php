@@ -128,7 +128,6 @@ class MejaBiliardController extends Controller
             if(strtotime("now")>strtotime($item->jamselesai)){
 
             if ($item->id_order_biliard!=0 and $item->flag == 0 ){
-                // dd($item);
                 $item->status = "Bayar";
 
                 if($item->status == "Bayar") {

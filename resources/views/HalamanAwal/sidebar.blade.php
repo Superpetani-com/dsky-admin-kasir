@@ -35,7 +35,7 @@
           </li>
           <li class="header">REPORT</li>
         <li>
-          <a href="{{route('laporan.index')}}">
+          <a href="{{route('laporan.indextransfer')}}">
             <i class="fa fa-file-pdf-o"></i> <span>Report Singkat</span>
             </span>
           </a>
@@ -55,6 +55,12 @@
         <li>
             <a href="{{route('laporan.indextransfer')}}">
               <i class="fa fa-file-text-o"></i> <span>Report Transfer</span>
+              </span>
+            </a>
+        </li>
+        <li>
+            <a href="{{route('laporan.indexBarang')}}">
+              <i class="fa fa-file-text-o"></i> <span>Report Barang</span>
               </span>
             </a>
         </li>

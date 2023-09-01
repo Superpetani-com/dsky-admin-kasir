@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use App\Models\OrderBiliard;
 use App\Models\Pesanan;
+use App\Models\PesananDetail;
+use App\Models\Menu;
 use PDF;
 use DateTime;
 use Illuminate\Support\Facades\DB;
@@ -123,6 +125,19 @@ class LaporanController extends Controller
         return view('laporan.transfer', compact('tanggalAwal', 'tanggalAkhir'));
     }
 
+    public function indexBarang(Request $request)
+    {
+        $tanggalAwal = date('Y-m-d', mktime(0, 0, 0, date('m'), 1, date('Y')));
+        $tanggalAkhir = date('Y-m-d');
+
+        if ($request->has('tanggal_awal') && $request->tanggal_awal != "" && $request->has('tanggal_akhir') && $request->tanggal_akhir) {
+            $tanggalAwal = $request->tanggal_awal;
+            $tanggalAkhir = $request->tanggal_akhir;
+        }
+
+        return view('laporan.barang', compact('tanggalAwal', 'tanggalAkhir'));
+    }
+
     public function getTransferData($awal, $akhir)
     {
         $no = 1;
@@ -202,9 +217,53 @@ class LaporanController extends Controller
             'total_biliard' => format_uang($total_biliards_all),
             'total_cafe_cash' => format_uang($total_cafes_all_cash),
             'total_cafe_tf' => format_uang($total_cafes_all_tf),
-            'total_cafe' => format_uang($total_cafes_all),
-            'total_all' => format_uang($total_pendapatan),
+            'total_cafe' => format_uang(ceil($total_cafes_all / 1000) * 1000),
+            'total_all' => format_uang(ceil($total_pendapatan / 1000) * 1000),
         ];
+
+        return $data;
+    }
+
+    public function getBarangData($awal, $akhir)
+    {
+        $no = 1;
+        $data = array();
+        $total_pendapatan = 0;
+
+        // Convert string dates to DateTime objects
+        $awalDate = new DateTime($awal);
+        $akhirDate = new DateTime($akhir);
+
+        // Initialize $awal and $akhir to start and end of the specified dates
+        $awal = $awalDate->format('Y-m-d 09:00:00');
+        $akhir = $akhirDate->format('Y-m-d 04:00:00');
+
+        // dd($awal, $akhir);
+
+        while ($awalDate <= $akhirDate) {
+            $tanggal = $awalDate->format('Y-m-d');
+            $tanggalSelanjutnya = $awalDate->format('Y-m-d');
+
+            // Move to the next day
+            $awalDate->modify('+1 day');
+
+            $pesanan = PesananDetail::select('id_menu', DB::raw('SUM(jumlah) as total_jumlah'))
+                ->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])
+                ->groupBy('id_menu')
+                ->orderBy('total_jumlah', 'desc')
+                ->get();
+
+            foreach ($pesanan as $item) {
+                $row = array();
+                $menu = Menu::where('Id_menu', '=', $item->id_menu)->first();
+
+                $row['DT_RowIndex'] = $no++;
+                $row['tanggal'] = tanggal_indonesia($tanggal, false);
+                $row['nama_menu'] = $menu->Nama_menu;
+                $row['kuantitas'] = $item->total_jumlah;
+                $data[] = $row;
+            }
+        }
 
         return $data;
     }
@@ -212,6 +271,15 @@ class LaporanController extends Controller
     public function dataTransfer($awal, $akhir)
     {
         $data = $this->getTransferData($awal, $akhir);
+
+        return datatables()
+            ->of($data)
+            ->make(true);
+    }
+
+    public function dataBarang($awal, $akhir)
+    {
+        $data = $this->getBarangData($awal, $akhir);
 
         return datatables()
             ->of($data)

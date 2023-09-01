@@ -1,7 +1,7 @@
 @extends('HalamanAwal.master')
 
 @section('title')
-    Laporan Pendapatan {{ tanggal_indonesia($tanggalAwal, false) }} s/d {{ tanggal_indonesia($tanggalAkhir, false) }}
+    Laporan Barang {{ tanggal_indonesia($tanggalAwal, false) }} s/d {{ tanggal_indonesia($tanggalAkhir, false) }}
 @endsection
 
 @push('css')
@@ -23,7 +23,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
 
 @section('breadcrumb')
     @parent
-    <li class="active">Laporan Pendapatan</li>
+    <li class="active">Laporan Barang</li>
 @endsection
 
 @section('content')
@@ -39,13 +39,8 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
                     <thead>
                         <th width="5%">No</th>
                         <th>Tanggal</th>
-                        <th>Penjualan Biliard (Cash)</th>
-                        <th>Penjualan Biliard (Tf)</th>
-                        <th>Penjualan Biliard</th>
-                        <th>Penjualan Cafe (Cash)</th>
-                        <th>Penjualan Cafe (Tf)</th>
-                        <th>Penjualan Cafe</th>
-                        <th>Total Penjualan</th>
+                        <th>Nama Menu</th>
+                        <th>Kuantitas</th>
                     </thead>
                 </table>
             </div>
@@ -53,7 +48,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
     </div>
 </div>
 
-@includeIf('Laporan.form-transfer')
+@includeIf('Laporan.form-barang')
 @endsection
 
 @push('scripts')
@@ -70,28 +65,13 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
             serverSide: true,
             autoWidth: false,
             ajax: {
-                url: '{{ route('laporan.dataTransfer', [$tanggalAwal, $tanggalAkhir]) }}',
+                url: '{{ route('laporan.dataBarang', [$tanggalAwal, $tanggalAkhir]) }}',
             },
             columns: [
                 {data: 'DT_RowIndex', searchable: false, sortable: false},
                 {data: 'tanggal'},
-                {data: 'total_biliard_cash'},
-                {data: 'total_biliard_tf'},
-                {data: 'total_biliard'},
-                {data: 'total_cafe_cash'},
-                {data: 'total_cafe_tf'},
-                {data: 'total_cafe'},
-                {
-                    data: null,
-                    render: function (data, type, row) {
-                        console.log(parseInt(data.total_biliard.split('.').join('')))
-                        var total_biliard = parseInt(data.total_biliard.split('.').join('')); // Convert to numeric
-                        var total_cafe = parseInt(data.total_cafe.split('.').join('')); // Convert to numeric
-                        var total_all = total_biliard + total_cafe;
-
-                        return formatIDR(total_all); // Format as currency
-                    }
-                }
+                {data: 'nama_menu'},
+                {data: 'kuantitas'},
             ],
             dom: 'Brt',
             bSort: false,
@@ -105,7 +85,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
     });
 
     function updatePeriode() {
-        $('#modal-form-transfer').modal('show');
+        $('#modal-form-barang').modal('show');
     }
 </script>
 @endpush
