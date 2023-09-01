@@ -21,7 +21,7 @@ class DataLampuController extends Controller
         $state=MejaBiliard::orderBy('id_meja_biliard')->get();
         $x=0;
         foreach ($state as $item) {
-            if ($item->status=="Dipakai"){
+            if ($item->status=="Dipakai" || $item->status=="Warning"){
                 $data[$x] = 1;
             }
             else{
