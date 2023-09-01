@@ -534,13 +534,9 @@
      let id=$(this).data('id');
      let jumlah=($(this).val());
      let dataexist = $(this).attr('max');
-     console.log(jumlah,id,'asdnaks')
+     console.log(jumlah,dataexist,'asdnaks')
 
-     if(jumlah < dataexist) {
-        alert('Jumlah tidak boleh kurang dari angka awal');
-        $(this).val(dataexist);
-        return;
-     }
+
      if(jumlah<0.00){
         alert('Jumlah tidak boleh kurang dari 0.00');
         $(this).val(0.05);
@@ -558,7 +554,7 @@
       'jumlah':jumlah
      })
      .done(response=>{
-         console.log(response, 'aksndaknd');
+        console.log(response, 'aksndaknd');
         loadform($('#diskon').val(), $('#diterima').val());
         table3.ajax.reload();
         table.ajax.reload();

@@ -11,6 +11,8 @@ use App\Models\PesananDetail;
 use App\Models\Meja;
 use App\Models\Pesanan;
 use App\Models\Menu;
+use DateTime;
+use DateInterval;
 
 class OrderBiliardDetailController extends Controller
 {
@@ -253,6 +255,18 @@ class OrderBiliardDetailController extends Controller
     {
         // dd($request);
         $detail=OrderBiliardDetail::with('paket')->find($id);
+        $order = OrderBiliard::where('id_order_biliard', '=', $detail->id_order_biliard)->first();
+        // dd($order);
+        $mejabiliard = mejabiliard::where('id_meja_biliard', $order->id_meja_biliard)->first();
+        $baru_main_berapa_menit = intval($detail->menit) - intval($mejabiliard->sisadurasi);
+        $jumlah_menit_request_main = floatval($request->jumlah) * intval($detail->menit);
+
+        // dd(intval($jumlah_menit_request_main) < $baru_main_berapa_menit);
+        if(intval($jumlah_menit_request_main) < $baru_main_berapa_menit) {
+            // $detail->delete();
+            return response('failed delete', 500);
+        }
+        // dd($baru_main_berapa_menit);
         $detail->jumlah=$request->jumlah;
         $detail->menit=$request->jumlah*$detail->paket['durasi'];
         $detail->subtotal=$detail->harga*$request->jumlah;
@@ -269,7 +283,16 @@ class OrderBiliardDetailController extends Controller
     {
         $detail = OrderBiliardDetail::find($id);
         $isDeleted = false;
-        // $orderAll = OrderBiliardDetail::where('id_order_biliard', $detail->id_order_biliard)->get();
+        // dd($detail);
+        $order = OrderBiliard::where('id_order_biliard', '=', $detail->id_order_biliard)->first();
+        // dd($order);
+        $mejabiliard = mejabiliard::where('id_meja_biliard', $order->id_meja_biliard)->first();
+        $baru_main_berapa_menit = intval($detail->menit) - intval($mejabiliard->sisadurasi);
+        // dd($baru_main_berapa_menit < 2);
+        if($baru_main_berapa_menit < 2) {
+            $detail->delete();
+            return response(null, 204);
+        }
 
         $valueToCheck = $detail->menit; // The value you want to check
         $columnToCheck = 'menit'; // The column in which you want to check the maximum value
