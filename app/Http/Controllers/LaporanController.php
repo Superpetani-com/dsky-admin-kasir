@@ -15,6 +15,7 @@ use Rap2hpoutre\FastExcel\FastExcel;
 use App\Exports\UsersExport;
 use App\Exports\CafeExport;
 use App\Exports\OrderBiliardExport;
+use App\Exports\BarangExport;
 use Maatwebsite\Excel\Facades\Excel;
 
 class LaporanController extends Controller
@@ -310,5 +311,12 @@ class LaporanController extends Controller
         ob_end_clean();
         ob_start();
         return Excel::download(new OrderBiliardExport($awal, $akhir), 'laporan_biliard_'.$awal.$akhir.'.xlsx');
+    }
+
+    public function exportExcelBarang($awal, $akhir)
+    {
+        ob_end_clean();
+        ob_start();
+        return Excel::download(new BarangExport($awal, $akhir), 'laporan_barang_'.$awal.$akhir.'.xlsx');
     }
 }
