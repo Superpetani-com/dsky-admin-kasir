@@ -319,11 +319,11 @@ class LaporanController extends Controller
                 $row['tanggal'] = tanggal_indonesia($tanggal, false);
                 $row['nama_menu'] = $menu->Nama_menu;
                 $row['kuantitas'] = $item->total_jumlah;
-                $row['harga'] = $menu->Harga;
-                $row['total'] = $menu->Harga * $item->total_jumlah;
+                $row['harga'] = format_uang($menu->Harga);
+                $row['total'] = format_uang($menu->Harga * $item->total_jumlah);
                 $data[] = $row;
 
-                $total_pendapatan += $row['total'];
+                $total_pendapatan += $menu->Harga * $item->total_jumlah;
             }
 
 
@@ -335,7 +335,7 @@ class LaporanController extends Controller
             'nama_menu' => '',
             'kuantitas' => '',
             'harga' => '',
-            'total' => $total_pendapatan
+            'total' => format_uang($total_pendapatan)
         ];
 
         return $data;
