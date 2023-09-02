@@ -72,7 +72,7 @@
         </li>
         <li class="header">REPORT</li>
         <li>
-          <a href="{{route('laporan.index')}}">
+          <a href="{{route('laporan.indextransfer')}}">
             <i class="fa fa-file-pdf-o"></i> <span>Report Singkat</span>
             </span>
           </a>
@@ -88,14 +88,14 @@
             <i class="fa fa-file-text-o"></i> <span>Report Biliard</span>
             </span>
           </a>
-        </li>  
+        </li>
         <li class="header">USER</li>
         <li>
           <a href="pages/widgets.html">
             <i class="fa fa-user"></i> <span>User</span>
             </span>
           </a>
-        </li>  
+        </li>
       </ul>
     </section>
     <!-- /.sidebar -->
