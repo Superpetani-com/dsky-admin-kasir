@@ -41,6 +41,8 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
                         <th>Tanggal</th>
                         <th>Nama Menu</th>
                         <th>Kuantitas</th>
+                        <th>Harga</th>
+                        <th>Total</th>
                     </thead>
                 </table>
             </div>
@@ -72,6 +74,8 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
                 {data: 'tanggal'},
                 {data: 'nama_menu'},
                 {data: 'kuantitas'},
+                {data: 'harga'},
+                {data: 'total'},
             ],
             dom: 'Brt',
             bSort: false,

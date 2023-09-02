@@ -319,9 +319,24 @@ class LaporanController extends Controller
                 $row['tanggal'] = tanggal_indonesia($tanggal, false);
                 $row['nama_menu'] = $menu->Nama_menu;
                 $row['kuantitas'] = $item->total_jumlah;
+                $row['harga'] = $menu->Harga;
+                $row['total'] = $menu->Harga * $item->total_jumlah;
                 $data[] = $row;
+
+                $total_pendapatan += $row['total'];
             }
+
+
         }
+
+        $data[] = [
+            'DT_RowIndex' => '',
+            'tanggal' => '',
+            'nama_menu' => '',
+            'kuantitas' => '',
+            'harga' => '',
+            'total' => $total_pendapatan
+        ];
 
         return $data;
     }
