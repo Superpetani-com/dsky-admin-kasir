@@ -37,7 +37,7 @@ class OrderBiliardDetailController extends Controller
 
         // Check if the current hour is within the range of 13:00 (1:00 PM) to 17:00 (5:00 PM)
         $paket = paketbiliard::whereIn('type', ['malam', 'custom'])->orderBy('id_paket_biliard', 'desc')->get();
-        if ($currentHour >= 12 && $currentHour <= 17) {
+        if ($currentHour >= 6 && $currentHour <= 17) {
             // The current time is within the range
             $paket = paketbiliard::whereIn('type', ['siang', 'custom'])->orderBy('id_paket_biliard', 'desc')->get();
         }
