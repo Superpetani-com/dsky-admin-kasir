@@ -213,7 +213,7 @@
         @if(auth()->user()->level == 3)
         <li class="header">REPORT</li>
         <li>
-          <a href="{{route('laporan.indextransfer')}}">
+          <a href="{{route('laporan.index')}}">
             <i class="fa fa-file-pdf-o"></i> <span>Report Singkat</span>
             </span>
           </a>
