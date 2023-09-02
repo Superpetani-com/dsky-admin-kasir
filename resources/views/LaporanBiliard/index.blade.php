@@ -36,7 +36,8 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
         <div class="box">
             <div class="box-header with-border">
                 <button onclick="updatePeriode()" class="btn btn-info btn-sm btn-flat"><i class="fa fa-plus-circle"></i> Ubah Periode</button>
-                <a href="{{ route('laporan.export_pdfbiliard', [$tanggalAwal, $tanggalAkhir]) }}" target="_blank" class="btn btn-success btn-sm btn-flat"><i class="fa fa-file-excel-o"></i> Export PDF</a>
+                <a href="{{ route('laporan.export_pdfbiliard', [$tanggalAwal, $tanggalAkhir]) }}" target="_blank" class="btn btn-warning btn-sm btn-flat"><i class="fa fa-file-pdf-o"></i> Export PDF</a>
+                <a href="{{ route('laporan.export_excelbiliard', [$tanggalAwal, $tanggalAkhir]) }}" target="_blank" class="btn btn-success btn-sm btn-flat"><i class="fa fa-file-excel-o"></i> Export Excel</a>
                 <button type="button" class="btn btn-primary btn-sm btn-flat btn-cetak"><i class="fa fa-book"></i> Cetak Laporan</button>
             </div>
             <div class="box-body table-responsive">

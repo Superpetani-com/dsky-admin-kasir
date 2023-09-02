@@ -14,6 +14,7 @@ use Illuminate\Support\Arr;
 use Rap2hpoutre\FastExcel\FastExcel;
 use App\Exports\UsersExport;
 use App\Exports\CafeExport;
+use App\Exports\OrderBiliardExport;
 use Maatwebsite\Excel\Facades\Excel;
 
 class LaporanController extends Controller
@@ -301,6 +302,13 @@ class LaporanController extends Controller
     {
         ob_end_clean();
         ob_start();
-        return Excel::download(new CafeExport($awal, $akhir), 'laporan_cafe.xlsx');
+        return Excel::download(new CafeExport($awal, $akhir), 'laporan_cafe_'.$awal.$akhir.'.xlsx');
+    }
+
+    public function exportExcelBiliard($awal, $akhir)
+    {
+        ob_end_clean();
+        ob_start();
+        return Excel::download(new OrderBiliardExport($awal, $akhir), 'laporan_biliard_'.$awal.$akhir.'.xlsx');
     }
 }
