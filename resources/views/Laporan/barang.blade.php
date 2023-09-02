@@ -88,6 +88,8 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
         });
     });
 
+    $.fn.dataTable.ext.errMode = 'none';
+
     function updatePeriode() {
         $('#modal-form-barang').modal('show');
     }

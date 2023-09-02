@@ -58,13 +58,16 @@ class BarangExport implements FromCollection, WithHeadings, ShouldAutoSize
 
                 $row['DT_RowIndex'] = $no++;
                 $row['tanggal'] = tanggal_indonesia($tanggal, false);
-                $row['nama_menu'] = $menu->Nama_menu;
                 $row['kuantitas'] = $item->total_jumlah;
-                $row['harga'] = ($menu->Harga);
-                $row['total'] = ($menu->Harga * $item->total_jumlah);
-                $data[] = $row;
 
-                $total_pendapatan += $menu->Harga * $item->total_jumlah;
+                if($menu) {
+                    $row['nama_menu'] = $menu->Nama_menu;
+                    $row['harga'] = ($menu->Harga);
+                    $row['total'] = ($menu->Harga * $item->total_jumlah);
+                    $total_pendapatan += $menu->Harga * $item->total_jumlah;
+                }
+
+                $data[] = $row;
             }
         }
 
