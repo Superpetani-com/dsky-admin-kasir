@@ -32,16 +32,18 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
         <div class="box">
             <div class="box-header with-border">
                 <button onclick="updatePeriode()" class="btn btn-info btn-xs btn-flat"><i class="fa fa-plus-circle"></i> Ubah Periode</button>
-                <a href="{{ route('laporan.export_pdf', [$tanggalAwal, $tanggalAkhir]) }}" target="_blank" class="btn btn-success btn-xs btn-flat"><i class="fa fa-file-pdf-o"></i> Export PDF</a>
-                <a href="{{ route('laporan.export_pdf', [$tanggalAwal, $tanggalAkhir]) }}" target="_blank" class="btn btn-success btn-xs btn-flat"><i class="fa fa-file-excel-o"></i> Export Excel</a>
+                <a href="{{ route('laporan.export_pdf', [$tanggalAwal, $tanggalAkhir]) }}" target="_blank" class="btn btn-warning btn-xs btn-flat"><i class="fa fa-file-pdf-o"></i> Export PDF</a>
+                <a href="{{ route('laporan.export_excel', [$tanggalAwal, $tanggalAkhir]) }}" target="_blank" class="btn btn-success btn-xs btn-flat"><i class="fa fa-file-excel-o"></i> Export Excel</a>
             </div>
             <div class="box-body table-responsive">
-                <table class="table table-stiped table-bordered" style="width:50%">
+                <table class="table table-stiped table-bordered" style="width:80%">
                     <thead>
                         <th width="5%">No</th>
                         <th>Tanggal</th>
                         <th>Penjualan Biliard</th>
                         <th>Penjualan Cafe</th>
+                        <th>Total Penjualan Cash</th>
+                        <th>Total Penjualan TF</th>
                         <th>Total Penjualan</th>
                     </thead>
                 </table>
@@ -74,6 +76,8 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
                 {data: 'tanggal'},
                 {data: 'total_biliard'},
                 {data: 'total_cafe'},
+                {data: 'total_cash'},
+                {data: 'total_tf'},
                 {
                     data: null,
                     render: function (data, type, row) {

@@ -60,7 +60,7 @@ class LaporanCafeController extends Controller
                     $detail = PesananDetail::where('id_pesanan', '=', $item->Id_pesanan)->with('menu')->get();
 
                     foreach ($detail as $value) {
-                        array_push($nama_menu, $value->menu->Nama_menu);
+                        array_push($nama_menu, $value->menu->Nama_menu. ' ('.$value->jumlah.')');
                         // $nama_menu += $value->menu->Nama_menu;
                     }
 

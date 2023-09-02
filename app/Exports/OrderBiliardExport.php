@@ -56,12 +56,13 @@ class OrderBiliardExport implements FromCollection, ShouldAutoSize, WithHeadings
                 $row['No.Order']    = $item->id_order_biliard;
                 $row['No.Meja']     = $item->meja['namameja'];
                 $row['Customer']    = $item->customer;
-                $row['TotalJam']    = $item->totaljam.'Jam';
                 $row['TotalBayar']  = $item->totalbayar;
                 $row['created_by']    = $item->created_by;
                 $data[] = $row;
                 }
             }
+
+
             $data[] = [
                 'DT_RowIndex' => ' ',
                 'tanggal' => ' ',

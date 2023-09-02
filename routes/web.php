@@ -96,11 +96,12 @@ Route::group(['middleware'=>'auth'], function(){
     Route::get('/mejabiliard/pindah/{baru}/{lama}/{order}', [MejaBiliardController::class, 'pindah'])->name('mejabiliard.pindah');
     Route::resource('/mejabiliard',MejaBiliardController::class);
 
-    Route::get('/laporan', [LaporanController::class, 'indexTransfer'])->name('laporan.indextransfer');
+    Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
     Route::get('/laporan/transfer', [LaporanController::class, 'indexTransfer'])->name('laporan.indextransfer');
     Route::get('/laporan/data-transfer/{awal}/{akhir}', [LaporanController::class, 'dataTransfer'])->name('laporan.dataTransfer');
     Route::get('/laporan/data/{awal}/{akhir}', [LaporanController::class, 'data'])->name('laporan.data');
     Route::get('/laporan/pdf/{awal}/{akhir}', [LaporanController::class, 'exportPDF'])->name('laporan.export_pdf');
+    Route::get('/laporan/pdf-transfer/{awal}/{akhir}', [LaporanController::class, 'exportPDFTransfer'])->name('laporan.export_transferpdf');
     Route::get('/laporan/excel/{awal}/{akhir}', [LaporanController::class, 'exportExcel'])->name('laporan.export_excel');
     Route::get('/laporan/excel-cafe/{awal}/{akhir}', [LaporanController::class, 'exportExcelCafe'])->name('laporan.export_excelcafe');
     Route::get('/laporan/excel-biliard/{awal}/{akhir}', [LaporanController::class, 'exportExcelBiliard'])->name('laporan.export_excelbiliard');

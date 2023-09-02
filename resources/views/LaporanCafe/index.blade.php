@@ -48,7 +48,6 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
                         <th>No.Order</th>
                         <th>No.Meja</th>
                         <th>Customer</th>
-                        <th>Jumlah Item</th>
                         <th>TotalBayar</th>
                         <th>Pesanan</th>
                         <th>Kasir</th>
@@ -90,7 +89,6 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
                 },
                 {data: 'No.Meja'},
                 {data: 'Customer'},
-                {data: 'TotalItem'},
                 {data: 'TotalBayar'},
                 {data: 'menus'},
                 {data: 'created_by'},

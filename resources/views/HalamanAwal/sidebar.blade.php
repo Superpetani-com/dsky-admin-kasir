@@ -35,7 +35,7 @@
           </li>
           <li class="header">REPORT</li>
         <li>
-          <a href="{{route('laporan.indextransfer')}}">
+          <a href="{{route('laporan.index')}}">
             <i class="fa fa-file-pdf-o"></i> <span>Report Singkat</span>
             </span>
           </a>
@@ -139,7 +139,7 @@
         </li> --}}
         <li class="header">REPORT</li>
         <li>
-          <a href="{{route('laporan.indextransfer')}}">
+          <a href="{{route('laporan.index')}}">
             <i class="fa fa-file-pdf-o"></i> <span>Report Singkat</span>
             </span>
           </a>

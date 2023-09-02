@@ -40,6 +40,10 @@ class LaporanController extends Controller
         $total_pendapatan = 0;
         $total_biliards = 0;
         $total_cafes = 0;
+        $total_cash = 0;
+        $total_tf = 0;
+        $total_cashes = 0;
+        $total_tfs = 0;
 
         // Convert string dates to DateTime objects
         $awalDate = new DateTime($awal);
@@ -61,6 +65,18 @@ class LaporanController extends Controller
             // \DB::enableQueryLog();
             $total_biliard = OrderBiliard::whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('totalbayar');
             $total_cafe = Pesanan::whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('TotalBayar');
+
+            $total_biliard_cash = OrderBiliard::where('customer',  'not like', '%tf%')->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('totalbayar');
+            $total_biliard_tf = OrderBiliard::where('customer',  'like', '%tf%')->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('totalbayar');
+
+            $total_cafe_cash = Pesanan::where('customer',  'not like', '%tf%')->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('TotalBayar');
+            $total_cafe_tf = Pesanan::where('customer',  'like', '%tf%')->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('TotalBayar');
+
+            // dd($total_biliard_cash);
+
+            $total_cash = $total_biliard_cash + $total_cafe_cash;
+            $total_tf = $total_biliard_tf + $total_cafe_tf;
+
             // dd(\DB::getQueryLog());
             $pendapatan = $total_biliard + $total_cafe;
             $total_pendapatan += $pendapatan;
@@ -72,8 +88,13 @@ class LaporanController extends Controller
             $row['tanggal'] = tanggal_indonesia($tanggal, false);
             $row['total_biliard'] = format_uang($total_biliard);
             $row['total_cafe'] = format_uang($total_cafe);
+            $row['total_cash'] = format_uang($total_cash);
+            $row['total_tf'] = format_uang($total_tf);
 
             $data[] = $row;
+
+            $total_cashes += $total_cash;
+            $total_tfs += $total_tf;
         }
 
         $data[] = [
@@ -81,6 +102,8 @@ class LaporanController extends Controller
             'tanggal' => 'Total Pendapatan',
             'total_biliard' => format_uang($total_biliards),
             'total_cafe' => format_uang($total_cafes),
+            'total_cash' => format_uang($total_cashes),
+            'total_tf' => format_uang($total_tfs),
             'total_all' => format_uang($total_pendapatan),
         ];
 
@@ -98,7 +121,7 @@ class LaporanController extends Controller
 
     public function exportPDF($awal, $akhir)
     {
-        $data = $this->getTransferData($awal, $akhir);
+        $data = $this->getData($awal, $akhir);
 
         foreach ($data as &$subarray) {
             $totalBiliard = intval(str_replace('.', '', $subarray['total_biliard']));
@@ -108,6 +131,28 @@ class LaporanController extends Controller
         }
 
         $pdf = PDF::loadView('laporan', [
+            'awal' => $awal,
+            'akhir' => $akhir,
+            'data' => $data
+        ]);
+
+        $pdf->setPaper('a4', 'landscape');
+
+        return $pdf->stream('Laporan-pendapatan-'. date('Y-m-d-his') .'.pdf');
+    }
+
+    public function exportPDFTransfer($awal, $akhir)
+    {
+        $data = $this->getTransferData($awal, $akhir);
+
+        foreach ($data as &$subarray) {
+            $totalBiliard = intval(str_replace('.', '', $subarray['total_biliard']));
+            $totalCafe = intval(str_replace('.', '', $subarray['total_cafe']));
+            $totalAll = $totalBiliard + $totalCafe;
+            $subarray['total_all'] = number_format($totalAll, 0, ',', '.');;
+        }
+
+        $pdf = PDF::loadView('laporantransfer', [
             'awal' => $awal,
             'akhir' => $akhir,
             'data' => $data
