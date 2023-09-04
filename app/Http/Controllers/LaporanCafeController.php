@@ -13,8 +13,8 @@ class LaporanCafeController extends Controller
 {
     public function indexcafe(Request $request)
     {
-        $tanggalAwal = date('Y-m-d', mktime(0, 0, 0, date('m'), date('d'), date('Y')));
-        $tanggalAkhir = date('Y-m-d', mktime(0, 0, 0, date('m'), date('d')+1, date('Y')));
+        $tanggalAwal = date('Y-m-d H:i', strtotime('00:00'));
+        $tanggalAkhir = date('Y-m-d H:i', strtotime('23:59:59'));
 
         if ($request->has('tanggal_awal') && $request->tanggal_awal != "" && $request->has('tanggal_akhir') && $request->tanggal_akhir!= "") {
             $tanggalAwal = $request->tanggal_awal;

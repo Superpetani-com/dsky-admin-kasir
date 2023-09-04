@@ -17,9 +17,9 @@
 <body>
     <h3 class="text-center">Laporan Pendapatan Kafe</h3>
     <h4 class="text-center">
-        Tanggal {{ tanggal_indonesia($awal, false) }}
+        Tanggal {{ str_replace('T', ' ', $awal) }}
         s/d
-        Tanggal {{ tanggal_indonesia($akhir, false) }}
+        Tanggal {{ str_replace('T', ' ', $akhir) }}
     </h4>
     <br>
 
