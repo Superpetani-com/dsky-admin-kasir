@@ -1,7 +1,7 @@
 @extends('HalamanAwal.master')
 
 @section('title')
-    Laporan Pendapatan Biliard {{ tanggal_indonesia($tanggalAwal, false) }} s/d {{ tanggal_indonesia($tanggalAkhir, false) }}
+    Laporan Pendapatan Biliard {{ str_replace('T', ' ', $tanggalAwal) }} s/d {{ str_replace('T', ' ', $tanggalAkhir)  }}
 @endsection
 
 @push('css')

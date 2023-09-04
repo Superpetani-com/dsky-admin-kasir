@@ -32,20 +32,20 @@ class OrderBiliardExport implements FromCollection, ShouldAutoSize, WithHeadings
 
         while ($awalDate <= $akhirDate) {
             $tanggal = $this->awal;
+            $dateAwal = new DateTime($this->awal);
+            $startTime = $dateAwal->format('H:i');
+
             $awal = date('Y-m-d', strtotime("+1 day", strtotime($this->awal)));
+            $akhirDate = new DateTime($this->akhir);
+            $endTime = $akhirDate->format('H:i');
 
-            $awalDate = new DateTime($awal);
-
-            // Move to the next day
-            // $awalDate->modify('+1 day');
-
-            $total_biliard = OrderBiliard::whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('totalbayar');
+            $total_biliard = OrderBiliard::whereBetween('created_at', [$dateAwal->format('Y-m-d ' . $startTime), $akhirDate->format('Y-m-d ' . $endTime)])->sum('totalbayar');
 
             $total_pendapatan += $total_biliard;
 
-            if (OrderBiliard::whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->exists()){
+            if (OrderBiliard::whereBetween('created_at', [$dateAwal->format('Y-m-d ' . $startTime), $akhirDate->format('Y-m-d ' . $endTime)])->exists()){
             $order = OrderBiliard::with('meja')
-            ->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])
+            ->whereBetween('created_at', [$dateAwal->format('Y-m-d ' . $startTime), $akhirDate->format('Y-m-d ' . $endTime)])
             ->where('TotalBayar', '>', 0)
             ->orderBy('id_order_biliard', 'desc')
             ->get();

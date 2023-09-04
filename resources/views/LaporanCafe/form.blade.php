@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
 <div class="modal fade" id="modal-form" tabindex="-1" role="dialog" aria-labelledby="modal-form">
     <div class="modal-dialog modal-lg" role="document">
         <form action="{{ route('laporan.indexcafe') }}" method="get" data-toggle="validator" class="form-horizontal">
@@ -11,7 +13,7 @@
                     <div class="form-group row">
                         <label for="tanggal_awal" class="col-lg-2 col-lg-offset-1 control-label">Tanggal Awal</label>
                         <div class="col-lg-6">
-                            <input type="datetime-local" name="tanggal_awal" id="tanggal_awal" class="form-control" required autofocus
+                            <input type="datetime-local" name="tanggal_awal" id="datetimepicker" class="form-control" required autofocus
                                 value="{{ request('tanggal_awal') }}"
                                 style="border-radius: 0 !important;"
                                 autocomplete="off">
@@ -21,8 +23,8 @@
                     <div class="form-group row">
                         <label for="tanggal_akhir" class="col-lg-2 col-lg-offset-1 control-label">Tanggal Akhir</label>
                         <div class="col-lg-6">
-                            <input type="datetime-local" name="tanggal_akhir" id="tanggal_akhir" class="form-control" required
-                                value="{{ request('tanggal_akhir') ?? date('Y-m-d') }}"
+                            <input type="datetime-local" name="tanggal_akhir" id="datetimepicker" class="form-control" required
+                                value="{{ request('tanggal_akhir') ?? date('Y-m-d H:i') }}"
                                 style="border-radius: 0 !important;"
                                 autocomplete="off">
                             <span class="help-block with-errors"></span>
@@ -37,3 +39,12 @@
         </form>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    flatpickr('#datetimepicker', {
+        enableTime: true, // Enable time selection
+        dateFormat: "Y-m-d H:i", // Format of the input value
+    });
+</script>
+

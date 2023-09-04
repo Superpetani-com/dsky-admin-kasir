@@ -26,6 +26,7 @@ class LaporanCafeController extends Controller
 
     public function getDatacafe($awal, $akhir)
     {
+        // dd($awal, $akhir);
         // Initialize variables
         $no = 1;
         $data = array();

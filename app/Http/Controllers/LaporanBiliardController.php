@@ -22,58 +22,74 @@ class LaporanBiliardController extends Controller
         return view('laporanbiliard.index', compact('tanggalAwal', 'tanggalAkhir'));
     }
 
+    function hasTimeComponent($dateString) {
+        // Parse the date string
+        $date = date_parse($dateString);
+
+        // Check if any time-related components are present (hours, minutes, seconds)
+        return ($date['hour'] !== false || $date['minute'] !== false || $date['second'] !== false);
+    }
+
     public function getDatabiliard($awal, $akhir)
     {
         $no = 1;
-        $data = array();
-        $pendapatan = 0;
+        $data = [];
         $total_pendapatan = 0;
+
 
         while (strtotime($awal) <= strtotime($akhir)) {
             $tanggal = $awal;
+            $dateAwal = new DateTime($awal);
+            $startTime = $dateAwal->format('H:i');
+
             $awal = date('Y-m-d', strtotime("+1 day", strtotime($awal)));
+            $akhirDate = new DateTime($akhir);
+            $endTime = $akhirDate->format('H:i');
 
-            $awalDate = new DateTime($awal);
+            if(!$this->hasTimeComponent($akhir)) {
+                $akhir = $akhir . " 23:59";
+            }
 
-            // Move to the next day
-            // $awalDate->modify('+1 day');
+            if(!$this->hasTimeComponent($awal)) {
+                $awal = $awal . " 00:00";
+            }
 
-            $total_biliard = OrderBiliard::whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('totalbayar');
+            // dd($awal, $akhir);
 
+            $total_biliard = OrderBiliard::whereBetween('created_at', [$dateAwal->format('Y-m-d ' . $startTime), $akhirDate->format('Y-m-d ' . $endTime)])->sum('totalbayar');
             $total_pendapatan += $total_biliard;
 
-            if (OrderBiliard::whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->exists()){
-            $order = OrderBiliard::with('meja')
-            ->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])
-            ->where('TotalBayar', '>', 0)
-            ->orderBy('id_order_biliard', 'desc')
-            ->get();
-            foreach ($order as $item) {
-                $row = array();
-                $row['DT_RowIndex'] = $no++;
-                $row['tanggal']     = date($item->created_at);
-                $row['No.Order']    = $item->id_order_biliard;
-                $row['No.Meja']     = $item->meja['namameja'];
-                $row['Customer']    = $item->customer;
-                $row['TotalJam']    = $item->totaljam.'Jam';
-                $row['TotalBayar']  = 'Rp.'.format_uang($item->totalbayar);
-                $row['created_by']    = $item->created_by;
-                $data[] = $row;
-                }
-            }
-            else {
-                $row = array();
-                $row['DT_RowIndex'] = $no++;
-                $row['tanggal']     = tanggal_indonesia($tanggal, false);
-                $row['No.Order']    = '-';
-                $row['No.Meja']     = '-';
-                $row['Customer']    = '-';
-                $row['TotalJam']    = '-';
-                $row['TotalBayar']  = '-';
-                $row['created_by']  = '-';
-                $data[] = $row;
-            }
+            if (OrderBiliard::whereBetween('created_at', [$dateAwal->format('Y-m-d ' . $startTime), $akhirDate->format('Y-m-d ' . $endTime)])->exists()) {
+                $order = OrderBiliard::with('meja')
+                    ->whereBetween('created_at', [$dateAwal->format('Y-m-d ' . $startTime), $akhirDate->format('Y-m-d ' . $endTime)])
+                    ->where('TotalBayar', '>', 0)
+                    ->orderBy('id_order_biliard', 'desc')
+                    ->get();
 
+                foreach ($order as $item) {
+                    $data[] = [
+                        'DT_RowIndex' => $no++,
+                        'tanggal' => date($item->created_at),
+                        'No.Order' => $item->id_order_biliard,
+                        'No.Meja' => $item->meja['namameja'],
+                        'Customer' => $item->customer,
+                        'TotalJam' => $item->totaljam . ' Jam',
+                        'TotalBayar' => 'Rp.' . format_uang($item->totalbayar),
+                        'created_by' => $item->created_by,
+                    ];
+                }
+            } else {
+                $data[] = [
+                    'DT_RowIndex' => $no++,
+                    'tanggal' => tanggal_indonesia($tanggal, false),
+                    'No.Order' => '-',
+                    'No.Meja' => '-',
+                    'Customer' => '-',
+                    'TotalJam' => '-',
+                    'TotalBayar' => '-',
+                    'created_by' => '-',
+                ];
+            }
         }
 
         $data[] = [
@@ -83,7 +99,7 @@ class LaporanBiliardController extends Controller
             'No.Meja' => ' ',
             'Customer' => ' ',
             'TotalJam' => 'Total Pendapatan ',
-            'TotalBayar' => 'Rp.'.format_uang($total_pendapatan),
+            'TotalBayar' => 'Rp.' . format_uang($total_pendapatan),
             'created_by' => '',
         ];
 
