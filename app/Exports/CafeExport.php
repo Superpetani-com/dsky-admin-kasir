@@ -24,32 +24,35 @@ class CafeExport implements FromCollection, ShouldAutoSize, WithHeadings
     */
     public function collection()
     {
+        // Initialize variables
         $no = 1;
         $data = array();
-        $pendapatan = 0;
         $total_pendapatan = 0;
-        // dd($awal, $akhir, 'askdna');
 
-        $awalDate = new DateTime($this->awal);
-        $akhirDate = new DateTime($this->akhir);
-
-        while ($awalDate <= $akhirDate) {
+        // Loop through date range
+        while (strtotime($this->awal) <= strtotime($this->akhir)) {
             $tanggal = $this->awal;
+            $dateAwal = new DateTime($this->awal);
+            $startTime = $dateAwal->format('H:i');
+
             $awal = date('Y-m-d', strtotime("+1 day", strtotime($this->awal)));
+            $akhirDate = new DateTime($this->akhir);
+            $endTime = $akhirDate->format('H:i');
 
+            // Calculate total cafe sales for the day
+            $total_cafe = Pesanan::whereBetween('created_at', [$dateAwal->format('Y-m-d ' . $startTime), $akhirDate->format('Y-m-d ' . $endTime)])->sum('TotalBayar');
 
-            $awalDate = new DateTime($awal);
-            // Move to the next day
-            // $awalDate->modify('+1 day');
-
-            $total_cafe = Pesanan::whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('TotalBayar');
-            // dd($awalDate->format('Y-m-d 07:00:00'));
             $total_pendapatan += $total_cafe;
-            // dd($total_cafe);
 
-            if (Pesanan::whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->exists()){
-                $order = Pesanan::with('meja')->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->where('TotalBayar', '>', 0)->orderBy('Id_pesanan', 'desc')->get();
-                // dd($order);
+            // Check if there are orders for the day
+            if (Pesanan::whereBetween('created_at', [$dateAwal->format('Y-m-d ' . $startTime), $akhirDate->format('Y-m-d ' . $endTime)])->exists()) {
+                $order = Pesanan::with('meja')
+                    ->whereBetween('created_at', [$dateAwal->format('Y-m-d ' . $startTime), $akhirDate->format('Y-m-d ' . $endTime)])
+                    ->where('TotalBayar', '>', 0)
+                    ->orderBy('Id_pesanan', 'desc')
+                    ->get();
+
+                // Process and format orders
                 foreach ($order as $item) {
                     $row = array();
                     $row['DT_RowIndex'] = $no++;
@@ -57,49 +60,44 @@ class CafeExport implements FromCollection, ShouldAutoSize, WithHeadings
                     $row['No.Order']    = $item->Id_pesanan;
                     $row['No.Meja']     = $item->meja['nama_meja'];
                     $row['Customer']    = $item->customer;
-                    $row['TotalItem']    = $item->TotalItem.' Item';
-                    $row['TotalBayar']  = $item->TotalBayar;
-                    $row['created_by']    = $item->created_by;
+                    $row['TotalItem']   = $item->TotalItem . ' Item';
+                    $row['TotalBayar']  = 'Rp.' . format_uang($item->TotalBayar);
+                    $row['created_by']  = $item->created_by;
                     $nama_menu = [];
 
                     $detail = PesananDetail::where('id_pesanan', '=', $item->Id_pesanan)->with('menu')->get();
 
                     foreach ($detail as $value) {
-                        if($value->menu) {
-                            array_push($nama_menu, $value->menu->Nama_menu. ' ('.$value->jumlah.')');
+                        if ($value->menu) {
+                            array_push($nama_menu, $value->menu->Nama_menu . ' (' . $value->jumlah . ')');
                         }
-                        // $nama_menu += $value->menu->Nama_menu;
                     }
-
 
                     $row['menus'] = implode(', ', $nama_menu);
 
                     $item->isOrder = false;
                     $order = OrderBiliard::where('id_pesanan', '=', $item->Id_pesanan)->get();
-                    // dd($item);
-                    if(count($order) > 0) {
+
+                    if (count($order) > 0) {
                         $item->isOrder = true;
-                        $row['No.Meja'] = 'Meja Biliard '.$item->meja['id_meja'];
+                        $row['No.Meja'] = 'Meja Biliard ' . $item->meja['id_meja'];
                     }
+
                     $data[] = $row;
                 }
-
-                // dd($data);;
             }
-
-            // dd($data);;
+            // Add total pendapatan row
             $data[] = [
                 'DT_RowIndex' => ' ',
                 'tanggal' => ' ',
                 'No.Order' => ' ',
                 'No.Meja' => ' ',
                 'Customer' => ' ',
-                'TotalItem' => 'Total Pendapatan',
-                'TotalBayar' => $total_pendapatan,
-                'menus' => '',
-                'created_by' => '',
+                'TotalItem' => ' ',
+                'TotalBayar' => ' ',
+                'menus' => 'Total Pendapatan ',
+                'created_by' => 'Rp.' . format_uang($total_pendapatan),
             ];
-
 
             return collect($data);
         }
