@@ -39,23 +39,31 @@ class UsersExport implements FromCollection, WithHeadings, ShouldAutoSize
         $total_cafes_all_cash = 0;
         $total_cafes_all_tf = 0;
 
-        // dd($this->awal, $this->akhir);
+        // Convert string dates to DateTime objects
+        $awalDate = new DateTime($this->awal);
+        $akhirDate = new DateTime($this->akhir);
 
-        while (strtotime($this->awal) <= strtotime($this->akhir)) {
-            $tanggal = $this->awal;
-            $dateAwal = new DateTime($this->awal);
+        // Initialize $awal and $akhir to start and end of the specified dates
+        $awal = $awalDate->format('Y-m-d 09:00:00');
+        $akhir = $akhirDate->format('Y-m-d 04:00:00');
 
-            $this->awal = date('Y-m-d', strtotime("+1 day", strtotime($this->awal)));
-            $akhirDate = new DateTime($this->akhir);
+        // dd($awal, $akhir);
 
-            $total_biliard = OrderBiliard::whereBetween('created_at', [$dateAwal, $akhirDate])->sum('totalbayar');
-            $total_cafe = Pesanan::whereBetween('created_at', [$dateAwal, $akhirDate])->sum('TotalBayar');
+        while ($awalDate <= $akhirDate) {
+            $tanggal = $awalDate->format('Y-m-d');
+            $tanggalSelanjutnya = $awalDate->format('Y-m-d');
 
-            $total_biliard_cash = OrderBiliard::where('customer',  'not like', '%tf%')->whereBetween('created_at', [$dateAwal, $akhirDate])->sum('totalbayar');
-            $total_biliard_tf = OrderBiliard::where('customer',  'like', '%tf%')->whereBetween('created_at', [$dateAwal, $akhirDate])->sum('totalbayar');
+            // Move to the next day
+            $awalDate->modify('+1 day');
 
-            $total_cafe_cash = Pesanan::where('customer',  'not like', '%tf%')->whereBetween('created_at', [$dateAwal, $akhirDate])->sum('TotalBayar');
-            $total_cafe_tf = Pesanan::where('customer',  'like', '%tf%')->whereBetween('created_at', [$dateAwal, $akhirDate])->sum('TotalBayar');
+            // \DB::enableQueryLog();
+            $total_biliard_cash = OrderBiliard::where('customer',  'not like', '%tf%')->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('totalbayar');
+            $total_biliard_tf = OrderBiliard::where('customer',  'like', '%tf%')->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('totalbayar');
+
+            $total_cafe_cash = Pesanan::where('customer',  'not like', '%tf%')->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('TotalBayar');
+            $total_cafe_tf = Pesanan::where('customer',  'like', '%tf%')->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('TotalBayar');
+
+            // dd(\DB::getQueryLog());
 
             $total_biliards = $total_biliard_cash + $total_biliard_tf;
             $total_cafes = $total_cafe_cash + $total_cafe_tf;

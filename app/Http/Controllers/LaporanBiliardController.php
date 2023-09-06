@@ -35,7 +35,7 @@ class LaporanBiliardController extends Controller
         $no = 1;
         $data = [];
         $total_pendapatan = 0;
-
+        $uniqueOrderIds = [];
 
         while (strtotime($awal) <= strtotime($akhir)) {
             $tanggal = $awal;
@@ -56,8 +56,8 @@ class LaporanBiliardController extends Controller
 
             // dd($awal, $akhir);
 
-            $total_biliard = OrderBiliard::whereBetween('created_at', [$dateAwal->format('Y-m-d ' . $startTime), $akhirDate->format('Y-m-d ' . $endTime)])->sum('totalbayar');
-            $total_pendapatan += $total_biliard;
+            // $total_biliard = OrderBiliard::whereBetween('created_at', [$dateAwal->format('Y-m-d ' . $startTime), $akhirDate->format('Y-m-d ' . $endTime)])->sum('totalbayar');
+            // $total_pendapatan += $total_biliard;
 
             if (OrderBiliard::whereBetween('created_at', [$dateAwal->format('Y-m-d ' . $startTime), $akhirDate->format('Y-m-d ' . $endTime)])->exists()) {
                 $order = OrderBiliard::with('meja')
@@ -67,16 +67,21 @@ class LaporanBiliardController extends Controller
                     ->get();
 
                 foreach ($order as $item) {
-                    $data[] = [
-                        'DT_RowIndex' => $no++,
-                        'tanggal' => date($item->created_at),
-                        'No.Order' => $item->id_order_biliard,
-                        'No.Meja' => $item->meja['namameja'],
-                        'Customer' => $item->customer,
-                        'TotalJam' => $item->totaljam . ' Jam',
-                        'TotalBayar' => 'Rp.' . format_uang($item->totalbayar),
-                        'created_by' => $item->created_by,
-                    ];
+                    if (!in_array($item->id_order_biliard, $uniqueOrderIds)) {
+                        $uniqueOrderIds[] = $item->id_order_biliard; // Mark 'No.Order' as seen
+                        $total_pendapatan += $item->totalbayar;
+                        $data[] = [
+                            'DT_RowIndex' => $no++,
+                            'tanggal' => date($item->created_at),
+                            'No.Order' => $item->id_order_biliard,
+                            'No.Meja' => $item->meja['namameja'],
+                            'Customer' => $item->customer,
+                            'TotalJam' => $item->totaljam . ' Jam',
+                            'TotalBayar' => 'Rp.' . format_uang($item->totalbayar),
+                            'created_by' => $item->created_by,
+                        ];
+                    }
+
                 }
             } else {
                 $data[] = [

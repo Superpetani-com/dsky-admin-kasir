@@ -26,6 +26,7 @@ class OrderBiliardExport implements FromCollection, ShouldAutoSize, WithHeadings
         $data = array();
         $pendapatan = 0;
         $total_pendapatan = 0;
+        $uniqueOrderIds = [];
 
         $awalDate = new DateTime($this->awal);
         $akhirDate = new DateTime($this->akhir);
@@ -39,10 +40,6 @@ class OrderBiliardExport implements FromCollection, ShouldAutoSize, WithHeadings
             $akhirDate = new DateTime($this->akhir);
             $endTime = $akhirDate->format('H:i');
 
-            $total_biliard = OrderBiliard::whereBetween('created_at', [$dateAwal->format('Y-m-d ' . $startTime), $akhirDate->format('Y-m-d ' . $endTime)])->sum('totalbayar');
-
-            $total_pendapatan += $total_biliard;
-
             if (OrderBiliard::whereBetween('created_at', [$dateAwal->format('Y-m-d ' . $startTime), $akhirDate->format('Y-m-d ' . $endTime)])->exists()){
             $order = OrderBiliard::with('meja')
             ->whereBetween('created_at', [$dateAwal->format('Y-m-d ' . $startTime), $akhirDate->format('Y-m-d ' . $endTime)])
@@ -50,15 +47,19 @@ class OrderBiliardExport implements FromCollection, ShouldAutoSize, WithHeadings
             ->orderBy('id_order_biliard', 'desc')
             ->get();
             foreach ($order as $item) {
-                $row = array();
-                $row['DT_RowIndex'] = $no++;
-                $row['tanggal']     = date($item->created_at);
-                $row['No.Order']    = $item->id_order_biliard;
-                $row['No.Meja']     = $item->meja['namameja'];
-                $row['Customer']    = $item->customer;
-                $row['TotalBayar']  = $item->totalbayar;
-                $row['created_by']    = $item->created_by;
-                $data[] = $row;
+                    if (!in_array($item->id_order_biliard, $uniqueOrderIds)) {
+                        $uniqueOrderIds[] = $item->id_order_biliard; // Mark 'No.Order' as seen
+                        $total_pendapatan += $item->totalbayar;
+                        $row = array();
+                        $row['DT_RowIndex'] = $no++;
+                        $row['tanggal']     = date($item->created_at);
+                        $row['No.Order']    = $item->id_order_biliard;
+                        $row['No.Meja']     = $item->meja['namameja'];
+                        $row['Customer']    = $item->customer;
+                        $row['TotalBayar']  = $item->totalbayar;
+                        $row['created_by']    = $item->created_by;
+                        $data[] = $row;
+                    }
                 }
             }
 
@@ -68,8 +69,7 @@ class OrderBiliardExport implements FromCollection, ShouldAutoSize, WithHeadings
                 'tanggal' => ' ',
                 'No.Order' => ' ',
                 'No.Meja' => ' ',
-                'Customer' => ' ',
-                'TotalJam' => 'Total Pendapatan ',
+                'Customer' => 'Total Pendapatan ',
                 'TotalBayar' => $total_pendapatan,
                 'created_by' => '',
             ];
@@ -80,6 +80,6 @@ class OrderBiliardExport implements FromCollection, ShouldAutoSize, WithHeadings
 
     public function headings(): array
     {
-        return ["No", "Tanggal", "No.Order", "No.Meja", "Customer", "Total Jam", "Total Bayar", "Kasir"];
+        return ["No", "Tanggal", "No.Order", "No.Meja", "Customer", "Total Bayar", "Kasir"];
     }
 }

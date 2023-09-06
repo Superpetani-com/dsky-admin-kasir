@@ -45,31 +45,32 @@ class LaporanController extends Controller
         $total_cashes = 0;
         $total_tfs = 0;
 
+        // Convert string dates to DateTime objects
+        $awalDate = new DateTime($awal);
+        $akhirDate = new DateTime($akhir);
+
+        // Initialize $awal and $akhir to start and end of the specified dates
+        $awal = $awalDate->format('Y-m-d 09:00:00');
+        $akhir = $akhirDate->format('Y-m-d 04:00:00');
+
         // dd($awal, $akhir);
 
-        while (strtotime($awal) <= strtotime($akhir)) {
-            $tanggal = $awal;
-            $dateAwal = new DateTime($awal);
-            // $startTime = $dateAwal->format('H:i');
-        // dd($awal, $akhir);
+        while ($awalDate <= $akhirDate) {
+            $tanggal = $awalDate->format('Y-m-d');
+            $tanggalSelanjutnya = $awalDate->format('Y-m-d');
 
-
-            $awal = date('Y-m-d', strtotime("+1 day", strtotime($awal)));
-            $akhirDate = new DateTime($akhir);
-            // $endTime = $akhirDate->format('H:i');
-
-            // dd([$dateAwal->format('Y-m-d ' . $startTime ?? '23:00'), $akhirDate->format('Y-m-d ' . $endTime)]);
-
+            // Move to the next day
+            $awalDate->modify('+1 day');
 
             // \DB::enableQueryLog();
-            $total_biliard = OrderBiliard::whereBetween('created_at', [$dateAwal, $akhirDate])->sum('totalbayar');
-            $total_cafe = Pesanan::whereBetween('created_at', [$dateAwal, $akhirDate])->sum('TotalBayar');
+            $total_biliard = OrderBiliard::whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('totalbayar');
+            $total_cafe = Pesanan::whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('TotalBayar');
 
-            $total_biliard_cash = OrderBiliard::where('customer',  'not like', '%tf%')->whereBetween('created_at', [$dateAwal, $akhirDate])->sum('totalbayar');
-            $total_biliard_tf = OrderBiliard::where('customer',  'like', '%tf%')->whereBetween('created_at', [$dateAwal, $akhirDate])->sum('totalbayar');
+            $total_biliard_cash = OrderBiliard::where('customer',  'not like', '%tf%')->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('totalbayar');
+            $total_biliard_tf = OrderBiliard::where('customer',  'like', '%tf%')->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('totalbayar');
 
-            $total_cafe_cash = Pesanan::where('customer',  'not like', '%tf%')->whereBetween('created_at', [$dateAwal, $akhirDate])->sum('TotalBayar');
-            $total_cafe_tf = Pesanan::where('customer',  'like', '%tf%')->whereBetween('created_at', [$dateAwal, $akhirDate])->sum('TotalBayar');
+            $total_cafe_cash = Pesanan::where('customer',  'not like', '%tf%')->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('TotalBayar');
+            $total_cafe_tf = Pesanan::where('customer',  'like', '%tf%')->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('TotalBayar');
 
             // dd($total_biliard_cash);
 
@@ -229,11 +230,11 @@ class LaporanController extends Controller
             $awalDate->modify('+1 day');
 
             // \DB::enableQueryLog();
-            $total_biliard_cash = OrderBiliard::where('customer',  'not like', '%tf%')->whereBetween('created_at', [$dateAwal->format('Y-m-d ' . $startTime), $akhirDate->format('Y-m-d ' . $endTime)])->sum('totalbayar');
-            $total_biliard_tf = OrderBiliard::where('customer',  'like', '%tf%')->whereBetween('created_at', [$dateAwal->format('Y-m-d ' . $startTime), $akhirDate->format('Y-m-d ' . $endTime)])->sum('totalbayar');
+            $total_biliard_cash = OrderBiliard::where('customer',  'not like', '%tf%')->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('totalbayar');
+            $total_biliard_tf = OrderBiliard::where('customer',  'like', '%tf%')->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('totalbayar');
 
-            $total_cafe_cash = Pesanan::where('customer',  'not like', '%tf%')->whereBetween('created_at', [$dateAwal->format('Y-m-d ' . $startTime), $akhirDate->format('Y-m-d ' . $endTime)])->sum('TotalBayar');
-            $total_cafe_tf = Pesanan::where('customer',  'like', '%tf%')->whereBetween('created_at', [$dateAwal->format('Y-m-d ' . $startTime), $akhirDate->format('Y-m-d ' . $endTime)])->sum('TotalBayar');
+            $total_cafe_cash = Pesanan::where('customer',  'not like', '%tf%')->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('TotalBayar');
+            $total_cafe_tf = Pesanan::where('customer',  'like', '%tf%')->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('TotalBayar');
 
             // dd(\DB::getQueryLog());
 
@@ -305,7 +306,7 @@ class LaporanController extends Controller
             $awalDate->modify('+1 day');
 
             $pesanan = PesananDetail::select('id_menu', DB::raw('SUM(jumlah) as total_jumlah'))
-                ->whereBetween('created_at', [$dateAwal->format('Y-m-d ' . $startTime), $akhirDate->format('Y-m-d ' . $endTime)])
+                ->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])
                 ->groupBy('id_menu')
                 ->orderBy('total_jumlah', 'desc')
                 ->get();

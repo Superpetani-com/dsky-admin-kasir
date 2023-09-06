@@ -1,5 +1,3 @@
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-
 <div class="modal fade" id="modal-form" tabindex="-1" role="dialog" aria-labelledby="modal-form">
     <div class="modal-dialog modal-lg" role="document">
         <form action="{{ route('laporan.index') }}" method="get" data-toggle="validator" class="form-horizontal">
@@ -39,11 +37,3 @@
         </form>
     </div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script>
-    flatpickr('#datetimepicker', {
-        enableTime: true, // Enable time selection
-        dateFormat: "Y-m-d H:i", // Format of the input value
-    });
-</script>

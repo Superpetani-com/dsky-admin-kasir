@@ -28,6 +28,7 @@ class CafeExport implements FromCollection, ShouldAutoSize, WithHeadings
         $no = 1;
         $data = array();
         $total_pendapatan = 0;
+        $uniqueOrderIds = [];
 
         // Loop through date range
         while (strtotime($this->awal) <= strtotime($this->akhir)) {
@@ -39,11 +40,6 @@ class CafeExport implements FromCollection, ShouldAutoSize, WithHeadings
             $akhirDate = new DateTime($this->akhir);
             $endTime = $akhirDate->format('H:i');
 
-            // Calculate total cafe sales for the day
-            $total_cafe = Pesanan::whereBetween('created_at', [$dateAwal->format('Y-m-d ' . $startTime), $akhirDate->format('Y-m-d ' . $endTime)])->sum('TotalBayar');
-
-            $total_pendapatan += $total_cafe;
-
             // Check if there are orders for the day
             if (Pesanan::whereBetween('created_at', [$dateAwal->format('Y-m-d ' . $startTime), $akhirDate->format('Y-m-d ' . $endTime)])->exists()) {
                 $order = Pesanan::with('meja')
@@ -54,36 +50,41 @@ class CafeExport implements FromCollection, ShouldAutoSize, WithHeadings
 
                 // Process and format orders
                 foreach ($order as $item) {
-                    $row = array();
-                    $row['DT_RowIndex'] = $no++;
-                    $row['tanggal']     = date($item->created_at);
-                    $row['No.Order']    = $item->Id_pesanan;
-                    $row['No.Meja']     = $item->meja['nama_meja'];
-                    $row['Customer']    = $item->customer;
-                    $row['TotalItem']   = $item->TotalItem . ' Item';
-                    $row['TotalBayar']  = 'Rp.' . format_uang($item->TotalBayar);
-                    $row['created_by']  = $item->created_by;
-                    $nama_menu = [];
+                    if (!in_array($item->Id_pesanan, $uniqueOrderIds)) {
+                        $uniqueOrderIds[] = $item->Id_pesanan; // Mark 'No.Order' as seen
+                        $total_pendapatan += $item->TotalBayar;
 
-                    $detail = PesananDetail::where('id_pesanan', '=', $item->Id_pesanan)->with('menu')->get();
+                        $row = array();
+                        $row['DT_RowIndex'] = $no++;
+                        $row['tanggal']     = date($item->created_at);
+                        $row['No.Order']    = $item->Id_pesanan;
+                        $row['No.Meja']     = $item->meja['nama_meja'];
+                        $row['Customer']    = $item->customer;
+                        $row['TotalItem']   = $item->TotalItem . ' Item';
+                        $row['TotalBayar']  = 'Rp.' . format_uang($item->TotalBayar);
+                        $row['created_by']  = $item->created_by;
+                        $nama_menu = [];
 
-                    foreach ($detail as $value) {
-                        if ($value->menu) {
-                            array_push($nama_menu, $value->menu->Nama_menu . ' (' . $value->jumlah . ')');
+                        $detail = PesananDetail::where('id_pesanan', '=', $item->Id_pesanan)->with('menu')->get();
+
+                        foreach ($detail as $value) {
+                            if ($value->menu) {
+                                array_push($nama_menu, $value->menu->Nama_menu . ' (' . $value->jumlah . ')');
+                            }
                         }
+
+                        $row['menus'] = implode(', ', $nama_menu);
+
+                        $item->isOrder = false;
+                        $order = OrderBiliard::where('id_pesanan', '=', $item->Id_pesanan)->get();
+
+                        if (count($order) > 0) {
+                            $item->isOrder = true;
+                            $row['No.Meja'] = 'Meja Biliard ' . $item->meja['id_meja'];
+                        }
+
+                        $data[] = $row;
                     }
-
-                    $row['menus'] = implode(', ', $nama_menu);
-
-                    $item->isOrder = false;
-                    $order = OrderBiliard::where('id_pesanan', '=', $item->Id_pesanan)->get();
-
-                    if (count($order) > 0) {
-                        $item->isOrder = true;
-                        $row['No.Meja'] = 'Meja Biliard ' . $item->meja['id_meja'];
-                    }
-
-                    $data[] = $row;
                 }
             }
             // Add total pendapatan row
