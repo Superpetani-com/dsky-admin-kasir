@@ -46,7 +46,7 @@
                         </div>
                     </div>
 
-                    <input type="hidden" name="cabang_id" value="Jogja Billiard">
+                    <input type="hidden" name="cabang_id" value="XT Billiard">
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-sm btn-flat btn-primary"><i class="fa fa-save"></i> Simpan</button>

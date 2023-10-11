@@ -106,7 +106,7 @@ class OrderBiliardDetailController extends Controller
         $detail->harga=$paket->harga;
         $detail->seting =$request->seting_paket;
         $detail->subtotal=$paket->harga*$detail->jumlah;
-        $detail->cabang_id='Jogja Billiard';
+        $detail->cabang_id='XT Billiard';
         $detail->save();
         return response()->json('Data berhasil disimpan', 200);
     }

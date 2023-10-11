@@ -2,9 +2,9 @@
     <!-- Logo -->
     <a class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>J</b>B</span>
+      <span class="logo-mini"><b>X</b>T</span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg">Jogja Billiard</span>
+      <span class="logo-lg">XT Billiard</span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
