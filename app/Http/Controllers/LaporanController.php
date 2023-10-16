@@ -66,16 +66,18 @@ class LaporanController extends Controller
             $total_biliard = OrderBiliard::whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('totalbayar');
             $total_cafe = Pesanan::whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('TotalBayar');
 
-            $total_biliard_cash = OrderBiliard::where('customer',  'not like', '%tf%')->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('totalbayar');
+            $total_biliard_cash = OrderBiliard::where('customer',  'not like', '%tf%')->where('customer',  'not like', '%qr%')->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('totalbayar');
             $total_biliard_tf = OrderBiliard::where('customer',  'like', '%tf%')->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('totalbayar');
+            $total_biliard_qr = OrderBiliard::where('customer',  'like', '%qr%')->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('totalbayar');
 
-            $total_cafe_cash = Pesanan::where('customer',  'not like', '%tf%')->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('TotalBayar');
+            $total_cafe_cash = Pesanan::where('customer',  'not like', '%tf%')->where('customer',  'not like', '%qr%')->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('TotalBayar');
             $total_cafe_tf = Pesanan::where('customer',  'like', '%tf%')->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('TotalBayar');
+            $total_cafe_qr = Pesanan::where('customer',  'like', '%qr%')->whereBetween('created_at', ["$tanggal 09:00:00", $awalDate->format('Y-m-d 07:00:00')])->sum('TotalBayar');
 
             // dd($total_biliard_cash);
 
             $total_cash = $total_biliard_cash + $total_cafe_cash;
-            $total_tf = $total_biliard_tf + $total_cafe_tf;
+            $total_tf = $total_biliard_tf + $total_cafe_tf + $total_biliard_qr + $total_cafe_qr;
 
             // dd(\DB::getQueryLog());
             $pendapatan = $total_biliard + $total_cafe;
