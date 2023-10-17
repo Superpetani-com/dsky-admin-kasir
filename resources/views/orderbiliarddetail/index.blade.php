@@ -219,7 +219,7 @@
                     </div>
                     <div class="col-lg-4">
                         {{-- {{dd($order);}} --}}
-                        <form action="{{ route('pesanan.store') }}" class="form-pesanan" method="post">
+                        <form action="{{ route('pesanan.store') }}" class="form-pesanan" method="post" id = "form_pesanan">
                             @csrf
                             <input type="hidden" name="id_meja_cafe" id="id_meja_cafe" value="{{ $meja->id_meja }}">
                             <input type="hidden" name="status_meja" id="status_meja" value="{{ $meja->Status }}">
@@ -272,7 +272,7 @@
 
                           </form>
                         </div>
-                        <form action="{{ route('orderbiliard.store') }}" class="form-order" method="post">
+                        <form action="{{ route('orderbiliard.store') }}" class="form-order" method="post" id ="form_order">
                             @csrf
                             <input type="hidden" name="id_order_biliard"  value="{{ $id_order_biliard }}">
                             <input type="hidden" name="total" id="total" value="{{ $order->totalharga }}">
@@ -742,6 +742,97 @@
                 newWindow.close();
             }, 1000); // Wait for 2000 milliseconds (2 seconds)
         }
+    }
+
+    function storeDetail(id, nama){
+      var setting_paket = $('#seting').val();
+      $.ajax({
+        type: 'POST',
+        url: '{{route('orderbiliarddetail.store')}}',
+        async:false,
+        cache: false,
+        data:{id_paket_biliard : id, nama : nama, setting_paket:setting_paket, id_order_biliard : {{$id_order_biliard}}, _token: '{{csrf_token()}}' },
+        dataType: 'json',
+        beforeSend: function() {
+
+        },
+        success: function(data) {
+          storeOrder();
+        },
+        error: function() {
+          console.log('gagal');
+        }
+      });
+    }
+
+    function storeOrder(){
+      var form_process				= $("#form_order");
+      var data_form_process 	= $("#form_order").serializeArray();
+      var m_data 						  = new FormData();
+
+      form_process.submit(function(e){
+        e.preventDefault(e);
+      });
+
+      $.each(data_form_process, function(i, field){
+        m_data.append(field.name, field.value);
+      });
+
+      m_data.append('_token', '{{csrf_token()}}');
+      $.ajax({
+        type: 'POST',
+        url: '{{route('orderbiliard.store')}}',
+        processData: false,
+        contentType: false,
+        cache: false,
+        dataType: 'html',
+        type: 'POST',
+        data: m_data,
+        beforeSend: function() {
+
+        },
+        success: function(data) {
+          console.log('Berhasil Order');
+        },
+        error: function() {
+          console.log('gagal Order');
+        }
+      });
+    }
+
+    function storePesanan(){
+      var form_process				= $("#form_pesanan");
+      var data_form_process 	= $("#form_pesanan").serializeArray();
+      var m_data 						  = new FormData();
+
+      form_process.submit(function(e){
+        e.preventDefault(e);
+      });
+
+      $.each(data_form_process, function(i, field){
+        m_data.append(field.name, field.value);
+      });
+
+      m_data.append('_token', '{{csrf_token()}}');
+      $.ajax({
+        type: 'POST',
+        url: '{{route('pesanan.store')}}',
+        processData: false,
+        contentType: false,
+        cache: false,
+        dataType: 'html',
+        type: 'POST',
+        data: m_data,
+        beforeSend: function() {
+
+        },
+        success: function(data) {
+          console.log('Berhasil Pesanan');
+        },
+        error: function() {
+          console.log('gagal Pesanan');
+        }
+      });
     }
 </script>
 @endpush

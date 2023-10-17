@@ -121,6 +121,10 @@ class PesananController extends Controller
         redirect()->route('dashboard.index');
     }
 
+    public function storeDetail(request $request){
+        
+    }
+
     public function cetak($id)
     {
         $detail=PesananDetail::with('menu')

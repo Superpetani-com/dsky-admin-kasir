@@ -42,6 +42,15 @@
                   </select>
                   </div>
                 </div>
+                <div class="form-group row">
+                  <label for="kategori" class="col-md-2 col-md-offset-1 control-label">Kategori</label>
+                  <div class="col-md-9">
+                  <select class="form-control kategori" name="kategori" id="kategori">
+                  <option>Makanan</option>
+                  <option>Minuman</option>
+                  </select>
+                  </div>
+                </div>
                 
         </div>
       <div class="modal-footer">

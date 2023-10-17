@@ -111,6 +111,41 @@ class OrderBiliardDetailController extends Controller
         return response()->json('Data berhasil disimpan', 200);
     }
 
+    public function store_detail(Request $request){
+        print_r("hehe");exit;
+        $order=new orderbiliard();
+        $order->id_meja_biliard=$id;
+        $order->totaljam=0.00;
+        $order->totalharga=0.00;
+        $order->totalbayar=0.00;
+        $order->diterima=0;
+        $order->kembali=0.00;
+        $order->diskon=0;
+        $order->totalflag=0;
+        $order->status='Aktif';
+        $order->cabang_id='XT Billiard';
+        $order->created_by = auth()->user()->name;
+
+        $uuid = Uuid::uuid4();
+        $pesanan=new pesanan();
+        $pesanan->Id_meja=$id;
+        $pesanan->TotalItem=0;
+        $pesanan->TotalHarga=0;
+        $pesanan->Diskon=0;
+        $pesanan->TotalBayar=0;
+        $pesanan->Diterima=0;
+        $pesanan->Kembali=0;
+        $pesanan->ppn=10;
+        $pesanan->status='Aktif';
+        $pesanan->cabang_id='XT Billiard';
+        $pesanan->created_by = auth()->user()->name;
+        $pesanan->uuid = $uuid->toString();
+        $pesanan->save();
+
+        $order->id_pesanan =  $pesanan->Id_pesanan;
+        $order->save();
+    }
+
     public function data($id, $status1, $status2)
     {
         $detail=OrderBiliardDetail::with('paket', 'order')

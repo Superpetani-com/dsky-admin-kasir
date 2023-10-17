@@ -26,7 +26,7 @@
               <td>{{$item->keterangan}}</td>
               <td>
                 <button href="#" class="btn btn-primary btn-xs btn-flat"
-                  onclick="pilihpaket('{{$item->id_paket_biliard}}','{{$item->nama_paket}}')">
+                  onclick="pilihpaket('{{$item->id_paket_biliard}}','{{$item->nama_paket}}'), storeDetail('{{$item->id_paket_biliard}}','{{$item->nama_paket}}')">
                   <i class="fa fa-check-circle"></i>  Pilih
                 </button>
               </td>

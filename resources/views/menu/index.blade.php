@@ -127,6 +127,7 @@
           $('#modal-form [name=harga]').val(response.Harga);
           $('#modal-form [name=stok]').val(response.stok);
           $('#modal-form [name=jenis]').val(response.jenis);
+          $('#modal-form [name=kategori]').val(response.kategori);
         })
         .fail((errors)=>{
           alert('Tidak dapat menampilkan data');
