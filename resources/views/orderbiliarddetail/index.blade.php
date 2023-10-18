@@ -219,7 +219,7 @@
                     </div>
                     <div class="col-lg-4">
                         {{-- {{dd($order);}} --}}
-                        <form action="{{ route('pesanan.store') }}" class="form-pesanan" method="post" id = "form_pesanan">
+                        <form action="{{ route('pesanan.store') }}" class="form-pesanan" method="post">
                             @csrf
                             <input type="hidden" name="id_meja_cafe" id="id_meja_cafe" value="{{ $meja->id_meja }}">
                             <input type="hidden" name="status_meja" id="status_meja" value="{{ $meja->Status }}">
@@ -272,7 +272,7 @@
 
                           </form>
                         </div>
-                        <form action="{{ route('orderbiliard.store') }}" class="form-order" method="post" id ="form_order">
+                        <form action="{{ route('orderbiliard.store') }}" class="form-order" method="post">
                             @csrf
                             <input type="hidden" name="id_order_biliard"  value="{{ $id_order_biliard }}">
                             <input type="hidden" name="total" id="total" value="{{ $order->totalharga }}">
