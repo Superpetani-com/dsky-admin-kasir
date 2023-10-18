@@ -41,6 +41,7 @@
                 <th width="5%">No</th>
                 <th>Nama Menu</th>
                 <th>Harga</th>
+                <th>Kategori</th>
                 <th>Stok</th>
                 <th>Stok Update?</th>
                 <th width="15%"><i class="fa fa-cog"></i></th>
@@ -74,6 +75,7 @@
         {data:'DT_RowIndex', searchable:false, sortable:false},
         {data:'Nama_menu'},
         {data:'Harga'},
+        {data:'kategori'},
         {data:'stok'},
         {data:'jenis'},
         {data:'aksi', searchable:false, sortable:false},

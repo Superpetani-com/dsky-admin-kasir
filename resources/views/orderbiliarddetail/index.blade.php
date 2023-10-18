@@ -834,5 +834,10 @@
         }
       });
     }
+    
+    function confirmDelete(){
+      console.log('cek')
+      $('#modal-paket').modal('show');
+    }
 </script>
 @endpush

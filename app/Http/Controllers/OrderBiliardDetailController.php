@@ -189,9 +189,10 @@ class OrderBiliardDetailController extends Controller
             $row['subtotal']    = 'Rp. '. format_uang(ceil($item->subtotal / 1000) * 1000);
 
             if ($status2<>"Selesai"){
-                $row['aksi']        =  ' <div class="btn-group">
-                                        <button onclick="deleteData(`'.route('orderbiliarddetail.destroy', $item->id_order_biliard_detail).'`)" class="btn btn-xs btn-danger btn-flat btn-hapus"><i class="fa fa-trash"></i> H</button>
-                                        </div>';
+                $row['aksi']        =  '<div class="btn-group">
+                                        <button onclick="confirmDelete()" class="btn btn-xs btn-danger btn-flat btn-hapus" type="button"><i class="fa fa-trash"></i></button>
+                                        <div>'
+                                        ;
             }
             if ($status2=="Selesai"){
                 $row['aksi']        =  ' ';
