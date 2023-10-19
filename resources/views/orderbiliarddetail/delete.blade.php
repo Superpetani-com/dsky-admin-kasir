@@ -11,13 +11,14 @@
         <h4 class="modal-title">Apakah Anda yakin Menghapus paket?</h4>
         <div class="form-group row">
             <div class="col-md-12">
-                <input type="text" name="confirm_delete" id="confirm_delete" class="form-control" required autofocus>
+                <input type="password" name="confirm_delete" id="confirm_delete" class="form-control" required autofocus>
+                <input type="hidden" name="url_delete" id="url_delete" class="form-control" >
                 <span class="help-block with-errors"></span>
             </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary">Konfirmasi</button>
+        <button type="button" class="btn btn-primary" onclick ="checkDelete()">Konfirmasi</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
       </div>
     </div>

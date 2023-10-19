@@ -335,6 +335,7 @@
 @includeIf('orderbiliarddetail.mejabilliard')
 @includeIf('orderbiliarddetail.paket')
 @includeIf('orderbiliarddetail.menu')
+@includeIf('orderbiliarddetail.delete')
 
 @endsection
 
@@ -641,6 +642,8 @@
   }
 
   function deleteData(url) {
+    console.log("delete data");
+    console.log(url);
     // harusnya tidak bisa dihapus, bisa dihapus ketika data menitnya lebih besar dari data awal
         if (confirm('Yakin ingin menghapus data terpilih?')) {
             $.post(url, {
@@ -835,9 +838,27 @@
       });
     }
     
-    function confirmDelete(){
-      console.log('cek')
-      $('#modal-paket').modal('show');
+    function confirmDelete(url){
+      $('#url_delete').val("");
+      $('#confirm_delete').val("");
+      $('#modal-delete').modal('show');
+      $('#url_delete').val(url);
+      //document.getElementById("url_delete");
+    }
+
+    function checkDelete(url){
+      console.log("cek konfirm")
+      console.log($('#url_delete').val());
+      var password_input = $("#confirm_delete").val();
+      var password_env   = '<?php echo env('PASS_KASIR');?>';
+      var url            = $('#url_delete').val();
+      if(password_env == password_input){
+        console.log('suksus')
+        deleteData(url)
+      }else{
+        console.log("cacat")
+      }
+      
     }
 </script>
 @endpush
