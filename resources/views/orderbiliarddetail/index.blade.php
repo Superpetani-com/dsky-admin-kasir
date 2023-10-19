@@ -272,7 +272,7 @@
 
                           </form>
                         </div>
-                        <form action="{{ route('orderbiliard.store') }}" class="form-order" method="post">
+                        <form action="{{ route('orderbiliard.store') }}" class="form-order" id = "form_order" method="post">
                             @csrf
                             <input type="hidden" name="id_order_biliard"  value="{{ $id_order_biliard }}">
                             <input type="hidden" name="total" id="total" value="{{ $order->totalharga }}">
@@ -698,6 +698,9 @@
                 $('.tampil-bayar').text('Bayar: Rp. '+ totals.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
                 // $('.tampil-terbilang').text('Terbilang: '+response.terbilang);
                 $('#kembalirp').val('Rp.'+ response.kembalirp);
+                setTimeout(() => {
+                  storeOrder();
+                }, 500)
                 // if ($('#diterima').val() != 0) {
                 //     $('.tampil-bayar').text('Kembali: Rp. '+ response.kembalirp);
                 //     $('.tampil-terbilang').text(response.kembali_terbilang);
@@ -769,6 +772,7 @@
     }
 
     function storeOrder(){
+      console.log("storeOrder");
       var form_process				= $("#form_order");
       var data_form_process 	= $("#form_order").serializeArray();
       var m_data 						  = new FormData();
@@ -782,9 +786,11 @@
       });
 
       m_data.append('_token', '{{csrf_token()}}');
+
+      console.log(m_data);
       $.ajax({
         type: 'POST',
-        url: '{{route('orderbiliard.store')}}',
+        url: "{{route('orderbiliard.store')}}",
         processData: false,
         contentType: false,
         cache: false,

@@ -136,7 +136,8 @@ class OrderBiliardController extends Controller
         ->get();
         foreach ($updatestatus as $item){
         $item->status="Selesai";
-        $item->update();}
+        $item->update();
+        }
         $order->totaljam= $request->total_jam;
         //$order->totalflag= $request->total_flag;
         $order->diskon = 0;
