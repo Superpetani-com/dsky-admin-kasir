@@ -134,10 +134,14 @@ class OrderBiliardController extends Controller
         ->offset(1)
         ->limit(20)
         ->get();
+
+        // dd($updatestatus);
+
         foreach ($updatestatus as $item){
-        $item->status="Selesai";
-        $item->update();
+            $item->status="Selesai";
+            $item->update();
         }
+
         $order->totaljam= $request->total_jam;
         //$order->totalflag= $request->total_flag;
         $order->diskon = 0;
@@ -150,42 +154,45 @@ class OrderBiliardController extends Controller
         $order->customer=$request->nama_cust3;
         $order->update();
 
+        // dd($order);
+
         if ($order->status=="Aktif"){
-        $unixtimenow = strtotime("now");
-        $timenow = date("Y/m/d H:i:s", $unixtimenow);
-        $durasi=($request->total_menit);
+            $unixtimenow = strtotime("now");
+            $timenow = date("Y/m/d H:i:s", $unixtimenow);
+            $durasi=($request->total_menit);
 
-        if ($mejabiliard->jammulai==0 && $mejabiliard->id_order_biliard==0){
-            $mejabiliard->jammulai = $timenow;}
-        //bila ada penambahan paket
-        //if ($mejabiliard->jammulai!=0 && $mejabiliard->id_order_biliard!=0) {
-        $jamselesai= date("Y/m/d H:i:s",intval(($durasi*60)+(strtotime($mejabiliard->jammulai))));
-        $mejabiliard->jamselesai = $jamselesai;
-        //}
+            if ($mejabiliard->jammulai==0 && $mejabiliard->id_order_biliard==0) {
+                $mejabiliard->jammulai = $timenow;
+            }
+            //bila ada penambahan paket
+            //if ($mejabiliard->jammulai!=0 && $mejabiliard->id_order_biliard!=0) {
+            $jamselesai= date("Y/m/d H:i:s",intval(($durasi*60)+(strtotime($mejabiliard->jammulai))));
+            $mejabiliard->jamselesai = $jamselesai;
+            //}
 
-        //bila paket baru
-        /*if ($mejabiliard->jammulai==0 && $mejabiliard->id_order_biliard==0){
-        $mejabiliard->jammulai = $timenow;
-        $jamselesai= date("Y/m/d H:i:s",intval($durasi*60+$unixtimenow));
-        $mejabiliard->jamselesai = $jamselesai;
-        }*/
+            //bila paket baru
+            /*if ($mejabiliard->jammulai==0 && $mejabiliard->id_order_biliard==0){
+            $mejabiliard->jammulai = $timenow;
+            $jamselesai= date("Y/m/d H:i:s",intval($durasi*60+$unixtimenow));
+            $mejabiliard->jamselesai = $jamselesai;
+            }*/
 
-        $mejabiliard->durasi = number_format($durasi,2,",",".");
-        $mejabiliard->id_order_biliard = $request->id_order_biliard;
-        $mejabiliard->flag=$request->total_flag;
+            $mejabiliard->durasi = number_format($durasi,2,",",".");
+            $mejabiliard->id_order_biliard = $request->id_order_biliard;
+            $mejabiliard->flag=$request->total_flag;
 
-        if(strtotime($mejabiliard->jamselesai)>strtotime("now") or $mejabiliard->flag>0){
-            $mejabiliard->status = "Dipakai";
-        }
-        if ($mejabiliard->flag==0){
-            $selesai=(strtotime($mejabiliard->jamselesai)-strtotime("now"))/60;
-            if ($selesai<0){$selesai=0;}
-            $mejabiliard->sisadurasi = number_format($selesai,2,",",".");
-        }
-        if ($mejabiliard->flag>0){
-            $mejabiliard->sisadurasi = 99999;
-        }
-        $mejabiliard->update();
+            if(strtotime($mejabiliard->jamselesai)>strtotime("now") or $mejabiliard->flag>0){
+                $mejabiliard->status = "Dipakai";
+            }
+            if ($mejabiliard->flag==0){
+                $selesai=(strtotime($mejabiliard->jamselesai)-strtotime("now"))/60;
+                if ($selesai<0){$selesai=0;}
+                $mejabiliard->sisadurasi = number_format($selesai,2,",",".");
+            }
+            if ($mejabiliard->flag>0){
+                $mejabiliard->sisadurasi = 99999;
+            }
+            $mejabiliard->update();
         }
 
         // dd($mejabiliard);
