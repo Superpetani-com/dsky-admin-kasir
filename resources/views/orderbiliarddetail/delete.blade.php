@@ -4,11 +4,11 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Pilih Paket</h4>
+        <h4 class="modal-title">Hapus Order?</h4>
       </div>
 
       <div class="modal-body">
-        <h4 class="modal-title">Apakah Anda yakin Menghapus paket?</h4>
+        <h4 class="modal-title">Masukan Password?</h4>
         <div class="form-group row">
             <div class="col-md-12">
                 <input type="password" name="confirm_delete" id="confirm_delete" class="form-control" required autofocus>

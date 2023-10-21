@@ -272,7 +272,7 @@
 
                           </form>
                         </div>
-                        <form action="{{ route('orderbiliard.store') }}" class="form-order" id = "form_order" method="post">
+                        <form action="{{ route('orderbiliard.store') }}" class="form-order" id="form_order" method="post">
                             @csrf
                             <input type="hidden" name="id_order_biliard"  value="{{ $id_order_biliard }}">
                             <input type="hidden" name="total" id="total" value="{{ $order->totalharga }}">
@@ -592,6 +592,10 @@
     $('#seting_paket').val($('.seting').val());
     hidepaket()
     tambahpaket()
+
+    setTimeout(() => {
+        storeOrder();
+     }, 1500)
   }
 
   function tambahpaket(){
@@ -698,9 +702,7 @@
                 $('.tampil-bayar').text('Bayar: Rp. '+ totals.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
                 // $('.tampil-terbilang').text('Terbilang: '+response.terbilang);
                 $('#kembalirp').val('Rp.'+ response.kembalirp);
-                setTimeout(() => {
-                  storeOrder();
-                }, 500)
+
                 // if ($('#diterima').val() != 0) {
                 //     $('.tampil-bayar').text('Kembali: Rp. '+ response.kembalirp);
                 //     $('.tampil-terbilang').text(response.kembali_terbilang);
@@ -772,16 +774,18 @@
     }
 
     function storeOrder(){
+    //   table.ajax.reload();
       console.log("storeOrder");
-      var form_process				= $("#form_order");
-      var data_form_process 	= $("#form_order").serializeArray();
-      var m_data 						  = new FormData();
+      var form_process = $("#form_order");
+      var data_form_process = $("#form_order").serializeArray();
+      var m_data = new FormData();
 
       form_process.submit(function(e){
         e.preventDefault(e);
       });
 
       $.each(data_form_process, function(i, field){
+          console.log(field)
         m_data.append(field.name, field.value);
       });
 
@@ -794,7 +798,7 @@
         processData: false,
         contentType: false,
         cache: false,
-        dataType: 'html',
+        dataType: 'json',
         type: 'POST',
         data: m_data,
         beforeSend: function() {
@@ -843,7 +847,7 @@
         }
       });
     }
-    
+
     function confirmDelete(url){
       $('#url_delete').val("");
       $('#confirm_delete').val("");
@@ -864,7 +868,7 @@
       }else{
         console.log("cacat")
       }
-      
+
     }
 </script>
 @endpush
