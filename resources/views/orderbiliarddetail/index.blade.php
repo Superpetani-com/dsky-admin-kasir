@@ -774,43 +774,46 @@
     }
 
     function storeOrder(){
-    //   table.ajax.reload();
+      loadform();
+      table.ajax.reload();
       console.log("storeOrder");
-      var form_process = $("#form_order");
-      var data_form_process = $("#form_order").serializeArray();
-      var m_data = new FormData();
+      setTimeout(() => {
+        var form_process = $("#form_order");
+        var data_form_process = $("#form_order").serializeArray();
+        var m_data = new FormData();
 
-      form_process.submit(function(e){
-        e.preventDefault(e);
-      });
+        form_process.submit(function(e){
+            e.preventDefault(e);
+        });
 
-      $.each(data_form_process, function(i, field){
-          console.log(field)
-        m_data.append(field.name, field.value);
-      });
+        $.each(data_form_process, function(i, field){
+            console.log(field)
+            m_data.append(field.name, field.value);
+        });
 
-      m_data.append('_token', '{{csrf_token()}}');
+        m_data.append('_token', '{{csrf_token()}}');
 
-      console.log(m_data);
-      $.ajax({
-        type: 'POST',
-        url: "{{route('orderbiliard.store')}}",
-        processData: false,
-        contentType: false,
-        cache: false,
-        dataType: 'json',
-        type: 'POST',
-        data: m_data,
-        beforeSend: function() {
+        console.log(m_data);
+        $.ajax({
+            type: 'POST',
+            url: "{{route('orderbiliard.store')}}",
+            processData: false,
+            contentType: false,
+            cache: false,
+            dataType: 'json',
+            type: 'POST',
+            data: m_data,
+            beforeSend: function() {
 
-        },
-        success: function(data) {
-          console.log('Berhasil Order');
-        },
-        error: function() {
-          console.log('gagal Order');
-        }
-      });
+            },
+            success: function(data) {
+            console.log('Berhasil Order');
+            },
+            error: function() {
+            console.log('gagal Order');
+            }
+        });
+      }, 500)
     }
 
     function storePesanan(){

@@ -30,6 +30,7 @@ class OrderBiliardController extends Controller
      */
     public function create($id)
     {
+        $uuid_order = Uuid::uuid4();
         $order=new orderbiliard();
         $order->id_meja_biliard=$id;
         $order->totaljam=0.00;
@@ -41,6 +42,7 @@ class OrderBiliardController extends Controller
         $order->totalflag=0;
         $order->status='Aktif';
         $order->cabang_id='XT Billiard';
+        $order->uuid = $uuid_order->toString();
         $order->created_by = auth()->user()->name;
 
         $uuid = Uuid::uuid4();
