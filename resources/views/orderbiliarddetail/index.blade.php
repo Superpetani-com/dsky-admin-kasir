@@ -336,6 +336,7 @@
 @includeIf('orderbiliarddetail.paket')
 @includeIf('orderbiliarddetail.menu')
 @includeIf('orderbiliarddetail.delete')
+@includeIf('orderbiliarddetail.delete_menu')
 
 @endsection
 
@@ -859,12 +860,32 @@
       var password_env   = '<?php echo env('PASS_KASIR');?>';
       var url            = $('#url_delete').val();
       if(password_env == password_input){
-        console.log('suksus')
         deleteData(url)
       }else{
-        console.log("cacat")
+        alert('Password Delete salah')
       }
       
+    }
+
+    function confirmDeleteMenu(url){
+      $('#url_delete_menu').val("");
+      $('#confirm_delete_menu').val("");
+      $('#modal-delete_menu').modal('show');
+      $('#url_delete_menu').val(url);
+      //document.getElementById("url_delete");
+    }
+
+    function checkDeleteMenu(){
+      console.log("cek konfirm")
+      console.log($('#url_delete_menu').val());
+      var password_input = $("#confirm_delete_menu").val();
+      var password_env   = '<?php echo env('PASS_KASIR');?>';
+      var url            = $('#url_delete_menu').val();
+      if(password_env == password_input){
+        deleteData(url)
+      }else{
+        alert('Password Delete salah')
+      }
     }
 </script>
 @endpush
