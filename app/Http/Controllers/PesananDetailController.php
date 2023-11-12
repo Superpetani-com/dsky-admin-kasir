@@ -101,7 +101,7 @@ class PesananDetailController extends Controller
             $row['subtotal']    = 'Rp. '. format_uang($item->subtotal);
 
             $row['aksi']        =  ' <div class="btn-group">
-                                    <button onclick="deleteData(`'.route('pesanandetail.destroy', $item->id_pesanan_detail).'`)" class="btn btn-xs btn-danger btn-flat btn-hapus"><i class="fa fa-trash"></i> Hapus</button>
+                                    <button onclick="confirmDeleteMenu(`'.route('pesanandetail.destroy', $item->id_pesanan_detail).'`)" class="btn btn-xs btn-danger btn-flat btn-hapus"><i class="fa fa-trash"></i> Hapus</button>
                                     </div>';
             $data[] = $row;
             // dd($item->harga);
