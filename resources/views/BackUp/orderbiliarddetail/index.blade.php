@@ -24,11 +24,11 @@
     }
   .table-order tbody tr:nth-child(even) {
   background-color: #cef0b1;
-    } 
+    }
   .table-order  thead{background-color: #96bf73;}
   .table-mejabiliard tbody tr:nth-child(even) {
   background-color: #cef0b1;
-    } 
+    }
   .table-mejabiliard  thead{background-color: #96bf73;}
   table{font-size: 12pt;}
   input[type="text"]{font-size:12pt;}
@@ -38,7 +38,7 @@
   background-color: #35b50e;
   color: white;
   text-align: center;
-  }   
+  }
 .div-red {
   background-color: #db1107;
   color: white;
@@ -79,7 +79,7 @@
             padding-top: 5px;
         }
     }
-    
+
 </style>
 @endpush
 @section('breadcrumb')
@@ -103,11 +103,11 @@
                   <td>Nomor Order</td>
                   <td>:{{$id_order_biliard}}</td>
                 </tr>
-              </table>         
+              </table>
             </div>
             <div class="box-body">
                 <form class="form-paket">
-                  @csrf  
+                  @csrf
                   <!--div class="form-group row">
                     <label for="nama_paket" class="col-lg-2">Tambah Jam</label>
                     <div class="col-lg-5">
@@ -126,16 +126,16 @@
                     <input type="hidden" name="id_paket_biliard" id="id_paket_biliard">
                     <input type="hidden" name="id_order_biliard" id="id_order_biliard" value="{{$id_order_biliard}}">
                     <input type="hidden" name="seting_paket" id="seting_paket">
-                  </div>  
+                  </div>
                   <label for="nama_cust" class="col-lg-1">Customer</label>
                   <div class="col-lg-3">
-                    <input type="text" class="form-control" name="nama_cust" id="nama_cust" maxlength="50" value="{{$order->customer}}" required> 
+                    <input type="text" class="form-control" name="nama_cust" id="nama_cust" maxlength="50" value="{{$order->customer}}" required>
                     <span class="help-block with-errors"></span>
                   </div>
                   <div class="input-group-btn">
                      <button onclick="tampilpaket()" class="btn btn-info btn-tambah" type="button"><i class="fa fa-plus-circle"></i> Tambah Jam</button>
                      <button onclick="tampilmeja()" class="btn btn-danger btn-pindah" type="button"><i class="fa fa-arrows"></i> Pindah Meja</button>
-                  </div>        
+                  </div>
                 </form>
               </div>
               <table class="table table-stiped table-bordered table-order">
@@ -201,7 +201,7 @@
                                     <input type="text" id="kembalirp" class="form-control" readonly>
                                </div>
                             </div>
-                            
+
                           </form>
                         </div>
                       </div>
@@ -247,7 +247,7 @@
      dom:'Brt',
      bSort: false,
      "lengthMenu": [[-1], ["All"]]
-     
+
    })
    .on('draw.dt', function(){
      setTimeout(() => {
@@ -264,14 +264,14 @@
             }
             loadform($(this).val(), $('#diterima').val());
         },300));
-  
+
     $('#diterima').on('input', debounce(function() {
             if ($(this).val() == "") {
                 $(this).val(0).select();
           }
           loadform($('#diskon').val(), $(this).val());
         },300));
-       
+
     $('#nama_cust').change(function() {
     $('#nama_cust2').val($(this).val());
     });
@@ -284,20 +284,20 @@
       }
       $('.form-order').submit();
         });
-    
+
     $('.btn-cetak').on('click', function () {
-     
+
     $('.form-order').submit();
-    cetak('{{ route('orderbiliard.cetak', $id_order_biliard) }}', 'Nota');  
+    cetak('{{ route('orderbiliard.cetak', $id_order_biliard) }}', 'Nota');
         });
-    
+
     $('.btn-cetakselesai').on('click', function () {
     $('.form-order').submit();
     cetak('{{ route('orderbiliard.cetak', $id_order_biliard) }}', 'Nota');
-    $.get('{{route('mejabiliard.reset', $mejabiliard->id_meja_biliard)}}');  
+    $.get('{{route('mejabiliard.reset', $mejabiliard->id_meja_biliard)}}');
         });
-    
-      
+
+
   });
 
   const debounce = (func, wait, immediate)=> {
@@ -305,25 +305,25 @@
     return function executedFunction() {
         var context = this;
         var args = arguments;
-            
+
         var later = function() {
         timeout = null;
         if (!immediate) func.apply(context, args);
         };
 
         var callNow = immediate && !timeout;
-        
+
         clearTimeout(timeout);
 
         timeout = setTimeout(later, wait);
-        
+
         if (callNow) func.apply(context, args);
         };
-    }; 
+    };
 $(document).on('input','.quantity', debounce(function(){
      let id=$(this).data('id');
      let jumlah=($(this).val());
-     
+
      if(jumlah<0.00){
         alert('Jumlah tidak boleh kurang dari 0.00');
         $(this).val(0.05);
@@ -342,14 +342,14 @@ $(document).on('input','.quantity', debounce(function(){
      })
      .done(response=>{
         loadform($('#diskon').val(), $('#diterima').val());
-        table.ajax.reload();       
+        table.ajax.reload();
       })
       .fail(errors=>{
         alert('Tidak dapat menyimpan data');
         return;
       });
     },300));
-  
+
   function tampilmeja(){
     let status2=($('#status_order_biliard').val());
     if (status2=="Aktif"){
@@ -367,18 +367,19 @@ $(document).on('input','.quantity', debounce(function(){
 
   function hidepaket(){
     $('#modal-paket').modal('hide');
-    
+
   }
 
-  function pilihpaket(id, nama){ 
+  function pilihpaket(id, nama){
     $('#id_paket_biliard').val(id);
     $('#nama_paket').val(nama);
     $('#seting_paket').val($('.seting').val());
     hidepaket()
-    tambahpaket()
+    tambahpaket(id)
   }
 
   function tambahpaket(){
+    const id_custom = [];
     setTimeout(() => {
     $.post('{{route('orderbiliarddetail.store')}}', $('.form-paket').serialize())
       .done(response=>{
@@ -418,7 +419,7 @@ $(document).on('input','.quantity', debounce(function(){
                     alert('Tidak dapat menghapus data');
                     return;
                     });
-    } 
+    }
   }
 
   function loadform(diskon = 0, diterima = 0){
@@ -461,12 +462,12 @@ $(document).on('input','.quantity', debounce(function(){
         const systemZoom = width / window.screen.availWidth;
         const left       = (width - w) / 2 / systemZoom + dualScreenLeft
         const top        = (height - h) / 2 / systemZoom + dualScreenTop
-        const newWindow  = window.open(url, title, 
+        const newWindow  = window.open(url, title,
         `
             scrollbars=yes,
-            width  = ${w / systemZoom}, 
-            height = ${h / systemZoom}, 
-            top    = ${top}, 
+            width  = ${w / systemZoom},
+            height = ${h / systemZoom},
+            top    = ${top},
             left   = ${left}
         `
         );

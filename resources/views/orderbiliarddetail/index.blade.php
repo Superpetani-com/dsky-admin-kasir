@@ -336,6 +336,7 @@
 @includeIf('orderbiliarddetail.paket')
 @includeIf('orderbiliarddetail.menu')
 @includeIf('orderbiliarddetail.delete')
+@includeIf('orderbiliarddetail.confirmation')
 
 @endsection
 
@@ -583,19 +584,22 @@
 
   function hidepaket(){
     $('#modal-paket').modal('hide');
-
   }
 
-  function pilihpaket(id, nama){
+  function pilihpaket(id, nama, type){
     $('#id_paket_biliard').val(id);
     $('#nama_paket').val(nama);
     $('#seting_paket').val($('.seting').val());
-    hidepaket()
-    tambahpaket()
+    if(type == 'custom') {
+        $('#modal-confirmation').modal('show');
+    } else {
+        hidepaket()
+        tambahpaket()
 
-    setTimeout(() => {
-        storeOrder();
-     }, 1500)
+        setTimeout(() => {
+            storeOrder();
+        }, 1500)
+    }
   }
 
   function tambahpaket(){
@@ -869,9 +873,26 @@
         console.log('suksus')
         deleteData(url)
       }else{
-        console.log("cacat")
+        alert('salah password')
       }
 
+    }
+
+    function confirmPassword(url){
+      var password_input = $("#confirm_password").val();
+      var password_env   = '<?php echo env('PASS_KASIR');?>';
+      console.log(password_env, password_input)
+      if(password_env == password_input){
+        hidepaket()
+        tambahpaket()
+        $('#modal-confirmation').modal('hide');
+        password_input = '';
+        setTimeout(() => {
+            storeOrder();
+        }, 1500)
+      } else {
+          alert('salah password')
+      }
     }
 </script>
 @endpush

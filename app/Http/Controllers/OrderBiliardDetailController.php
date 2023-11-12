@@ -85,6 +85,19 @@ class OrderBiliardDetailController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request);
+        $id_paket_custom = paketbiliard::select('id_paket_biliard')->where('type', 'custom')->get();
+        $ids_paket_custom = [];
+        foreach ($id_paket_custom as $key) {
+            array_push($ids_paket_custom, $key['id_paket_biliard']);
+        }
+
+        $check_is_custom = OrderBiliardDetail::where('id_order_biliard', '=', $request->id_order_biliard)->whereIn('id_paket_biliard', $ids_paket_custom)->get();
+
+        if(count($check_is_custom) > 0) {
+            return response()->json('Hanya boleh 1 order custom', 400);
+        }
+
         $paket = paketbiliard::where('id_paket_biliard', $request->id_paket_biliard)->first();
         if(!$paket){
             return response()->json('Data gagal disimpan', 400);
@@ -172,7 +185,7 @@ class OrderBiliardDetailController extends Controller
             $row['jumlah']      =
             '<form>
             <div class="form-group">
-            <input type="number" class="quantity form-control" onchange="checkInputValidity(this, '. $item->jumlah .')" max="'. $item->jumlah .'" data-id="'.$item->id_order_biliard_detail .'" value="'. $item->jumlah .'" step=".05" size="4" readonly>
+            <input disabled type="number" class="quantity form-control" onchange="checkInputValidity(this, '. $item->jumlah .')" max="'. $item->jumlah .'" data-id="'.$item->id_order_biliard_detail .'" value="'. $item->jumlah .'" step=".05" size="4" readonly>
             </div>
             </form>';
             }
@@ -180,7 +193,7 @@ class OrderBiliardDetailController extends Controller
             $row['jumlah']      =
             '<form>
             <div class="form-group">
-            <input type="number" class="quantity form-control" onchange="checkInputValidity(this, '. $item->jumlah .')" max="'. $item->jumlah .'" data-id="'.$item->id_order_biliard_detail .'" value="'. $item->jumlah .'" step=".05" size="4">
+            <input disabled type="number" class="quantity form-control" onchange="checkInputValidity(this, '. $item->jumlah .')" max="'. $item->jumlah .'" data-id="'.$item->id_order_biliard_detail .'" value="'. $item->jumlah .'" step=".05" size="4">
             </div>
             </form>';
             }
