@@ -358,12 +358,12 @@ class OrderBiliardDetailController extends Controller
         }
 
         // dd($isDeleted, $maxValueInColumn);
-        if($isDeleted) {
+        // if($isDeleted) {
             $detail->delete();
             return response(null, 204);
-        } else {
-            return response('failed delete', 500);
-        }
+        // } else {
+            // return response('failed delete', 500);
+        // }
 
     }
 
