@@ -19,7 +19,7 @@ class MenuController extends Controller
 
     public function data()
     {
-        $menu=menu::orderBy('Id_Menu', 'desc')->get();
+        $menu=menu::orderByRaw("FIELD(jenis, 'Update Stok', 'Tidak Update Stok')")->orderBy('stok', 'desc')->get();
 
         return datatables()
             ->of($menu)

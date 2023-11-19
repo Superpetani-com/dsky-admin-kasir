@@ -253,16 +253,12 @@ class OrderBiliardController extends Controller
     public function cetak($id)
     {
         // dd($id);
-        $detail=OrderBiliardDetail::with('paket')
-        ->where('id_order_biliard', $id)
-        ->get();
-        $order=OrderBiliard::where('id_order_biliard', $id)->first();
-        $meja=MejaBiliard::where('id_meja_biliard', $order->id_meja_biliard)->first();
-        $nama_meja=$meja->namameja;
+        $detail = OrderBiliardDetail::with('paket')->where('id_order_biliard', $id)->get();
+        $order = OrderBiliard::where('id_order_biliard', $id)->first();
+        $meja = MejaBiliard::where('id_meja_biliard', $order->id_meja_biliard)->first();
+        $nama_meja = $meja->namameja;
 
-        $detailpesanan=PesananDetail::with('menu')
-        ->where('id_pesanan', $order->id_pesanan)
-        ->get();
+        $detailpesanan=PesananDetail::with('menu')->where('id_pesanan', $order->id_pesanan)->get();
         $pesanan=pesanan::where('Id_pesanan', $order->id_pesanan)->first();
         //return ($detail);
         // dd($pesanan, $detail);

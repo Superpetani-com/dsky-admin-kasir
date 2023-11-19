@@ -234,7 +234,6 @@ class MejaBiliardController extends Controller
         $mejabiliard->id_order_biliard = 0;
         $mejabiliard->flag = 0;
 
-        // dd($order->id_pesanan);
         if($order->id_pesanan > 0) {
             $meja = meja::where('Id_pesanan', '=', $order->id_pesanan)->first();
             $pesanan = pesanan::find($order->id_pesanan);
@@ -251,9 +250,9 @@ class MejaBiliardController extends Controller
 
                 if(auth()->user()->level != 5) {
                     foreach ($detail as $item2){
-                        $menu=menu::find($item2->id_menu);
-                        if($menu->jenis=="Update Stok" && $menu->stok>0 && $pesanan->status!="Selesai"){
-                            $menu->stok=$menu->stok-$item2->jumlah;
+                        $menu = menu::find($item2->id_menu);
+                        if($menu->jenis=="Update Stok"){
+                            $menu->stok = $menu->stok - $item2->jumlah;
                             $menu->update();
                         }
                     }
