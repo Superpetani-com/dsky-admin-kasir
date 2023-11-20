@@ -16,20 +16,21 @@ local_db_config = {
 
 # Remote database configuration
 remote_db_config = {
-    "user": "y4tho8ku49emafbea1sz",
-    "password": "pscale_pw_NHSG8faLzXTIZOP8fXdtHgP1rkBEY5YZmrPfJJzRrtg",
-    "host": "aws.connect.psdb.cloud",
-    "database": "billiard",
+    "user": "root",
+    "password": "root_password",
+    "host": "104.154.119.168",
+    "database": "billiards",
     "connection_timeout": 1200
 }
 
 # Fetch the last sync date from the cron_history table in the remote database
-def get_last_date_sync():
+def get_last_date_sync(table_name):
     connection = mysql.connector.connect(**remote_db_config)
 
     try:
         cursor = connection.cursor(dictionary=True)
-        cursor.execute('SELECT * FROM cron_history ORDER BY id DESC LIMIT 1')
+        # Note: Use a tuple (table_name,) instead of just table_name
+        cursor.execute('SELECT * FROM cron_history WHERE cabang_id = "XT Billiard" AND table_name = %s ORDER BY id DESC LIMIT 1', (table_name,))
         result = cursor.fetchone()
 
         if result:
@@ -47,34 +48,6 @@ def retrieve_data(last_date_sync, cabang_id):
     try:
         cursor = local_connection.cursor(dictionary=True)
         cursor.execute('SELECT * FROM pesanan WHERE updated_at > %s AND cabang_id = %s', (last_date_sync, cabang_id))
-        rows = cursor.fetchall()
-        return rows
-    except mysql.connector.Error as error:
-        print('Error retrieving data from local database:', error)
-        return []
-    finally:
-        local_connection.close()
-
-def retrieve_data_log_hapus_barang(last_date_sync, cabang_id):
-    local_connection = mysql.connector.connect(**local_db_config)
-
-    try:
-        cursor = local_connection.cursor(dictionary=True)
-        cursor.execute('SELECT * FROM log_hapus_barang WHERE updated_at > %s AND cabang_id = %s', (last_date_sync, cabang_id))
-        rows = cursor.fetchall()
-        return rows
-    except mysql.connector.Error as error:
-        print('Error retrieving data from local database:', error)
-        return []
-    finally:
-        local_connection.close()
-
-def retrieve_data_log_sensor(last_date_sync, cabang_id):
-    local_connection = mysql.connector.connect(**local_db_config)
-
-    try:
-        cursor = local_connection.cursor(dictionary=True)
-        cursor.execute('SELECT * FROM log_sensor WHERE created_date > %s AND cabang_id = %s', (last_date_sync, cabang_id))
         rows = cursor.fetchall()
         return rows
     except mysql.connector.Error as error:
@@ -153,127 +126,10 @@ def upsert_to_remote_table_pesanan(data):
 
          # Insert into cron_history table
         insert_cron_history_query = """
-            INSERT INTO cron_history (last_date_sync, total_data, cabang_id)
-            VALUES (NOW(), %s, %s)
+            INSERT INTO cron_history (last_date_sync, total_data, cabang_id, table_name)
+            VALUES (DATE_ADD(NOW(), INTERVAL 7 HOUR), %s, %s, %s)
         """
-        cursor.execute(insert_cron_history_query, (total_data, cabang_id))
-
-        connection.commit()
-        print(f'Bulk upsert operation successful. Total data upserted: {total_data}')
-    except mysql.connector.Error as error:
-        connection.rollback()
-        print('Error performing bulk upsert:', error)
-    finally:
-        connection.close()
-
-def upsert_to_remote_table_log_sensor(data):
-    connection = mysql.connector.connect(**remote_db_config)
-
-    try:
-        cursor = connection.cursor()
-
-        total_data = 0  # Count the total number of upserted data
-        # Get the current UTC time
-        current_time_utc = datetime.datetime.utcnow()
-
-        # Calculate the GMT+7 offset in hours
-        gmt_plus_7_offset = datetime.timedelta(hours=7)
-
-        # Adjust the current time with the GMT+7 offset
-        current_time_gmt_plus_7 = current_time_utc + gmt_plus_7_offset
-        for item in data:
-            upsert_query = """
-                INSERT INTO log_sensor (id_log_sensor, id_meja, duration, cabang_id, created_date, created_by, last_sync)
-                VALUES (%s, %s, %s, %s, %s, %s, %s)
-                ON DUPLICATE KEY UPDATE
-                id_log_sensor = VALUES(id_log_sensor),
-                id_meja = VALUES(id_meja),
-                duration = VALUES(duration),
-                cabang_id = VALUES(cabang_id),
-                created_date = VALUES(created_date),
-                created_by = VALUES(created_by),
-                last_sync = VALUES(last_sync)
-            """
-
-            values = (
-                item["uuid"],
-                item["id_meja"],
-                item["duration"],
-                item["cabang_id"],
-                item["created_date"],
-                item["created_by"],
-                current_time_gmt_plus_7
-            )
-
-            cursor.execute(upsert_query, values)
-            print(f'Upserting data table log_sensor with id {item["uuid"]}')
-
-            total_data += 1
-
-         # Insert into cron_history table
-        insert_cron_history_query = """
-            INSERT INTO cron_history (last_date_sync, total_data, cabang_id)
-            VALUES (NOW(), %s, %s)
-        """
-        cursor.execute(insert_cron_history_query, (total_data, cabang_id))
-
-        connection.commit()
-        print(f'Bulk upsert operation successful. Total data upserted: {total_data}')
-    except mysql.connector.Error as error:
-        connection.rollback()
-        print('Error performing bulk upsert:', error)
-    finally:
-        connection.close()
-
-def upsert_to_remote_table_log_hapus_barang(data):
-    connection = mysql.connector.connect(**remote_db_config)
-
-    try:
-        cursor = connection.cursor()
-
-        total_data = 0  # Count the total number of upserted data
-
-        for item in data:
-            upsert_query = """
-                INSERT INTO log_hapus_barang (id_pesanan, id_menu, harga, jumlah, subtotal, created_at, updated_at,  cabang_id, user_id, uuid)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                ON DUPLICATE KEY UPDATE
-                id_pesanan = VALUES(id_pesanan),
-                id_menu = VALUES(id_menu),
-                harga = VALUES(harga),
-                jumlah = VALUES(jumlah),
-                subtotal = VALUES(subtotal),
-                created_at = VALUES(created_at),
-                updated_at = VALUES(updated_at),
-                cabang_id = VALUES(cabang_id),
-                user_id = VALUES(user_id),
-                uuid = VALUES(uuid)
-            """
-
-            values = (
-                item["id_pesanan"],
-                item["id_menu"],
-                item["harga"],
-                item["jumlah"],
-                item["subtotal"],
-                item["created_at"],
-                item["updated_at"],
-                item["cabang_id"],
-                item["user_id"],
-                item["uuid"]
-            )
-
-            cursor.execute(upsert_query, values)
-            print(f'Upserting data table log_hapus_barang with id {item["id_pesanan"]}')
-
-            total_data += 1
-
-        # Insert into cron_history table
-        insert_cron_history_query = """
-            INSERT INTO cron_history (last_date_sync, total_data, cabang_id)
-            VALUES (NOW(), %s, %s)
-        """
-        cursor.execute(insert_cron_history_query, (total_data, cabang_id))
+        cursor.execute(insert_cron_history_query, (total_data, cabang_id, 'pesanan'))
 
         connection.commit()
         print(f'Bulk upsert operation successful. Total data upserted: {total_data}')
@@ -293,8 +149,8 @@ def upsert_to_remote_table_order_billiard(data):
         # print(data)
         for item in data:
             upsert_query = """
-                INSERT INTO order_biliard (id_order_biliard, id_meja_biliard, totaljam, diskon, totalharga, totalflag, totalbayar, diterima, kembali, status, customer, cabang_id, created_at, updated_at, created_by, uuid)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                INSERT INTO order_biliard (id_order_biliard, id_meja_biliard, totaljam, diskon, totalharga, totalflag, totalbayar, diterima, kembali, status, customer, cabang_id, created_at, updated_at, created_by, uuid, id_pesanan)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 ON DUPLICATE KEY UPDATE
                 id_order_biliard = VALUES(id_order_biliard),
                 id_meja_biliard = VALUES(id_meja_biliard),
@@ -311,7 +167,8 @@ def upsert_to_remote_table_order_billiard(data):
                 created_at = VALUES(created_at),
                 updated_at = VALUES(updated_at),
                 created_by = VALUES(created_by),
-                uuid = VALUES(uuid)
+                created_by = VALUES(created_by),
+                id_pesanan = VALUES(id_pesanan)
             """
 
             values = (
@@ -330,7 +187,8 @@ def upsert_to_remote_table_order_billiard(data):
                 item["created_at"],
                 item["updated_at"],
                 item["created_by"],
-                item["uuid"]
+                item["uuid"],
+                item["id_pesanan"]
             )
 
             cursor.execute(upsert_query, values)
@@ -340,10 +198,10 @@ def upsert_to_remote_table_order_billiard(data):
 
         # Insert into cron_history table
         insert_cron_history_query = """
-            INSERT INTO cron_history (last_date_sync, total_data, cabang_id)
-            VALUES (NOW(), %s, %s)
+            INSERT INTO cron_history (last_date_sync, total_data, cabang_id, table_name)
+            VALUES (DATE_ADD(NOW(), INTERVAL 7 HOUR), %s, %s, %s)
         """
-        cursor.execute(insert_cron_history_query, (total_data, cabang_id))
+        cursor.execute(insert_cron_history_query, (total_data, cabang_id, 'order_billiard'))
 
         connection.commit()
         print(f'Bulk upsert operation successful. Total data upserted: {total_data}')
@@ -354,37 +212,26 @@ def upsert_to_remote_table_order_billiard(data):
         connection.close()
 
 # Get the last sync date from the remote database
-last_date_sync, cabang_id = get_last_date_sync()
-print(f'Last Date Syncronize: {last_date_sync}')
+last_date_sync_o, cabang_id = get_last_date_sync("order_billiard")
+last_date_sync_p, cabang_id = get_last_date_sync("pesanan")
+print(f'Last Date Syncronize Order: {last_date_sync_o}')
+print(f'Last Date Syncronize Pesanan: {last_date_sync_p}')
 print(f'Cabang ID Syncronize: {cabang_id}')
 
 def perform_data_sync():
-    print(last_date_sync, 'last sync date')
-    if last_date_sync:
+    print(last_date_sync_o, 'last sync date order')
+    print(last_date_sync_p, 'last sync date pesanan')
+    if last_date_sync_o:
         print('Do sync...')
         # sync tabel pesanan
-        data = retrieve_data(last_date_sync, cabang_id)
+        data = retrieve_data(last_date_sync_p, cabang_id)
         if data:
             upsert_to_remote_table_pesanan(data)
         else:
             print('No new data to sync in table pesanan')
 
-        # sync tabel log hapus barang
-        data_log_hapus_barang = retrieve_data_log_hapus_barang(last_date_sync, cabang_id)
-        if data_log_hapus_barang:
-            upsert_to_remote_table_log_hapus_barang(data_log_hapus_barang)
-        else:
-            print('No new data to sync in table log hapus barang')
-
-        # sync tabel log hapus barang
-        data_log_sensor = retrieve_data_log_sensor(last_date_sync, cabang_id)
-        if data_log_sensor:
-            upsert_to_remote_table_log_sensor(data_log_sensor)
-        else:
-            print('No new data to sync in table log hapus barang')
-
          # sync tabel order billiard
-        data_order_biliard = retrieve_data_order_biliard(last_date_sync, cabang_id)
+        data_order_biliard = retrieve_data_order_biliard(last_date_sync_o, cabang_id)
         if data_order_biliard:
             upsert_to_remote_table_order_billiard(data_order_biliard)
         else:
@@ -418,17 +265,11 @@ class DataSyncApp:
         self.sync_billiard_button = tk.Button(root, text="Sync Order", command=self.sync_order_billiard)
         self.sync_billiard_button.pack()
 
-        self.sync_log_hapus_barang_button = tk.Button(root, text="Sync Log Hapus Barang", command=self.sync_log_hapus_barang)
-        self.sync_log_hapus_barang_button.pack()
-
-        self.sync_log_sensor_button = tk.Button(root, text="Sync Log Sensor", command=self.sync_log_sensor)
-        self.sync_log_sensor_button.pack()
-
         self.sync_all_button = tk.Button(root, text="Sync All", command=self.sync_all)
         self.sync_all_button.pack()
 
         # Schedule the data synchronization operation
-        schedule.every(15).minutes.do(self.perform_data_sync)
+        schedule.every(5).minutes.do(self.perform_data_sync)
 
         # Update last sync date and GUI
         self.update_last_sync_date()
@@ -459,38 +300,22 @@ class DataSyncApp:
         perform_data_sync()
 
     def update_last_sync_date(self):
-        last_date_sync = get_last_date_sync()
+        last_date_sync = get_last_date_sync('order_billiard')
         if last_date_sync:
             self.last_sync_date_label.config(text=last_date_sync)
         else:
             self.last_sync_date_label.config(text="Not available")
 
     def sync_pesanan(self):
-        data = retrieve_data(last_date_sync, cabang_id)
+        data = retrieve_data(last_date_sync_p, cabang_id)
         if data:
             upsert_to_remote_table_pesanan(data)
             messagebox.showinfo("Sync Pesanan", "Sync completed.")
         else:
             messagebox.showinfo("Sync Pesanan", "No new data to sync.")
 
-    def sync_log_hapus_barang(self):
-        data = retrieve_data_log_hapus_barang(last_date_sync, cabang_id)
-        if data:
-            upsert_to_remote_table_log_hapus_barang(data)
-            messagebox.showinfo("Sync Log Hapus Barang", "Sync completed.")
-        else:
-            messagebox.showinfo("Sync Log Hapus Barang", "No new data to sync.")
-
-    def sync_log_sensor(self):
-        data = retrieve_data_log_sensor(last_date_sync, cabang_id)
-        if data:
-            upsert_to_remote_table_log_sensor(data)
-            messagebox.showinfo("Sync Log Sensor", "Sync completed.")
-        else:
-            messagebox.showinfo("Sync Log Sensor", "No new data to sync.")
-
     def sync_order_billiard(self):
-        data = retrieve_data_order_biliard(last_date_sync, cabang_id)
+        data = retrieve_data_order_biliard(last_date_sync_o, cabang_id)
         if data:
             upsert_to_remote_table_order_billiard(data)
             messagebox.showinfo("Sync Order Biliard", "Sync completed.")
@@ -500,8 +325,8 @@ class DataSyncApp:
     def sync_all(self):
         self.sync_order_billiard()
         self.sync_pesanan()
-        self.sync_log_hapus_barang()
-        self.sync_log_sensor()
+        # self.sync_log_hapus_barang()
+        # self.sync_log_sensor()
 
 # Create the main application window
 root = tk.Tk()
