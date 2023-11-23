@@ -714,7 +714,7 @@
                 // }
       })
     .fail(errors => {
-                alert('Tidak dapat menampilkan data');
+                // alert('Tidak dapat menampilkan data');
                 $('#diterima').trigger('input');
                 return;
   })
