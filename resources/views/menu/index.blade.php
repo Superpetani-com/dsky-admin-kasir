@@ -82,6 +82,8 @@
      ]
    });
 
+   $.fn.dataTable.ext.errMode = 'none';
+
     $('#modal-form').validator().on('submit', function (e){
       if(!e.preventDefault()){
         $.ajax({

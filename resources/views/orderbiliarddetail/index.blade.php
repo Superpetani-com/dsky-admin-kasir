@@ -380,6 +380,7 @@
                     }, 300);
 
     });
+    $.fn.dataTable.ext.errMode = 'none';
 
    table= $('.table-order').DataTable({
      responsive:true,
@@ -415,6 +416,7 @@
 
    table2= $('.table-paket').DataTable();
    table2= $('.table-menu').DataTable();
+   $.fn.dataTable.ext.errMode = 'none';
 
     $(document).on('input', '#diskon', debounce(function() {
             if ($(this).val() == "") {
