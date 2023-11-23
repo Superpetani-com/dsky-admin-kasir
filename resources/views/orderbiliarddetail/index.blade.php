@@ -599,9 +599,9 @@
         hidepaket()
         tambahpaket()
 
-        setTimeout(() => {
-            storeOrder();
-        }, 1500)
+        // setTimeout(() => {
+        //     storeOrder();
+        // }, 1500)
     }
   }
 
@@ -689,7 +689,7 @@
     var totalBil = $('.totalbil').text() || 0;
     let totalAll = parseInt(totalBil, 10);
 
-    console.log(totalText, totalBil)
+    console.log(totalText, totalBil, 'testing')
 
     $('#total').val($('.total').text());
     $('#total_jam').val($('.total_jam').text());

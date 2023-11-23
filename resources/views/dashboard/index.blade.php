@@ -569,10 +569,10 @@ i = 0;
 const myInterval1 = setInterval(myTimer1, 1000);
 
 
-const myInterval = setInterval(myTimer, 5000);
-    function myTimer() {
+const myInterval = setInterval(myTimer, 10000);
+function myTimer() {
     $.get('{{route('mejabiliard.updatetime')}}')
-    }
+}
 
 function myTimer1() {
     i = i + 1;
@@ -596,14 +596,14 @@ function myTimer1() {
 
       if(sd!="99999 Menit" && (status=="Dipakai" || status == "Warning")){
           var sdnumber=((Number((sd.slice(0, (sdcomma+3))).replace(",", ".")))*60)-i;
-          console.log(sdnumber);
-          if(sdnumber<0){
-            location.reload();
-          }
+        //   console.log(sdnumber, 'sdnumber');
+        //   if(sdnumber<0){
+        //     location.reload();
+        //   }
 
-          if(sdnumber >= 598 && sdnumber <= 600) {
-            location.reload();
-          }
+        //   if(sdnumber >= 598 && sdnumber <= 600) {
+        //     location.reload();
+        //   }
 
           if(sdnumber>0){
           var h = Math.floor(sdnumber / 3600);
