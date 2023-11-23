@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="{{ asset('AdminLTE-2/dist/css/skins/_all-skins.min.css')}}">
   <!-- DataTables -->
   <link rel="stylesheet" href="{{ asset('AdminLTE-2/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css')}}">
-  
+
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -36,7 +36,7 @@
  @includeIf('HalamanAwal.header')
   <!-- Left side column. contains the logo and sidebar -->
   @includeIf('HalamanAwal.sidebar')
-  
+
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -61,9 +61,9 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-  
 
-  
+
+
 </div>
 <!-- ./wrapper -->
 
@@ -81,11 +81,11 @@
 <!--Validator-->
 <script src="{{asset('js/validator.min.js')}}"></script>
 @stack('scripts')
-<script>
+{{-- <script>
 const myInterval = setInterval(myTimer, 5000);
     function myTimer() {
     $.get('{{route('mejabiliard.updatetime')}}')
     }
-</script>
+</script> --}}
 </body>
 </html>

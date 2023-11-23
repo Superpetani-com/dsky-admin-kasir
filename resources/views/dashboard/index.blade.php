@@ -568,6 +568,12 @@ i = 0;
 
 const myInterval1 = setInterval(myTimer1, 1000);
 
+
+const myInterval = setInterval(myTimer, 5000);
+    function myTimer() {
+    $.get('{{route('mejabiliard.updatetime')}}')
+    }
+
 function myTimer1() {
     i = i + 1;
       @foreach ($mejabiliard as $key=>$item)
