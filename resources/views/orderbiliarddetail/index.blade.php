@@ -321,7 +321,7 @@
                       </div>
                     </div>
               <div class="box-footer p-3">
-                <button type="submit" class="btn btn-primary btn-sm btn-flat pull-right btn-simpan "><i class="fa fa-floppy-o"></i> Simpan Transaksi</button>
+                <button id="btn-submit" disabled type="submit" class="btn btn-primary btn-sm btn-flat pull-right btn-simpan "><i class="fa fa-floppy-o"></i> Simpan Transaksi</button>
                 @if($count_pesanan_detail > 0)
                 <button class="button-aksi bg-black pull-right" style="margin-right: 10px;" onclick="printNotaKitchen({{$id_order_biliard}})">PRINT KITCHEN</button>
                 @endif
@@ -685,6 +685,7 @@
   }
 
   function loadform(diskon = 0, diterima = 0){
+    $('#btn-submit').prop('true', false);
     var totalText = $('.total').text();
     var totalBil = $('.totalbil').text() || 0;
     let totalAll = parseInt(totalBil, 10);
@@ -697,29 +698,37 @@
     $('#total_flag').val($('.total_flag').text());
     $('#total_item').val($('.total_item').text());
     // $('#bayar').val(19999);
-    $.get(`{{ url('/orderbiliarddetail/loadform') }}/${diskon}/${totalAll}/${diterima}`)
-    .done(response => {
-        let totals = parseInt(response.bayarrp) + parseInt(totalText, 10);
+    if(totalAll > 0) {
+        $.get(`{{ url('/orderbiliarddetail/loadform') }}/${diskon}/${totalAll}/${diterima}`)
+        .done(response => {
+            let totals = parseInt(response.bayarrp) + parseInt(totalText, 10);
 
-                $('#totalrp').val('Rp. '+ response.totalrp);
-                $('#bayarrp').val('Rp. '+ response.bayarrp);
-                $('#bayar').val(response.bayar);
-                $('#diterima').val(response.bayar);
-                $('#kembali').val(response.kembali);
-                $('.tampil-bayar').text('Bayar: Rp. '+ totals.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
-                // $('.tampil-terbilang').text('Terbilang: '+response.terbilang);
-                $('#kembalirp').val('Rp.'+ response.kembalirp);
+                    $('#totalrp').val('Rp. '+ response.totalrp);
+                    $('#bayarrp').val('Rp. '+ response.bayarrp);
+                    $('#bayar').val(response.bayar);
+                    $('#diterima').val(response.bayar);
+                    $('#kembali').val(response.kembali);
+                    $('.tampil-bayar').text('Bayar: Rp. '+ totals.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+                    // $('.tampil-terbilang').text('Terbilang: '+response.terbilang);
+                    $('#kembalirp').val('Rp.'+ response.kembalirp);
 
-                // if ($('#diterima').val() != 0) {
-                //     $('.tampil-bayar').text('Kembali: Rp. '+ response.kembalirp);
-                //     $('.tampil-terbilang').text(response.kembali_terbilang);
-                // }
-      })
-    .fail(errors => {
-                // alert('Tidak dapat menampilkan data');
-                $('#diterima').trigger('input');
-                return;
-  })
+                    // Enable the button
+                    $('#btn-submit').prop('disabled', false);
+
+                    // if ($('#diterima').val() != 0) {
+                    //     $('.tampil-bayar').text('Kembali: Rp. '+ response.kembalirp);
+                    //     $('.tampil-terbilang').text(response.kembali_terbilang);
+                    // }
+
+        })
+        .fail(errors => {
+            $('#btn-submit').prop('true', false);
+            // alert('Tidak dapat menampilkan data');
+            $('#diterima').trigger('input');
+            return;
+        })
+    }
+
 
   }
 
