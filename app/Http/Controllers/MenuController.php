@@ -67,6 +67,7 @@ class MenuController extends Controller
     {
 
         $menu=new menu();
+        // dd($request->all());
         $menu = menu::create($request->all());
 
         return response()->json('Data berhasil disimpan', 200);
@@ -105,11 +106,14 @@ class MenuController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // dd($request->all());
+
         $menu = menu::find($id);
         $menu->Nama_menu = $request->nama_menu;
         $menu->Harga=$request->harga;
         $menu->stok=$request->stok;
         $menu->jenis=$request->jenis;
+        $menu->kategori=$request->kategori;
         $menu->update();
 
         return response()->json('Data berhasil disimpan', 200);
