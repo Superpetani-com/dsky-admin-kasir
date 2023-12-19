@@ -33,7 +33,7 @@
               </span>
             </a>
           </li>
-          <li class="header">REPORT</li>
+          {{-- <li class="header">REPORT</li>
         <li>
           <a href="{{route('laporan.index')}}">
             <i class="fa fa-file-pdf-o"></i> <span>Report Singkat</span>
@@ -63,7 +63,7 @@
               <i class="fa fa-file-text-o"></i> <span>Report Barang</span>
               </span>
             </a>
-        </li>
+        </li> --}}
         {{-- <li class="header">CAFE</li> --}}
 
 
