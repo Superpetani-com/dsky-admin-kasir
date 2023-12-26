@@ -30,6 +30,7 @@ class OrderBiliardController extends Controller
      */
     public function create($id)
     {
+        // dd($id);
         $uuid_order = Uuid::uuid4();
         $order=new orderbiliard();
         $order->id_meja_biliard=$id;
@@ -129,6 +130,7 @@ class OrderBiliardController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request);
         $mejabiliard = MejaBiliard::find($request->id_meja_biliard);
         $order = orderbiliard::findOrFail($request->id_order_biliard);
         $updatestatus = orderbiliard::where('id_meja_biliard',$request->id_meja_biliard)
@@ -154,7 +156,16 @@ class OrderBiliardController extends Controller
         $order->kembali=0;
 
         $order->customer=$request->nama_cust3;
+        if($request->waiter_name) {
+            $order->waiter_name = $request->waiter_name;
+        }
         $order->update();
+
+        $pesanan = pesanan::find($order->id_pesanan);
+        if($request->waiter_name) {
+            $pesanan->waiter_name = $request->waiter_name;
+            $pesanan->update();
+        }
 
         // dd($order);
 

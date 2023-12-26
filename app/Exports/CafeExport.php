@@ -63,6 +63,7 @@ class CafeExport implements FromCollection, ShouldAutoSize, WithHeadings
                         $row['TotalItem']   = $item->TotalItem . ' Item';
                         $row['TotalBayar']  = 'Rp.' . format_uang($item->TotalBayar);
                         $row['created_by']  = $item->created_by;
+                        $row['waiter_name']  = $item->waiter_name;
                         $nama_menu = [];
 
                         $detail = PesananDetail::where('id_pesanan', '=', $item->Id_pesanan)->with('menu')->get();
@@ -96,6 +97,7 @@ class CafeExport implements FromCollection, ShouldAutoSize, WithHeadings
                 'Customer' => ' ',
                 'TotalItem' => ' ',
                 'TotalBayar' => ' ',
+                'waiter_name' => '',
                 'menus' => 'Total Pendapatan ',
                 'created_by' => 'Rp.' . format_uang($total_pendapatan),
             ];
@@ -106,6 +108,6 @@ class CafeExport implements FromCollection, ShouldAutoSize, WithHeadings
 
     public function headings(): array
     {
-        return ["No", "Tanggal", "No.Order", "No.Meja", "Customer", "Jumlah Item", "Total Bayar", "Kasir", "Pesanan"];
+        return ["No", "Tanggal", "No.Order", "No.Meja", "Customer", "Jumlah Item", "Total Bayar", "Kasir", "Server", "Pesanan"];
     }
 }

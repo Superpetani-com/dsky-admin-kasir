@@ -90,6 +90,8 @@ class PesananController extends Controller
     {
         // dd($request);
         $pesanan = Pesanan::findOrFail($request->id_pesanan);
+        $pesanan_details = PesananDetail::where('id_pesanan', '=', $request->id_pesanan)->get();
+
         $updatestatus = Pesanan::where('Id_meja',$request->id_meja_cafe)
         ->orderBy('Id_pesanan', 'desc')
         ->offset(1)
@@ -117,12 +119,30 @@ class PesananController extends Controller
         }
         $meja->update();
 
+
+
+        foreach ($pesanan_details as $pesanan_detail) {
+            $count = 0;
+            $pesanan->TotalItem = count($pesanan_details);
+            $pesanan->TotalHarga += $pesanan_detail['subtotal'];
+            $pesanan->Diskon = 0;
+            $pesanan->TotalBayar += $pesanan_detail['subtotal'];
+            $pesanan->Diterima += $pesanan_detail['subtotal'];
+            // $pesanan->Kembali=$request->kembali;
+            $pesanan->Kembali=0;
+            $pesanan->ppn=0;
+        }
+
+        // dd($pesanan);
+
+        $pesanan->update();
+
         return
         redirect()->route('dashboard.index');
     }
 
     public function storeDetail(request $request){
-        
+
     }
 
     public function cetak($id)

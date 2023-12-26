@@ -51,6 +51,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
                         <!--th>Durasi</th-->
                         <th>TotalBayar</th>
                         <th>Kasir</th>
+                        <th>Server</th>
                         <th>Aksi</th>
                     </thead>
                 </table>
@@ -90,6 +91,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
                 //{data: 'TotalJam'},
                 {data: 'TotalBayar'},
                 {data: 'created_by'},
+                {data: 'waiter_name'},
                 {
                     "mData": "No.Order",
                     "mRender": function (data, type, row) {

@@ -65,7 +65,7 @@ class LaporanBiliardController extends Controller
                     ->where('TotalBayar', '>', 0)
                     ->orderBy('id_order_biliard', 'desc')
                     ->get();
-
+                // dd($order);
                 foreach ($order as $item) {
                     if (!in_array($item->id_order_biliard, $uniqueOrderIds)) {
                         $uniqueOrderIds[] = $item->id_order_biliard; // Mark 'No.Order' as seen
@@ -79,6 +79,7 @@ class LaporanBiliardController extends Controller
                             'TotalJam' => $item->totaljam . ' Jam',
                             'TotalBayar' => 'Rp.' . format_uang($item->totalbayar),
                             'created_by' => $item->created_by,
+                            'waiter_name' => $item->waiter_name
                         ];
                     }
 

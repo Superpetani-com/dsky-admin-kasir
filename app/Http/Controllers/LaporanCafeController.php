@@ -69,6 +69,8 @@ class LaporanCafeController extends Controller
                         $row['TotalItem']   = $item->TotalItem . ' Item';
                         $row['TotalBayar']  = 'Rp.' . format_uang($item->TotalBayar);
                         $row['created_by']  = $item->created_by;
+                        $row['waiter_name'] = $item->waiter_name;
+
                         $nama_menu = [];
 
                         $detail = PesananDetail::where('id_pesanan', '=', $item->Id_pesanan)->with('menu')->get();

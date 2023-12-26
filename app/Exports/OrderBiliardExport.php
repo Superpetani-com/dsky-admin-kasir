@@ -58,6 +58,7 @@ class OrderBiliardExport implements FromCollection, ShouldAutoSize, WithHeadings
                         $row['Customer']    = $item->customer;
                         $row['TotalBayar']  = $item->totalbayar;
                         $row['created_by']    = $item->created_by;
+                        $row['waiter_name']    = $item->waiter_name;
                         $data[] = $row;
                     }
                 }
@@ -72,6 +73,7 @@ class OrderBiliardExport implements FromCollection, ShouldAutoSize, WithHeadings
                 'Customer' => 'Total Pendapatan ',
                 'TotalBayar' => $total_pendapatan,
                 'created_by' => '',
+                'waiter_name' => '',
             ];
 
             return collect($data);
@@ -80,6 +82,6 @@ class OrderBiliardExport implements FromCollection, ShouldAutoSize, WithHeadings
 
     public function headings(): array
     {
-        return ["No", "Tanggal", "No.Order", "No.Meja", "Customer", "Total Bayar", "Kasir"];
+        return ["No", "Tanggal", "No.Order", "No.Meja", "Customer", "Total Bayar", "Kasir", "Server"];
     }
 }

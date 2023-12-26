@@ -202,6 +202,64 @@
               </table>
               <table class="table table-stiped table-bordered table-pesanan">
                   <h3>Pesanan Cafe</h3>
+                  <div class="row col-md-4" id='select-server' style="display: none">
+                    <label for="option">Pilih Server</label>
+                    <form action="{{ route('orderbiliard.store') }}" class="form-order" id="form_order" method="post">
+                        @csrf
+                        <input type="hidden" name="id_order_biliard"  value="{{ $id_order_biliard }}">
+                        <input type="hidden" name="total" id="total" value="{{ $order->totalharga }}">
+                        <input type="hidden" name="total_jam" id="total_jam">
+                        <input type="hidden" name="total_menit" id="total_menit">
+                        <input type="hidden" name="total_flag" id="total_flag" value="0">
+                        <input type="hidden" name="bayar" id="bayar" class="totalbil">
+                        <input type="hidden" name="kembali" id="kembali">
+                        <input type="hidden" name="id_meja_biliard" id="id_meja_biliard" value="{{ $mejabiliard->id_meja_biliard }}">
+                        <input type="hidden" name="status_meja_biliard" id="status_meja_biliard" value="{{ $mejabiliard->status }}">
+                        <input type="hidden" name="status_order_biliard" id="status_order_biliard" value="{{ $order->status }}">
+                        <input type="hidden" name="nama_cust3" id="nama_cust3" value="{{$pesanan->customer}}">
+                        <select {{ $waiter_name != null || $waiter_name != '' ? 'disabled' : '' }} name="waiter_name" id="option" class="form-control">
+                            @foreach ($waiters as $waiter)
+                                <option value="{{$waiter_name != null || $waiter_name != '' ? $waiter_name : $waiter['name'] }}">
+                                    {{$waiter_name != null || $waiter_name != '' ? $waiter_name : $waiter['name'] }}
+                                </option>
+                            @endforeach
+                        </select>
+
+                        {{-- <div class="form-group row">
+                            <label for="totalrp" class="col-lg-3 control-label">Total</label>
+                            <div class="col-lg-8">
+                                <input type="text" id="totalrp" class="form-control" readonly>
+                            </div>
+                        </div> --}}
+                        <!-- <div class="form-group row">
+                            <label for="diskon" class="col-lg-3 control-label">Diskon</label>
+                            <div class="col-lg-8">
+                                <input type="number" name="diskon" id="diskon" class="form-control" value="{{ $order->diskon }}">
+                            </div>
+                        </div> -->
+                        {{-- <div class="form-group row">
+                            <label for="bayarrp" class="col-lg-3 control-label">Bayar</label>
+                            <div class="col-lg-8">
+                                <input type="text" id="bayarrp" class="form-control" readonly>
+                            </div>
+                        </div> --}}
+                        <div class="form-group row">
+                            {{-- <label for="diterima" class="col-lg-3 control-label">Diterima</label> --}}
+                            <div class="col-lg-8">
+                                <input type="hidden" name="diterima" id="diterima" class="form-control" value="{{ $order->diterima }}">
+                           </div>
+                        </div>
+                        {{-- <div class="form-group row">
+                            <label for="kembalirp" class="col-lg-3 control-label">Kembali</label>
+                            <div class="col-lg-8">
+                                <input type="text" id="kembalirp" class="form-control" readonly>
+                           </div>
+                        </div> --}}
+
+                      </form>
+                    </div>
+                  </div>
+
                 <thead>
                   <th width="5%">No</th>
                   <th>Menu</th>
@@ -272,52 +330,7 @@
 
                           </form>
                         </div>
-                        <form action="{{ route('orderbiliard.store') }}" class="form-order" id="form_order" method="post">
-                            @csrf
-                            <input type="hidden" name="id_order_biliard"  value="{{ $id_order_biliard }}">
-                            <input type="hidden" name="total" id="total" value="{{ $order->totalharga }}">
-                            <input type="hidden" name="total_jam" id="total_jam">
-                            <input type="hidden" name="total_menit" id="total_menit">
-                            <input type="hidden" name="total_flag" id="total_flag" value="0">
-                            <input type="hidden" name="bayar" id="bayar" class="totalbil">
-                            <input type="hidden" name="kembali" id="kembali">
-                            <input type="hidden" name="id_meja_biliard" id="id_meja_biliard" value="{{ $mejabiliard->id_meja_biliard }}">
-                            <input type="hidden" name="status_meja_biliard" id="status_meja_biliard" value="{{ $mejabiliard->status }}">
-                            <input type="hidden" name="status_order_biliard" id="status_order_biliard" value="{{ $order->status }}">
-                            <input type="hidden" name="nama_cust3" id="nama_cust3" value="{{$pesanan->customer}}">
-                            {{-- <div class="form-group row">
-                                <label for="totalrp" class="col-lg-3 control-label">Total</label>
-                                <div class="col-lg-8">
-                                    <input type="text" id="totalrp" class="form-control" readonly>
-                                </div>
-                            </div> --}}
-                            <!-- <div class="form-group row">
-                                <label for="diskon" class="col-lg-3 control-label">Diskon</label>
-                                <div class="col-lg-8">
-                                    <input type="number" name="diskon" id="diskon" class="form-control" value="{{ $order->diskon }}">
-                                </div>
-                            </div> -->
-                            {{-- <div class="form-group row">
-                                <label for="bayarrp" class="col-lg-3 control-label">Bayar</label>
-                                <div class="col-lg-8">
-                                    <input type="text" id="bayarrp" class="form-control" readonly>
-                                </div>
-                            </div> --}}
-                            <div class="form-group row">
-                                {{-- <label for="diterima" class="col-lg-3 control-label">Diterima</label> --}}
-                                <div class="col-lg-8">
-                                    <input type="hidden" name="diterima" id="diterima" class="form-control" value="{{ $order->diterima }}">
-                               </div>
-                            </div>
-                            {{-- <div class="form-group row">
-                                <label for="kembalirp" class="col-lg-3 control-label">Kembali</label>
-                                <div class="col-lg-8">
-                                    <input type="text" id="kembalirp" class="form-control" readonly>
-                               </div>
-                            </div> --}}
 
-                          </form>
-                        </div>
                       </div>
                     </div>
               <div class="box-footer p-3">
@@ -374,6 +387,15 @@
         "lengthMenu": [[-1], ["All"]]
         })
         .on('draw.dt', function(){
+            var dataExists = table3.data().length > 1;
+            console.log(dataExists, 'data')
+
+            // Show/hide the select dropdown based on data existence
+            if (dataExists) {
+                $('#select-server').show();
+            } else {
+                $('#select-server').hide();
+            }
             loadform($('#diskon').val());
             setTimeout(() => {
                         $('#diterima').trigger('input');
@@ -638,6 +660,7 @@
     hidemenu()
     tambahmenu()
   }
+
 
   function tambahmenu(){
     $.post('{{route('pesanandetail.store')}}', $('.form-menu').serialize())

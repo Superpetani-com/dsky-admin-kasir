@@ -11,6 +11,7 @@ use App\Models\PesananDetail;
 use App\Models\Meja;
 use App\Models\Pesanan;
 use App\Models\Menu;
+use App\Models\User;
 use DateTime;
 use DateInterval;
 
@@ -46,6 +47,8 @@ class OrderBiliardDetailController extends Controller
         $mejabiliard=mejabiliard::where('id_meja_biliard', $order->id_meja_biliard)->first();
         $mejadetail = mejabiliard::orderBy('id_meja_biliard')->get();
         $menu=menu::orderBy('Nama_menu')->get();
+        $waiters = User::where('level', '=', '6')->get();
+        $waiter_name = $order['waiter_name'];
 
         if ($id==0){
             return "Belum Ada Order";
@@ -59,11 +62,13 @@ class OrderBiliardDetailController extends Controller
 
             $count_pesanan_detail = count($pesanan_detail);
 
-            return view('orderbiliarddetail.index', compact('id_order_biliard','paket','order','mejabiliard', 'mejadetail','Id_pesanan','menu','meja','pesanan', 'count_pesanan_detail'));
+            return view('orderbiliarddetail.index', compact('id_order_biliard','paket','order','mejabiliard', 'mejadetail','Id_pesanan','menu','meja','pesanan', 'count_pesanan_detail', 'waiters', 'waiter_name'));
         }
 
 
-        return view('orderbiliarddetail.index', compact('id_order_biliard','paket','order','mejabiliard', 'mejadetail','Id_pesanan','menu'));
+
+
+        return view('orderbiliarddetail.index', compact('id_order_biliard','paket','order','mejabiliard', 'mejadetail','Id_pesanan','menu', 'waiters', 'waiter_name'));
 
     }
 
