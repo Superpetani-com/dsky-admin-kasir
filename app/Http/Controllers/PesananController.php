@@ -119,26 +119,25 @@ class PesananController extends Controller
         }
         $meja->update();
 
-
-
-        foreach ($pesanan_details as $pesanan_detail) {
-            $count = 0;
-            $pesanan->TotalItem = count($pesanan_details);
-            $pesanan->TotalHarga += $pesanan_detail['subtotal'];
-            $pesanan->Diskon = 0;
-            $pesanan->TotalBayar += $pesanan_detail['subtotal'];
-            $pesanan->Diterima += $pesanan_detail['subtotal'];
-            // $pesanan->Kembali=$request->kembali;
-            $pesanan->Kembali=0;
-            $pesanan->ppn=0;
+        if($pesanan->TotalBayar == 0) {
+            foreach ($pesanan_details as $pesanan_detail) {
+                $count = 0;
+                $pesanan->TotalItem = count($pesanan_details);
+                $pesanan->TotalHarga += $pesanan_detail['subtotal'];
+                $pesanan->Diskon = 0;
+                $pesanan->TotalBayar += $pesanan_detail['subtotal'];
+                $pesanan->Diterima += $pesanan_detail['subtotal'];
+                // $pesanan->Kembali=$request->kembali;
+                $pesanan->Kembali=0;
+                $pesanan->ppn=0;
+            }
         }
 
         // dd($pesanan);
 
         $pesanan->update();
 
-        return
-        redirect()->route('dashboard.index');
+        return redirect()->route('dashboard.index');
     }
 
     public function storeDetail(request $request){
