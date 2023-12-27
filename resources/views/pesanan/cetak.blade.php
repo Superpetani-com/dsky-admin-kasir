@@ -67,7 +67,7 @@
     <div>
     <div>
         <p style="float: left;">{{ $pesanan->created_at }}</p>
-        <p style="float: right">Kasir: {{ ucwords(auth()->user()->name) }}</p>
+        <p style="float: right">Kasir: {{ $pesanan->created_by }}</p>
     </div>
     <div class="clear-both" style="clear: both;"></div>
     <p>Customer &nbsp&nbsp&nbsp: {{ ($pesanan->customer) }}</p>
