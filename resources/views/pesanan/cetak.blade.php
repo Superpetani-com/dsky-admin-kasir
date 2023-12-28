@@ -65,14 +65,18 @@
     </div>
     <br>
     <div>
-    <div>
+    {{-- <div>
         <p style="float: left;">{{ $pesanan->created_at }}</p>
-        <p style="float: right">Kasir: {{ $pesanan->created_by }}</p>
-    </div>
+        <p style="float: left">Kasir: {{ $pesanan->created_by }}</p>
+        <p style="float: left">Server: {{ $pesanan->waiter_name }}</p>
+    </div> --}}
     <div class="clear-both" style="clear: both;"></div>
-    <p>Customer &nbsp&nbsp&nbsp: {{ ($pesanan->customer) }}</p>
+    <p>Kasir &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp: {{ ($pesanan->created_by) }}</p>
+    <p>Server &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp: {{ ($pesanan->waiter_name) }}</p>
+    <p>Customer &nbsp&nbsp&nbsp&nbsp&nbsp: {{ ($pesanan->customer) }}</p>
     <p>No Pesanan &nbsp: {{ ($pesanan->Id_pesanan) }}</p>
-    <p>No Meja &nbsp&nbsp&nbsp&nbsp: {{ ($nama_meja) }}</p>
+    <p>No Meja &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp: {{ ($nama_meja) }}</p>
+    <p>Tanggal &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp: {{ ($pesanan->created_at) }}</p>
 
     <p class="text-center">===================================</p>
     <br>
@@ -82,9 +86,9 @@
                 <td colspan="3">{{ $item->menu->Nama_menu }}</td>
             </tr>
             <tr>
-                <td>{{ $item->jumlah }} x {{ format_uang(ceil($item->harga / 100) * 100) }}</td>
+                <td>{{ $item->jumlah }} x Rp. {{ format_uang(ceil($item->harga / 100) * 100) }}</td>
                 <td></td>
-                <td class="text-right">{{ format_uang($item->jumlah * ceil($item->harga / 100) * 100) }}</td>
+                <td class="text-right">Rp. {{ format_uang($item->jumlah * ceil($item->harga / 100) * 100) }}</td>
             </tr>
         @endforeach
     </table>

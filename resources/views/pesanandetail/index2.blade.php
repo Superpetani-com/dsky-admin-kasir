@@ -116,66 +116,75 @@
                 </thead>
                 <tbody></tbody>
               </table>
+              <div class="col-lg-4">
+                <form action="{{ route('pesanan.store') }}" class="form-pesanan" method="post">
+                    @csrf
+                    <input type="hidden" name="id_meja_cafe" id="id_meja_cafe" value="{{ $meja->id_meja }}">
+                    <input type="hidden" name="status_meja" id="status_meja" value="{{ $meja->Status }}">
+                    <input type="hidden" name="status_pesanan" id="status_pesanan" value="{{ $pesanan->status }}">
+                    <input type="hidden" name="nama_cust2" id="nama_cust2" value="{{$pesanan->customer}}">
+                    <input type="hidden" name="id_pesanan" value="{{ $Id_pesanan }}">
+                    <input type="hidden" name="total" id="total">
+                    <input type="hidden" name="total_item" id="total_item">
+                    <input type="hidden" name="bayar" id="bayar">
+                    <input type="hidden" name="kembali" id="kembali">
+                    <input type="hidden" name="ppn" id="ppn">
+                    <label for="waiter"> Pilih Server </label>
+                    <select {{ $waiter_name != null || $waiter_name != '' ? 'disabled' : '' }} name="waiter_name" id="option" class="form-control">
+                        @foreach ($waiters as $waiter)
+                            <option value="{{$waiter_name != null || $waiter_name != '' ? $waiter_name : $waiter['name'] }}">
+                                {{$waiter_name != null || $waiter_name != '' ? $waiter_name : $waiter['name'] }}
+                            </option>
+                        @endforeach
+                    </select>
+                    {{-- <div class="form-group row">
+                        <label for="totalrp" class="col-lg-2 control-label">Total</label>
+                        <div class="col-lg-8">
+                            <input type="text" id="totalrp" class="form-control" readonly>
+                        </div>
+                    </div> --}}
+                    <!-- <div class="form-group row">
+                        <label for="diskon" class="col-lg-2 control-label">Diskon</label>
+                        <div class="col-lg-8">
+                            <input type="number" name="diskon" id="diskon" class="form-control" value="{{ $pesanan->Diskon }}">
+                        </div>
+                    </div> -->
+                    {{-- <div class="form-group row">
+                        <label for="ppnrp" class="col-lg-2 control-label">PPN 10%</label>
+                        <div class="col-lg-8">
+                            <input type="text" name="ppnrp" id="ppnrp" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="bayar" class="col-lg-2 control-label">Bayar</label>
+                        <div class="col-lg-8">
+                            <input type="text" id="bayarrp" class="form-control" readonly>
+                        </div>
+                    </div> --}}
+                    <div class="form-group row">
+                        {{-- <label for="diterima" class="col-lg-2 control-label">Diterima</label> --}}
+                        {{-- {{dd($pesanan);}} --}}
+                        <div class="col-lg-8">
+                            <input type="hidden" name="diterima" id="diterima" class="form-control">
+                       </div>
+                    </div>
+                    {{-- <div class="form-group row">
+                        <label for="kembalirp" class="col-lg-2 control-label">Kembali</label>
+                        <div class="col-lg-8">
+                            <input type="text" id="kembalirp" class="form-control" readonly>
+                       </div>
+                    </div> --}}
+
+                  </form>
+                </div>
+              </div>
+            </div>
               <div class="row">
                     <div class="col-lg-8">
                         <div class="tampil-bayar bg-primary"></div>
                         <div class="tampil-terbilang"></div>
                     </div>
-                    <div class="col-lg-4">
-                        <form action="{{ route('pesanan.store') }}" class="form-pesanan" method="post">
-                            @csrf
-                            <input type="hidden" name="id_meja_cafe" id="id_meja_cafe" value="{{ $meja->id_meja }}">
-                            <input type="hidden" name="status_meja" id="status_meja" value="{{ $meja->Status }}">
-                            <input type="hidden" name="status_pesanan" id="status_pesanan" value="{{ $pesanan->status }}">
-                            <input type="hidden" name="nama_cust2" id="nama_cust2" value="{{$pesanan->customer}}">
-                            <input type="hidden" name="id_pesanan" value="{{ $Id_pesanan }}">
-                            <input type="hidden" name="total" id="total">
-                            <input type="hidden" name="total_item" id="total_item">
-                            <input type="hidden" name="bayar" id="bayar">
-                            <input type="hidden" name="kembali" id="kembali">
-                            <input type="hidden" name="ppn" id="ppn">
-                            {{-- <div class="form-group row">
-                                <label for="totalrp" class="col-lg-2 control-label">Total</label>
-                                <div class="col-lg-8">
-                                    <input type="text" id="totalrp" class="form-control" readonly>
-                                </div>
-                            </div> --}}
-                            <!-- <div class="form-group row">
-                                <label for="diskon" class="col-lg-2 control-label">Diskon</label>
-                                <div class="col-lg-8">
-                                    <input type="number" name="diskon" id="diskon" class="form-control" value="{{ $pesanan->Diskon }}">
-                                </div>
-                            </div> -->
-                            {{-- <div class="form-group row">
-                                <label for="ppnrp" class="col-lg-2 control-label">PPN 10%</label>
-                                <div class="col-lg-8">
-                                    <input type="text" name="ppnrp" id="ppnrp" class="form-control" readonly>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="bayar" class="col-lg-2 control-label">Bayar</label>
-                                <div class="col-lg-8">
-                                    <input type="text" id="bayarrp" class="form-control" readonly>
-                                </div>
-                            </div> --}}
-                            <div class="form-group row">
-                                {{-- <label for="diterima" class="col-lg-2 control-label">Diterima</label> --}}
-                                {{-- {{dd($pesanan);}} --}}
-                                <div class="col-lg-8">
-                                    <input type="hidden" name="diterima" id="diterima" class="form-control">
-                               </div>
-                            </div>
-                            {{-- <div class="form-group row">
-                                <label for="kembalirp" class="col-lg-2 control-label">Kembali</label>
-                                <div class="col-lg-8">
-                                    <input type="text" id="kembalirp" class="form-control" readonly>
-                               </div>
-                            </div> --}}
 
-                          </form>
-                        </div>
-                      </div>
-                    </div>
               <div class="box-footer p-3">
                 <button type="submit" class="btn btn-primary btn-sm btn-flat pull-right btn-simpan "><i class="fa fa-floppy-o"></i> Simpan Transaksi</button>
                 <button type="submit" class="btn btn-warning btn-sm btn-flat pull-right btn-cetak "><i class="fa fa-floppy-o"></i> Cetak Transaksi</button>

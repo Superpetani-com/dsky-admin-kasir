@@ -133,6 +133,9 @@ class PesananController extends Controller
             }
         }
 
+        if($request->waiter_name) {
+            $pesanan->waiter_name = $request->waiter_name;
+        }
         // dd($pesanan);
 
         $pesanan->update();

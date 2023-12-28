@@ -8,6 +8,7 @@ use App\Models\Meja;
 use App\Models\Pesanan;
 use App\Models\PesananDetail;
 use App\Models\LogHapus;
+use App\Models\User;
 use Ramsey\Uuid\Uuid;
 
 class PesananDetailController extends Controller
@@ -38,12 +39,17 @@ class PesananDetailController extends Controller
         $pesanan_detail = pesanandetail::where('id_pesanan', $id)->get();
 
         $count_pesanan_detail = count($pesanan_detail);
-        return view('pesanandetail.index2', compact('Id_pesanan','menu','meja','pesanan', 'count_pesanan_detail'));
+        $waiters = User::where('level', '=', '6')->get();
+        $waiter_name = $pesanan['waiter_name'];
+
+        return view('pesanandetail.index2', compact('Id_pesanan','menu','meja','pesanan', 'count_pesanan_detail', 'waiters', 'waiter_name'));
 
     }
 
     public function store(Request $request)
     {
+        // dd($request);
+
         $menu = menu::where('Id_Menu', $request->id_menu)->first();
         if(!$menu){
             return response()->json('Data gagal disimpan', 400);
@@ -154,6 +160,7 @@ class PesananDetailController extends Controller
 
     public function update(Request $request, $id)
     {
+        // dd($request);
         $detail=pesanandetail::find($id);
         $detail->jumlah=$request->jumlah;
         $detail->subtotal=$detail->harga*$request->jumlah;
