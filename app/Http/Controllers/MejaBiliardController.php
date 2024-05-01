@@ -224,6 +224,9 @@ class MejaBiliardController extends Controller
     {
         $mejabiliard = MejaBiliard::find($id);
         $order = orderbiliard::find($mejabiliard->id_order_biliard);
+        $order->totalharga = $order->totalharga + $order->totalharga * 0.1;
+        $order->totalbayar = $order->totalbayar + $order->totalbayar * 0.1;
+        $order->diterima = $order->diterima + $order->diterima * 0.1;
         $order->status="Selesai";
         $order->update();
         $mejabiliard->status = "Kosong";
@@ -237,6 +240,9 @@ class MejaBiliardController extends Controller
         if($order->id_pesanan > 0) {
             $meja = meja::where('Id_pesanan', '=', $order->id_pesanan)->first();
             $pesanan = pesanan::find($order->id_pesanan);
+            $pesanan->TotalHarga = $pesanan->TotalHarga + $pesanan->TotalHarga * 0.1;
+            $pesanan->TotalBayar = $pesanan->TotalBayar + $pesanan->TotalBayar * 0.1;
+            $pesanan->Diterima = $pesanan->Diterima + $pesanan->Diterima * 0.1;
             $detail = Pesanandetail::where('id_pesanan', $order->id_pesanan)->get();
             $pesanan->status="Selesai";
 
