@@ -100,13 +100,18 @@ class PesananController extends Controller
         //return [$updatestatus, $pesanan];
         // dd($request);
         foreach ($updatestatus as $item){
-        $item->status="Selesai";
-        $item->update();}
+            $item->status="Selesai";
+            $item->update();
+        }
+
+        // dd($request);
         $pesanan->TotalItem= $request->total_item;
-        $pesanan->TotalHarga = $request->total;
+        $pesanan->TotalHarga = intval($request->total) + (intval($request->total) * 0.1);
         $pesanan->Diskon = 0;
-        $pesanan->TotalBayar = $request->total;
-        $pesanan->Diterima=$request->total;
+        $pesanan->TotalBayar = intval($request->total) + (intval($request->total) * 0.1);
+        $pesanan->Diterima =intval($request->total) + (intval($request->total) * 0.1);
+        // dd($pesanan);
+
         // $pesanan->Kembali=$request->kembali;
         $pesanan->Kembali=0;
         $pesanan->customer=$request->nama_cust2;

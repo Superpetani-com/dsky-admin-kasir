@@ -115,6 +115,10 @@
             <td class="text-right">Rp.{{ format_uang($pesanan->ppn) }}</td>
         </tr> --}}
         <tr>
+            <td>Pajak:</td>
+            <td class="text-right">Rp.{{ format_uang(($pesanan->ppn)) }}</td>
+        </tr>
+        <tr>
             <td>Total Bayar:</td>
             <td class="text-right">Rp.{{ format_uang($pesanan->TotalBayar) }}</td>
         </tr>
