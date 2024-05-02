@@ -276,6 +276,28 @@ class OrderBiliardController extends Controller
         return view('orderbiliard.cetak', compact('detail','order', 'nama_meja', 'pesanan', 'detailpesanan', 'meja'));
     }
 
+    public function cetakAfter($id)
+    {
+        // dd($id);
+        $detail = OrderBiliardDetail::with('paket')->where('id_order_biliard', $id)->get();
+        $order = OrderBiliard::where('id_order_biliard', $id)->first();
+        $meja = MejaBiliard::where('id_meja_biliard', $order->id_meja_biliard)->first();
+        $nama_meja = $meja->namameja;
+
+        $detailpesanan=PesananDetail::with('menu')->where('id_pesanan', $order->id_pesanan)->get();
+        $pesanan=pesanan::where('Id_pesanan', $order->id_pesanan)->first();
+
+        $data = [
+            'totalBayar' => (intval($order->totalharga) + $pesanan->TotalBayar) - (intval($order->totalharga) + $pesanan->TotalBayar) * 0.1,
+            'pajak' => (intval($order->totalharga) + $pesanan->TotalBayar) * 0.1
+        ];
+
+        // dd($data, $order->totalharga, $pesanan->TotalBayar);
+        //return ($detail);
+        // dd($pesanan, $detail);
+        return view('orderbiliard.cetak-after', compact('detail','order', 'nama_meja', 'pesanan', 'detailpesanan', 'meja', 'data'));
+    }
+
     public function cetakKitchen($id)
     {
         // dd($id);

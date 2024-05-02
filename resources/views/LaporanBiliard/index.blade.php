@@ -123,7 +123,7 @@ tr, .dataTables_length, .dataTables_filter, select.form-control.input-sm, input.
         $('#modal-form').modal('show');
     }
     function printNota(id) {
-        var urlcetak=(`{{url('orderbiliard')}}/cetak/${id}`);
+        var urlcetak=(`{{url('orderbiliard')}}/cetak-after/${id}`);
         cetak(urlcetak);
     }
     function cetak(url, title) {

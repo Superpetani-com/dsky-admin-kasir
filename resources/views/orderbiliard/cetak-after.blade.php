@@ -152,13 +152,13 @@
             <td>Diskon:</td>
             <td class="text-right">{{ format_uang($pesanan->Diskon) }}%</td>
         </tr> --}}
-        <tr>
-            <td>Pajak: test</td>
+        {{-- <tr>
+            <td>Pajak:</td>
             <td class="text-right">Rp.{{ format_uang(($order->totalharga + $pesanan->TotalBayar)) }}</td>
-        </tr>
+        </tr> --}}
         <tr>
-            <td>Total:</td>
-            <td class="text-right">Rp.{{ format_uang($order->totalharga + $pesanan->TotalBayar + ($order->totalharga + $pesanan->TotalBayar) * 0.1) }}</td>
+            <td>Total + PPN (10%):</td>
+            <td class="text-right">Rp.{{ format_uang($order->totalharga + $pesanan->TotalBayar) }}</td>
         </tr>
         {{-- <tr>
             <td>Diterima:</td>
