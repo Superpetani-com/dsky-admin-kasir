@@ -153,7 +153,7 @@
             <td class="text-right">{{ format_uang($pesanan->Diskon) }}%</td>
         </tr> --}}
         <tr>
-            <td>Pajak: test</td>
+            <td>Pajak:</td>
             <td class="text-right">Rp.{{ format_uang(($order->totalharga + $pesanan->TotalBayar)) }}</td>
         </tr>
         <tr>
