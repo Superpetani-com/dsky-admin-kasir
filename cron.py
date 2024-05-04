@@ -30,11 +30,11 @@ def get_last_date_sync(table_name):
     try:
         cursor = connection.cursor(dictionary=True)
         # Note: Use a tuple (table_name,) instead of just table_name
-        cursor.execute('SELECT * FROM cron_history WHERE cabang_id = "XT Billiard" AND table_name = %s ORDER BY id DESC LIMIT 1', (table_name,))
+        cursor.execute('SELECT * FROM cron_history WHERE cabang_id = "Jackal Billiard" AND table_name = %s ORDER BY id DESC LIMIT 1', (table_name,))
         result = cursor.fetchone()
 
         if result:
-            return result['last_date_sync'], "XT Billiard"
+            return result['last_date_sync'], "Jackal Billiard"
         return None
     except mysql.connector.Error as error:
         print('Error fetching last sync date from remote database:', error)

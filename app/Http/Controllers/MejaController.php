@@ -456,16 +456,22 @@ class MejaController extends Controller
 
         $pesanan->update();
         $meja->update();
+        // dd(auth()->user()->level);
 
-        if(auth()->user()->level != 5) {
+        // if(auth()->user()->level != 5) {
             foreach ($detail as $item2){
-                $menu=menu::find($item2->id_menu);
-                if($menu->jenis=="Update Stok" && $menu->stok>0 && $pesanan->status!="Selesai"){
-                    $menu->stok=$menu->stok-$item2->jumlah;
+                $menu = menu::find($item2->id_menu);
+
+                if($menu->jenis == "Update Stok"){
+                    // dd($menu);
+
+                    $menu->stok = $menu->stok - $item2->jumlah;
+
+                    // dd($menu);
                     $menu->update();
                 }
             }
-        }
+        // }
     }
 
     public function cancel($id)

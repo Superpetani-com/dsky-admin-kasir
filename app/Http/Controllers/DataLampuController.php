@@ -51,7 +51,7 @@ class DataLampuController extends Controller
                     'id_meja' => $request->id_meja,
                     'duration' => $request->duration,
                     'created_date' => date('Y-m-d H:i:s'),
-                    'cabang_id' => 'XT Billiard',
+                    'cabang_id' => 'Jackal Billiard',
                     'created_by' => $findLastOrderToGetUsers
                 ];
 
