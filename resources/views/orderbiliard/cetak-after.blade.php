@@ -57,7 +57,7 @@
 <button class="btn-print" style="position: absolute; right: 1rem; top: rem;" onclick="window.print()">Print</button>
     <div class="text-center">
         {{-- <h3 style="margin-bottom: 5px;">{{ strtoupper("NOTA BILIARD") }}</h3> --}}
-        <h3 style="margin-bottom: 5px;">{{ strtoupper("XT Billiard") }}</h3>
+        <h3 style="margin-bottom: 5px;">{{ strtoupper("Jogja Billiard Margonda") }}</h3>
         <p>{{ ucwords("XT Square") }}</p>
         <p>{{ ucwords("BCA : 0376-616-333(Billiard Indonesia)") }}</p>
         <p>{{ ucwords("WA : 081225557100") }}</p>
