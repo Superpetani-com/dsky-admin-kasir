@@ -28,9 +28,9 @@ class PesananController extends Controller
         $pesanan->TotalBayar=0;
         $pesanan->Diterima=0;
         $pesanan->Kembali=0;
-        $pesanan->ppn=10;
+        $pesanan->ppn=0;
         $pesanan->status='Aktif';
-        $pesanan->cabang_id='Jackal Billiard';
+        $pesanan->cabang_id='Jogja Billiard Margonda';
         $pesanan->created_by = auth()->user()->name;
         $pesanan->uuid = $uuid->toString();
         $pesanan->save();
@@ -106,16 +106,24 @@ class PesananController extends Controller
 
         // dd($request);
         $pesanan->TotalItem= $request->total_item;
-        $pesanan->TotalHarga = intval($request->total) + (intval($request->total) * 0.1);
+        // hide pajak
+        // $pesanan->TotalHarga = intval($request->total) + (intval($request->total) * 0.1);
+        $pesanan->TotalHarga = intval($request->total);
+
         $pesanan->Diskon = 0;
-        $pesanan->TotalBayar = intval($request->total) + (intval($request->total) * 0.1);
-        $pesanan->Diterima =intval($request->total) + (intval($request->total) * 0.1);
+        // hide pajak
+        // $pesanan->TotalBayar = intval($request->total) + (intval($request->total) * 0.1);
+        // $pesanan->Diterima =intval($request->total) + (intval($request->total) * 0.1);
+
+        $pesanan->TotalBayar = intval($request->total);
+        $pesanan->Diterima =intval($request->total);
         // dd($pesanan);
 
         // $pesanan->Kembali=$request->kembali;
         $pesanan->Kembali=0;
         $pesanan->customer=$request->nama_cust2;
-        $pesanan->ppn=$request->ppn;
+        $pesanan->ppn=0;
+        // $pesanan->ppn=$request->ppn;
         $pesanan->update();
         $meja=Meja::find($pesanan->Id_meja);
         if ($pesanan->status=="Aktif"){

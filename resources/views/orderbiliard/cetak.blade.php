@@ -58,10 +58,10 @@
     <div class="text-center">
         {{-- <h3 style="margin-bottom: 5px;">{{ strtoupper("NOTA BILIARD") }}</h3> --}}
         <h3 style="margin-bottom: 5px;">{{ strtoupper("Jogja Billiard Margonda") }}</h3>
-        <p>{{ ucwords("XT Square") }}</p>
+        <p>{{ ucwords("Jl. Margonda No.223, Beji, Depok, Jawa Barat 16423") }}</p>
         <p>{{ ucwords("BCA : 0376-616-333(Billiard Indonesia)") }}</p>
         <p>{{ ucwords("WA : 081225557100") }}</p>
-        <p>{{ ucwords("IG : @xtbilliard") }}</p>
+        <p>{{ ucwords("IG : @jogjabilliard.margonda") }}</p>
     </div>
     <br>
     <div>
@@ -152,13 +152,13 @@
             <td>Diskon:</td>
             <td class="text-right">{{ format_uang($pesanan->Diskon) }}%</td>
         </tr> --}}
-        <tr>
+        {{-- <tr>
             <td>Services:</td>
             <td class="text-right">Rp.{{ format_uang(($order->totalharga + $pesanan->TotalBayar) * 0.1) }}</td>
-        </tr>
+        </tr> --}}
         <tr>
             <td>Total:</td>
-            <td class="text-right">Rp.{{ format_uang($order->totalharga + $pesanan->TotalBayar + ($order->totalharga + $pesanan->TotalBayar) * 0.1) }}</td>
+            <td class="text-right">Rp.{{ format_uang($order->totalharga + $pesanan->TotalBayar) }}</td>
         </tr>
         {{-- <tr>
             <td>Diterima:</td>

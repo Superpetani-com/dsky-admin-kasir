@@ -124,7 +124,7 @@ class OrderBiliardDetailController extends Controller
         $detail->harga=$paket->harga;
         $detail->seting =$request->seting_paket;
         $detail->subtotal=$paket->harga*$detail->jumlah;
-        $detail->cabang_id='Jackal Billiard';
+        $detail->cabang_id='Jogja Billiard Margonda';
         $detail->save();
         return response()->json('Data berhasil disimpan', 200);
     }
@@ -141,7 +141,7 @@ class OrderBiliardDetailController extends Controller
         $order->diskon=0;
         $order->totalflag=0;
         $order->status='Aktif';
-        $order->cabang_id='Jackal Billiard';
+        $order->cabang_id='Jogja Billiard Margonda';
         $order->created_by = auth()->user()->name;
 
         $uuid = Uuid::uuid4();
@@ -155,7 +155,7 @@ class OrderBiliardDetailController extends Controller
         $pesanan->Kembali=0;
         $pesanan->ppn=10;
         $pesanan->status='Aktif';
-        $pesanan->cabang_id='Jackal Billiard';
+        $pesanan->cabang_id='Jogja Billiard Margonda';
         $pesanan->created_by = auth()->user()->name;
         $pesanan->uuid = $uuid->toString();
         $pesanan->save();

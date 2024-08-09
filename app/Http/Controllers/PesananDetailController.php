@@ -60,7 +60,7 @@ class PesananDetailController extends Controller
         $detail->harga=$menu->Harga;
         $detail->jumlah=1;
         $detail->subtotal=$menu->Harga;
-        $detail->cabang_id='Jackal Billiard';
+        $detail->cabang_id='Jogja Billiard Margonda';
         $detail->save();
         return response()->json('Data berhasil disimpan', 200);
     }
@@ -77,7 +77,7 @@ class PesananDetailController extends Controller
         $detail->harga=$menu->Harga;
         $detail->jumlah=1;
         $detail->subtotal=$menu->Harga;
-        $detail->cabang_id='Jackal Billiard';
+        $detail->cabang_id='Jogja Billiard Margonda';
         $detail->save();
         return response()->json('Data berhasil disimpan', 200);
     }
@@ -180,7 +180,7 @@ class PesananDetailController extends Controller
         $log_hapus->harga = $detail->harga;
         $log_hapus->jumlah = $detail->jumlah;
         $log_hapus->subtotal = $detail->subtotal;
-        $log_hapus->cabang_id = 'Jackal Billiard';
+        $log_hapus->cabang_id = 'Jogja Billiard Margonda';
         $log_hapus->user_id = auth()->user()->name;
         $log_hapus->created_at = date('Y-m-d H:i:s');
         $log_hapus->updated_at = date('Y-m-d H:i:s');
@@ -196,7 +196,9 @@ class PesananDetailController extends Controller
     {
         //0.1 karena ppn 10%
         // $total = ceil($total / 10) * 10;
-        $ppn=intval(0.1*$total);
+
+        // hide ppn
+        // $ppn=intval(0.1*$total);
         $bayar = $total;
         $kembali =$diterima - ceil($bayar / 100) * 100;
         $bayar = ceil($bayar / 100) * 100;
@@ -205,7 +207,8 @@ class PesananDetailController extends Controller
             'totalrp' => format_uang($total),
             'bayar' => $bayar,
             'kembali'=>$kembali,
-            'ppn'=>intval(0.1* ceil($total / 100) * 100),
+            // 'ppn'=> intval(0.1* ceil($total / 100) * 100),
+            'ppn'=> 0,
             'bayarrp' => format_uang($bayar),
             'terbilang' => ucwords(terbilang($bayar). ' Rupiah'),
             'kembalirp' => format_uang($kembali),
