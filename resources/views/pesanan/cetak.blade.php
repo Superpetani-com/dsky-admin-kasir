@@ -41,6 +41,7 @@
     $style .= '
             html, body {
                 width: 70mm;
+                margin: 12px;
             }
             .btn-print {
                 display: none;
@@ -57,12 +58,13 @@
 <button class="btn-print" style="position: absolute; right: 1rem; top: rem;" onclick="window.print()">Print</button>
     <div class="text-center">
         {{-- <h3 style="margin-bottom: 5px;">{{ strtoupper("NOTA BILIARD") }}</h3> --}}
-        <h3 style="margin-bottom: 5px;">{{ strtoupper("XT Billiard") }}</h3>
-        <p>{{ ucwords("XT Square") }}</p>
-        <p>{{ ucwords("BCA : 0376-616-333(Billiard Indonesia)") }}</p>
+        <h3 style="margin-bottom: 5px;">{{ strtoupper("Jakal 9 Billiard") }}</h3>
+        <p>{{ ucwords("Jln. Kaliurang KM 9.5") }}</p>
+        <p>{{ ucwords("BCA : 0376-616-333 (Billiard Indonesia)") }}</p>
         <p>{{ ucwords("WA : 081225557100") }}</p>
-        <p>{{ ucwords("IG : @xtbilliard") }}</p>
+        <p>{{ ucwords("IG : @jakal9.billiard") }}</p>
     </div>
+    <br>
     <br>
     <div>
     {{-- <div>
@@ -71,12 +73,12 @@
         <p style="float: left">Server: {{ $pesanan->waiter_name }}</p>
     </div> --}}
     <div class="clear-both" style="clear: both;"></div>
-    <p>Kasir &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp: {{ ($pesanan->created_by) }}</p>
-    <p>Server &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp: {{ ($pesanan->waiter_name) }}</p>
-    <p>Customer &nbsp&nbsp&nbsp&nbsp&nbsp: {{ ($pesanan->customer) }}</p>
-    <p>No Pesanan &nbsp: {{ ($pesanan->Id_pesanan) }}</p>
-    <p>No Meja &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp: {{ ($nama_meja) }}</p>
-    <p>Tanggal &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp: {{ ($pesanan->created_at) }}</p>
+    <p>Kasir &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ ($pesanan->created_by) }}</p>
+    <p>Server &nbsp;&nbsp;&nbsp;&nbsp; : {{ ($pesanan->waiter_name) }}</p>
+    <p>Customer &nbsp;&nbsp; : {{ ($pesanan->customer) }}</p>
+    <p>No Pesanan &nbsp;: {{ ($pesanan->Id_pesanan) }}</p>
+    <p>No Meja &nbsp;&nbsp;&nbsp; : {{ ($nama_meja) }}</p>
+    <p>Tanggal &nbsp;&nbsp;&nbsp; : {{ ($pesanan->created_at) }}</p>
 
     <p class="text-center">===================================</p>
     <br>
@@ -111,11 +113,11 @@
             <td class="text-right">{{ format_uang($pesanan->Diskon) }}%</td>
         </tr> --}}
         {{-- <tr>
-            <td>Pajak:</td>
+            <td>Services:</td>
             <td class="text-right">Rp.{{ format_uang($pesanan->ppn) }}</td>
         </tr> --}}
         <tr>
-            <td>Pajak:</td>
+            <td>Services:</td>
             <td class="text-right">Rp.{{ format_uang(($pesanan->ppn)) }}</td>
         </tr>
         <tr>

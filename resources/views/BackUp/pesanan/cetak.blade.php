@@ -56,7 +56,7 @@
 <body onload="window.print()">
 <button class="btn-print" style="position: absolute; right: 1rem; top: rem;" onclick="window.print()">Print</button>
     <div class="text-center">
-        <h3 style="margin-bottom: 5px;">{{ strtoupper("XT Billiard") }}</h3>
+        <h3 style="margin-bottom: 5px;">{{ strtoupper("Jakal Billiard") }}</h3>
         <p>{{ ucwords("jl dr. sutomo cilacap") }}</p>
     </div>
     <br>

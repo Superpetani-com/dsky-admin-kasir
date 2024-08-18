@@ -11,7 +11,7 @@ local_db_config = {
     "user": "root",
     "password": "",
     "host": "localhost",
-    "database": "datakasir_v2"
+    "database": "kasir"
 }
 
 # Remote database configuration
@@ -25,22 +25,32 @@ remote_db_config = {
 
 # Fetch the last sync date from the cron_history table in the remote database
 def get_last_date_sync(table_name):
-    connection = mysql.connector.connect(**remote_db_config)
-
     try:
+        connection = mysql.connector.connect(**remote_db_config)
         cursor = connection.cursor(dictionary=True)
-        # Note: Use a tuple (table_name,) instead of just table_name
-        cursor.execute('SELECT * FROM cron_history WHERE cabang_id = "Jackal Billiard" AND table_name = %s ORDER BY id DESC LIMIT 1', (table_name,))
+
+        query = '''
+            SELECT last_date_sync, cabang_id
+            FROM cron_history
+            WHERE cabang_id = "Jakal Billiard" AND table_name = %s
+            ORDER BY id DESC LIMIT 1
+        '''
+        cursor.execute(query, (table_name,))
         result = cursor.fetchone()
 
         if result:
-            return result['last_date_sync'], "Jackal Billiard"
-        return None
+            return result['last_date_sync'], result['cabang_id']
+        else:
+            print(f'No data found for table {table_name}.')
+            return None
+
     except mysql.connector.Error as error:
-        print('Error fetching last sync date from remote database:', error)
+        print(f'Error fetching last sync date from remote database: {error}')
         return None
+
     finally:
-        connection.close()
+        if 'connection' in locals():
+            connection.close()
 
 def retrieve_data(last_date_sync, cabang_id):
     local_connection = mysql.connector.connect(**local_db_config)
@@ -212,8 +222,22 @@ def upsert_to_remote_table_order_billiard(data):
         connection.close()
 
 # Get the last sync date from the remote database
-last_date_sync_o, cabang_id = get_last_date_sync("order_billiard")
-last_date_sync_p, cabang_id = get_last_date_sync("pesanan")
+# last_date_sync_o, cabang_id = get_last_date_sync("order_billiard")
+result = get_last_date_sync("order_billiard")
+if result:
+    last_date_sync_o, cabang_id = result
+else:
+    print("No valid data found for order_billiard.")
+    last_date_sync_o, cabang_id = None, None
+
+result2 = get_last_date_sync("pesanan")
+if result2:
+    last_date_sync_p, cabang_id = result2
+else:
+    print("No valid data found for pesanan.")
+    last_date_sync_p, cabang_id = None, None
+
+# last_date_sync_p, cabang_id = get_last_date_sync("pesanan")
 print(f'Last Date Syncronize Order: {last_date_sync_o}')
 print(f'Last Date Syncronize Pesanan: {last_date_sync_p}')
 print(f'Cabang ID Syncronize: {cabang_id}')

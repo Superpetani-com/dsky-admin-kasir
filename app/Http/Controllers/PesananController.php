@@ -30,7 +30,7 @@ class PesananController extends Controller
         $pesanan->Kembali=0;
         $pesanan->ppn=10;
         $pesanan->status='Aktif';
-        $pesanan->cabang_id='Jackal Billiard';
+        $pesanan->cabang_id='Jakal Billiard';
         $pesanan->created_by = auth()->user()->name;
         $pesanan->uuid = $uuid->toString();
         $pesanan->save();

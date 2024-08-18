@@ -60,7 +60,7 @@ class PesananDetailController extends Controller
         $detail->harga=$menu->Harga;
         $detail->jumlah=1;
         $detail->subtotal=$menu->Harga;
-        $detail->cabang_id='Jackal Billiard';
+        $detail->cabang_id='Jakal Billiard';
         $detail->save();
         return response()->json('Data berhasil disimpan', 200);
     }
@@ -77,7 +77,7 @@ class PesananDetailController extends Controller
         $detail->harga=$menu->Harga;
         $detail->jumlah=1;
         $detail->subtotal=$menu->Harga;
-        $detail->cabang_id='Jackal Billiard';
+        $detail->cabang_id='Jakal Billiard';
         $detail->save();
         return response()->json('Data berhasil disimpan', 200);
     }
@@ -180,7 +180,7 @@ class PesananDetailController extends Controller
         $log_hapus->harga = $detail->harga;
         $log_hapus->jumlah = $detail->jumlah;
         $log_hapus->subtotal = $detail->subtotal;
-        $log_hapus->cabang_id = 'Jackal Billiard';
+        $log_hapus->cabang_id = 'Jakal Billiard';
         $log_hapus->user_id = auth()->user()->name;
         $log_hapus->created_at = date('Y-m-d H:i:s');
         $log_hapus->updated_at = date('Y-m-d H:i:s');

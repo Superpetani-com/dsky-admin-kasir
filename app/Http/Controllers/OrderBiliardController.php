@@ -42,7 +42,7 @@ class OrderBiliardController extends Controller
         $order->diskon=0;
         $order->totalflag=0;
         $order->status='Aktif';
-        $order->cabang_id='Jackal Billiard';
+        $order->cabang_id='Jakal Billiard';
         $order->uuid = $uuid_order->toString();
         $order->created_by = auth()->user()->name;
 
@@ -57,7 +57,7 @@ class OrderBiliardController extends Controller
         $pesanan->Kembali=0;
         $pesanan->ppn=10;
         $pesanan->status='Aktif';
-        $pesanan->cabang_id='Jackal Billiard';
+        $pesanan->cabang_id='Jakal Billiard';
         $pesanan->created_by = auth()->user()->name;
         $pesanan->uuid = $uuid->toString();
         $pesanan->save();

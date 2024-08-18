@@ -41,6 +41,7 @@
     $style .= '
             html, body {
                 width: 70mm;
+                margin: 12px;
             }
             .btn-print {
                 display: none;
@@ -57,22 +58,23 @@
 <button class="btn-print" style="position: absolute; right: 1rem; top: rem;" onclick="window.print()">Print</button>
     <div class="text-center">
         {{-- <h3 style="margin-bottom: 5px;">{{ strtoupper("NOTA BILIARD") }}</h3> --}}
-        <h3 style="margin-bottom: 5px;">{{ strtoupper("XT Billiard") }}</h3>
-        <p>{{ ucwords("XT Square") }}</p>
-        <p>{{ ucwords("BCA : 0376-616-333(Billiard Indonesia)") }}</p>
+        <h3 style="margin-bottom: 5px;">{{ strtoupper("Jakal 9 Billiard") }}</h3>
+        <p>{{ ucwords("Jln. Kaliurang KM 9.5") }}</p>
+        <p>{{ ucwords("BCA : 0376-616-333 (Billiard Indonesia)") }}</p>
         <p>{{ ucwords("WA : 081225557100") }}</p>
-        <p>{{ ucwords("IG : @xtbilliard") }}</p>
+        <p>{{ ucwords("IG : @jakal9.billiard") }}</p>
     </div>
+    <br>
     <br>
     <div>
     <div class="clear-both" style="clear: both;"></div>
-    <p>Kasir &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ $order->created_by }}</p>
-    <p>Server &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ $order->waiter_name }}</p>
+    <p>Kasir &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ $order->created_by }}</p>
+    <p>Server &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ $order->waiter_name }}</p>
 
-    <p>Customer &nbsp;&nbsp;&nbsp;&nbsp;: {{ ucwords($order->customer) }}</p>
-    <p>No Order &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ ($order->id_order_biliard) }}-{{ $order->id_pesanan }}</p>
-    <p>No Meja &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ ($nama_meja) }}</p>
-    <p>Jam Mulai &nbsp;&nbsp;&nbsp;: {{ ($meja->jammulai) }}</p>
+    <p>Customer &nbsp;&nbsp;&nbsp;: {{ ucwords($order->customer) }}</p>
+    <p>No Order &nbsp;&nbsp;&nbsp;: {{ ($order->id_order_biliard) }}-{{ $order->id_pesanan }}</p>
+    <p>No Meja &nbsp;&nbsp;&nbsp;&nbsp;: {{ ($nama_meja) }}</p>
+    <p>Jam Mulai &nbsp;&nbsp;: {{ ($meja->jammulai) }}</p>
     <p>Jam Selesai : {{ ($meja->jamselesai) }}</p>
 
     <p class="text-center">===================================</p>
@@ -153,7 +155,7 @@
             <td class="text-right">{{ format_uang($pesanan->Diskon) }}%</td>
         </tr> --}}
         <tr>
-            <td>Pajak:</td>
+            <td>Services:</td>
             <td class="text-right">Rp.{{ format_uang(($order->totalharga + $pesanan->TotalBayar) * 0.1) }}</td>
         </tr>
         <tr>
