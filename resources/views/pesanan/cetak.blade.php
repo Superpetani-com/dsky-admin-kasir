@@ -116,10 +116,10 @@
             <td>Services:</td>
             <td class="text-right">Rp.{{ format_uang($pesanan->ppn) }}</td>
         </tr> --}}
-        <tr>
+        {{-- <tr>
             <td>Services:</td>
             <td class="text-right">Rp.{{ format_uang(($pesanan->ppn)) }}</td>
-        </tr>
+        </tr> --}}
         <tr>
             <td>Total Bayar:</td>
             <td class="text-right">Rp.{{ format_uang($pesanan->TotalBayar) }}</td>

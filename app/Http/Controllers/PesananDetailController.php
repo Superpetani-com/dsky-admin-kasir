@@ -196,7 +196,8 @@ class PesananDetailController extends Controller
     {
         //0.1 karena ppn 10%
         // $total = ceil($total / 10) * 10;
-        $ppn=intval(0.1*$total);
+        // hide ppn
+        // $ppn=intval(0.1*$total);$ppn=intval(0.1*$total);
         $bayar = $total;
         $kembali =$diterima - ceil($bayar / 100) * 100;
         $bayar = ceil($bayar / 100) * 100;
@@ -205,7 +206,7 @@ class PesananDetailController extends Controller
             'totalrp' => format_uang($total),
             'bayar' => $bayar,
             'kembali'=>$kembali,
-            'ppn'=>intval(0.1* ceil($total / 100) * 100),
+            'ppn'=>0,
             'bayarrp' => format_uang($bayar),
             'terbilang' => ucwords(terbilang($bayar). ' Rupiah'),
             'kembalirp' => format_uang($kembali),
