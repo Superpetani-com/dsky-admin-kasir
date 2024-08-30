@@ -195,9 +195,9 @@ class PesananDetailController extends Controller
     public function loadform($diskon, $total, $diterima)
     {
         //0.1 karena ppn 10%
-        // $total = ceil($total / 10) * 10;
+        $total = ceil($total / 10) * 10;
         // hide ppn
-        // $ppn=intval(0.1*$total);$ppn=intval(0.1*$total);
+        $ppn=intval(0.1*$total);$ppn=intval(0.1*$total);
         $bayar = $total;
         $kembali =$diterima - ceil($bayar / 100) * 100;
         $bayar = ceil($bayar / 100) * 100;
@@ -206,7 +206,7 @@ class PesananDetailController extends Controller
             'totalrp' => format_uang($total),
             'bayar' => $bayar,
             'kembali'=>$kembali,
-            'ppn'=>0,
+            'ppn'=>$ppn,
             'bayarrp' => format_uang($bayar),
             'terbilang' => ucwords(terbilang($bayar). ' Rupiah'),
             'kembalirp' => format_uang($kembali),
