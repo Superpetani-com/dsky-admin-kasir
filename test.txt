@@ -1,6 +1,6 @@
-Error performing bulk upsert: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ', 6, 'Jakal Billiard')' at line 2
+Error performing bulk upsert: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ', 6, 'Jogja Billiard')' at line 2
 
-             (957, 4, 15, 87500, 0, 0, 87500, 87500, 0, 'Aktif', None, 'Jakal Billiard', datetime.datetime(2023, 11, 21, 4, 27, 13), datetime.datetime(2023, 11, 21, 4, 27, 29), 'cashier', '19d48f58-2325-42dd-b897-bfab900ee6f4')
+             (957, 4, 15, 87500, 0, 0, 87500, 87500, 0, 'Aktif', None, 'Jogja Billiard', datetime.datetime(2023, 11, 21, 4, 27, 13), datetime.datetime(2023, 11, 21, 4, 27, 29), 'cashier', '19d48f58-2325-42dd-b897-bfab900ee6f4')
 INSERT INTO pesanan (Id_pesanan, Id_meja, TotalItem, TotalHarga, Diskon, ppn, TotalBayar, Diterima, Kembali, status, customer, cabang_id, created_at, updated_at, created_by, uuid)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 ON DUPLICATE KEY UPDATE

@@ -13,12 +13,12 @@ local_db_config = {
     "host": "localhost",
     "database": "kasir"
 }
-
+# mysql://root:root_password@34.45.164.235/billiards
 # Remote database configuration
 remote_db_config = {
     "user": "root",
     "password": "root_password",
-    "host": "104.154.119.168",
+    "host": "34.45.164.235",
     "database": "billiards",
     "connection_timeout": 1200
 }
@@ -32,7 +32,7 @@ def get_last_date_sync(table_name):
         query = '''
             SELECT last_date_sync, cabang_id
             FROM cron_history
-            WHERE cabang_id = "Jakal Billiard" AND table_name = %s
+            WHERE cabang_id = "Jogja Billiard" AND table_name = %s
             ORDER BY id DESC LIMIT 1
         '''
         cursor.execute(query, (table_name,))

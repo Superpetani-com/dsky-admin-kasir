@@ -58,11 +58,11 @@
 <button class="btn-print" style="position: absolute; right: 1rem; top: rem;" onclick="window.print()">Print</button>
     <div class="text-center">
         {{-- <h3 style="margin-bottom: 5px;">{{ strtoupper("NOTA BILIARD") }}</h3> --}}
-        <h3 style="margin-bottom: 5px;">{{ strtoupper("Jakal 9 Billiard") }}</h3>
-        <p>{{ ucwords("Jln. Kaliurang KM 9.5") }}</p>
+        <h3 style="margin-bottom: 5px;">{{ strtoupper("Jogja Billiard") }}</h3>
+        <p>{{ ucwords("Jln. Urip Sumoharjo No. 3") }}</p>
         <p>{{ ucwords("BCA : 0376-616-333 (Billiard Indonesia)") }}</p>
         <p>{{ ucwords("WA : 081225557100") }}</p>
-        <p>{{ ucwords("IG : @jakal9.billiard") }}</p>
+        <p>{{ ucwords("IG : @jogjabilliard") }}</p>
     </div>
     <br>
     <br>
@@ -154,13 +154,13 @@
             <td>Diskon:</td>
             <td class="text-right">{{ format_uang($pesanan->Diskon) }}%</td>
         </tr> --}}
-        {{-- <tr>
+        <tr>
             <td>Services:</td>
             <td class="text-right">Rp.{{ format_uang(($order->totalharga + $pesanan->TotalBayar) * 0.1) }}</td>
-        </tr> --}}
+        </tr>
         <tr>
             <td>Total:</td>
-            <td class="text-right">Rp.{{ format_uang($order->totalharga + $pesanan->TotalBayar) }}</td>
+            <td class="text-right">Rp.{{ format_uang($order->totalharga + $pesanan->TotalBayar + ($order->totalharga + $pesanan->TotalBayar) * 0.1) }}</td>
         </tr>
         {{-- <tr>
             <td>Diterima:</td>
